@@ -13,9 +13,17 @@
 		6208307E24E9C13A00291825 /* Medspace.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6208307C24E9C13A00291825 /* Medspace.xcdatamodeld */; };
 		6208308024E9C14200291825 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6208307F24E9C14200291825 /* Assets.xcassets */; };
 		6208308324E9C14200291825 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6208308124E9C14200291825 /* LaunchScreen.storyboard */; };
+		621535AC24EACF14007B18BA /* SignupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621535AB24EACF14007B18BA /* SignupVC.swift */; };
+		6246D9C124EA6E370057872E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6246D9C024EA6E370057872E /* GoogleService-Info.plist */; };
+		6246D9C424EA772A0057872E /* Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 6246D9C324EA772A0057872E /* Logo.png */; };
+		6246D9C624EA78800057872E /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6246D9C524EA787F0057872E /* Icon.png */; };
+		6246D9C824EA7A260057872E /* Icon_no_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 6246D9C724EA7A260057872E /* Icon_no_back.png */; };
+		6246D9CA24EA7CD80057872E /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6246D9C924EA7CD80057872E /* LoginVC.swift */; };
+		62533ACA24EE6F9700AD5DA5 /* Pods_Medspace.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62533AC924EE6F9700AD5DA5 /* Pods_Medspace.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3D7E06918CD3386866B4E848 /* Pods-Medspace.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Medspace.release.xcconfig"; path = "Pods/Target Support Files/Pods-Medspace/Pods-Medspace.release.xcconfig"; sourceTree = "<group>"; };
 		6208307224E9C13A00291825 /* Medspace.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Medspace.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6208307524E9C13A00291825 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6208307724E9C13A00291825 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -24,6 +32,14 @@
 		6208307F24E9C14200291825 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6208308224E9C14200291825 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6208308424E9C14200291825 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		621535AB24EACF14007B18BA /* SignupVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupVC.swift; sourceTree = "<group>"; };
+		6246D9C024EA6E370057872E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		6246D9C324EA772A0057872E /* Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Logo.png; sourceTree = "<group>"; };
+		6246D9C524EA787F0057872E /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		6246D9C724EA7A260057872E /* Icon_no_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon_no_back.png; sourceTree = "<group>"; };
+		6246D9C924EA7CD80057872E /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
+		62533AC924EE6F9700AD5DA5 /* Pods_Medspace.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_Medspace.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9A2EBA75079582513C89542C /* Pods-Medspace.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Medspace.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Medspace/Pods-Medspace.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				62533ACA24EE6F9700AD5DA5 /* Pods_Medspace.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,6 +59,8 @@
 			children = (
 				6208307424E9C13A00291825 /* Medspace */,
 				6208307324E9C13A00291825 /* Products */,
+				CC053B100E7FD91BFAB8FDFE /* Frameworks */,
+				ACB0CD046BC072A557EDAA72 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -56,6 +75,8 @@
 		6208307424E9C13A00291825 /* Medspace */ = {
 			isa = PBXGroup;
 			children = (
+				6246D9C224EA77210057872E /* Images */,
+				6246D9C024EA6E370057872E /* GoogleService-Info.plist */,
 				6208307524E9C13A00291825 /* AppDelegate.swift */,
 				6208307724E9C13A00291825 /* ViewController.swift */,
 				6208307924E9C13A00291825 /* Main.storyboard */,
@@ -63,8 +84,37 @@
 				6208308124E9C14200291825 /* LaunchScreen.storyboard */,
 				6208308424E9C14200291825 /* Info.plist */,
 				6208307C24E9C13A00291825 /* Medspace.xcdatamodeld */,
+				6246D9C924EA7CD80057872E /* LoginVC.swift */,
+				621535AB24EACF14007B18BA /* SignupVC.swift */,
 			);
 			path = Medspace;
+			sourceTree = "<group>";
+		};
+		6246D9C224EA77210057872E /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				6246D9C724EA7A260057872E /* Icon_no_back.png */,
+				6246D9C524EA787F0057872E /* Icon.png */,
+				6246D9C324EA772A0057872E /* Logo.png */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
+		ACB0CD046BC072A557EDAA72 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				9A2EBA75079582513C89542C /* Pods-Medspace.debug.xcconfig */,
+				3D7E06918CD3386866B4E848 /* Pods-Medspace.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		CC053B100E7FD91BFAB8FDFE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				62533AC924EE6F9700AD5DA5 /* Pods_Medspace.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -74,9 +124,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6208308724E9C14200291825 /* Build configuration list for PBXNativeTarget "Medspace" */;
 			buildPhases = (
+				7B13B917F5476F2D6C809B46 /* [CP] Check Pods Manifest.lock */,
 				6208306E24E9C13A00291825 /* Sources */,
 				6208306F24E9C13A00291825 /* Frameworks */,
 				6208307024E9C13A00291825 /* Resources */,
+				38B50A078C575C982665EC4F /* [CP] Embed Pods Frameworks */,
+				A1CFB264E2FA32E077960498 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -125,13 +178,73 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6246D9C624EA78800057872E /* Icon.png in Resources */,
 				6208308324E9C14200291825 /* LaunchScreen.storyboard in Resources */,
+				6246D9C124EA6E370057872E /* GoogleService-Info.plist in Resources */,
+				6246D9C424EA772A0057872E /* Logo.png in Resources */,
 				6208308024E9C14200291825 /* Assets.xcassets in Resources */,
 				6208307B24E9C13A00291825 /* Main.storyboard in Resources */,
+				6246D9C824EA7A260057872E /* Icon_no_back.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		38B50A078C575C982665EC4F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Medspace/Pods-Medspace-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Medspace/Pods-Medspace-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7B13B917F5476F2D6C809B46 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Medspace-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A1CFB264E2FA32E077960498 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Medspace/Pods-Medspace-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		6208306E24E9C13A00291825 /* Sources */ = {
@@ -139,7 +252,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				6208307824E9C13A00291825 /* ViewController.swift in Sources */,
+				621535AC24EACF14007B18BA /* SignupVC.swift in Sources */,
 				6208307E24E9C13A00291825 /* Medspace.xcdatamodeld in Sources */,
+				6246D9CA24EA7CD80057872E /* LoginVC.swift in Sources */,
 				6208307624E9C13A00291825 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -284,6 +399,7 @@
 		};
 		6208308824E9C14200291825 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9A2EBA75079582513C89542C /* Pods-Medspace.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -292,6 +408,39 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-l\"c++\"",
+					"-l\"icucore\"",
+					"-l\"sqlite3\"",
+					"-l\"z\"",
+					"-framework",
+					"\"CFNetwork\"",
+					"-framework",
+					"\"FirebaseAnalytics\"",
+					"-framework",
+					"\"FirebaseAuth\"",
+					"-framework",
+					"\"FirebaseCore\"",
+					"-framework",
+					"\"FirebaseCoreDiagnostics\"",
+					"-framework",
+					"\"FirebaseDatabase\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"GTMSessionFetcher\"",
+					"-framework",
+					"\"SafariServices\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"StoreKit\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"UIKit\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = iOS.Medspace;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -302,6 +451,7 @@
 		};
 		6208308924E9C14200291825 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3D7E06918CD3386866B4E848 /* Pods-Medspace.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -310,6 +460,44 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-l\"c++\"",
+					"-l\"icucore\"",
+					"-l\"sqlite3\"",
+					"-l\"z\"",
+					"-framework",
+					"\"CFNetwork\"",
+					"\"FBLPromises\"",
+					"\"FIRAnalyticsConnector\"",
+					"-framework",
+					"\"FirebaseAnalytics\"",
+					"\"FirebaseAuth\"",
+					"-framework",
+					"\"FirebaseCore\"",
+					"\"FirebaseCoreDiagnostics\"",
+					"-framework",
+					"\"FirebaseDatabase\"",
+					"-framework",
+					"\"FirebaseInstallations\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"GTMSessionFetcher\"",
+					"\"GoogleAppMeasurement\"",
+					"-framework",
+					"\"GoogleDataTransport\"",
+					"\"GoogleUtilities\"",
+					"\"SafariServices\"",
+					"-framework",
+					"\"Security\"",
+					"\"StoreKit\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = iOS.Medspace;
 				PRODUCT_NAME = "$(TARGET_NAME)";
