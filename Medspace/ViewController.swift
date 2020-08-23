@@ -13,7 +13,12 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            self.performSegue(withIdentifier: "LoginVC", sender: nil)
+            let user_logged = UserDefaults.standard.bool(forKey: "isUserLoggedIn")
+            if(user_logged){
+                self.performSegue(withIdentifier: "HomeVC", sender: nil)
+            } else {
+                self.performSegue(withIdentifier: "LoginVC", sender: nil)
+            }
         }
     }
 }

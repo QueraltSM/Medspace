@@ -23,6 +23,7 @@ class SignupVC: UIViewController {
         super.viewDidLoad()
         ref = Database.database().reference()
         customSignupBttn()
+        self.navigationController?.isNavigationBarHidden = true
     }
     
     func customSignupBttn(){

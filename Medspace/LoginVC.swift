@@ -15,17 +15,46 @@ class LoginVC: UIViewController {
     @IBOutlet weak var email: IuFloatingTextFiledPlaceHolder!
     @IBOutlet weak var password: IuFloatingTextFiledPlaceHolder!
     @IBOutlet weak var login_button: UIButton!
-    var blue: UIColor!
+    var spinningActivityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
+    let container: UIView = UIView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         customLoginBttn()
+        self.navigationController?.isNavigationBarHidden = true
     }
     
     func customLoginBttn(){
         login_button.layer.borderColor = UIColor.black.cgColor
         login_button.layer.borderWidth = 1
         login_button.layer.cornerRadius = login_button.frame.size.height / 2.0
+    }
+    
+    func stopAnimation() {
+        self.spinningActivityIndicator.stopAnimating()
+        UIApplication.shared.endIgnoringInteractionEvents()
+        self.container.removeFromSuperview()
+    }
+    
+    func setActivityIndicator() {
+        let window = UIApplication.shared.keyWindow
+        container.frame = UIScreen.main.bounds
+        container.backgroundColor = UIColor(hue: 0/360, saturation: 0/100, brightness: 0/100, alpha: 0.6)
+        let loadingView: UIView = UIView()
+        loadingView.frame = CGRect(x: 0, y: 0, width: 80, height: 80)
+        loadingView.center = container.center
+        loadingView.backgroundColor = UIColor.init(hexString: "#03264o")
+        loadingView.clipsToBounds = true
+        loadingView.layer.cornerRadius = 40
+        spinningActivityIndicator.frame =  CGRect(x: 0, y: 0, width: 40, height: 40)
+        spinningActivityIndicator.hidesWhenStopped = true
+        spinningActivityIndicator.style = UIActivityIndicatorView.Style.whiteLarge
+        spinningActivityIndicator.center = CGPoint(x: loadingView.frame.size.width / 2, y: loadingView.frame.size.height / 2)
+        loadingView.addSubview(spinningActivityIndicator)
+        container.addSubview(loadingView)
+        window!.addSubview(container)
+        spinningActivityIndicator.startAnimating()
+        UIApplication.shared.beginIgnoringInteractionEvents()
     }
     
     @IBAction func login(_ sender: Any) {
@@ -35,11 +64,18 @@ class LoginVC: UIViewController {
                 self.password.setUnderline(color: UIColor.red)
                 self.showAlert(title: "Error", message: error.localizedDescription)
             } else {
-                if ((result?.isEmailVerified)!) {
-                    self.performSegue(withIdentifier: "HomeVC", sender: nil)
-                } else {
-                    self.showAlert(title: "Couldn't sign you in", message: "Please check your mailbox to verify your account")
-                }
+                self.setActivityIndicator()
+                Database.database().reference().child("Users").child((Auth.auth().currentUser?.uid)!).observeSingleEvent(of: .value, with: { snapshot in
+                        let value = snapshot.value as? NSDictionary
+                        let usertype = value?["Type"] as? String ?? ""
+                        let fullname = value?["Fullname"] as? String ?? ""
+                        UserDefaults.standard.set(usertype, forKey: "usertype")
+                        UserDefaults.standard.set(fullname, forKey: "fullname")
+                        UserDefaults.standard.set(true, forKey: "isUserLoggedIn")
+                        self.stopAnimation()
+                        self.performSegue(withIdentifier: "HomeVC", sender: nil)
+                    })
+                
             }
         }
     }
@@ -61,7 +97,6 @@ class LoginVC: UIViewController {
                         }
                         self.showAlert(title:title, message: message)
                     }
-                    
                 }
             }
         })
