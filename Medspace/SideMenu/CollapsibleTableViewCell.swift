@@ -15,10 +15,11 @@ class CollapsibleTableViewCell: UITableViewCell {
     func configure(withViewModel viewModel: CollapsableViewModel) {
         self.textLabel?.text = viewModel.label
         self.imageView?.image = viewModel.image
+        self.textLabel?.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.headline)
         backgroundColor = UIColor.clear
         if(viewModel.needsSeparator) {
-            let viewSeparatorLine = UIView(frame:CGRect(x: 0, y: contentView.frame.size.height - 1.0, width: contentView.frame.size.width, height: 1))
-            viewSeparatorLine.backgroundColor = UIColor.lightGray
+            let viewSeparatorLine = UIView(frame:CGRect(x: 0, y: contentView.frame.size.height - 1.0, width: contentView.frame.size.width, height: 0.5))
+            viewSeparatorLine.backgroundColor = UIColor.black
             contentView.addSubview(viewSeparatorLine)
         } else {
             separator.removeFromSuperview()
@@ -31,7 +32,7 @@ class CollapsibleTableViewCell: UITableViewCell {
         separator.frame = CGRect(x: separatorInset.left,
                                  y: contentView.bounds.height - separatorHeight,
                                  width: contentView.bounds.width-separatorInset.left-separatorInset.right,
-                                 height: separatorHeight)        
+                                 height: separatorHeight)
     }
     
     override func awakeFromNib() {

@@ -12,6 +12,12 @@ var admin_menu : AdminMenuVC!
 var doctor_menu: DoctorMenuVC!
 var usertype: String!
 var username: String!
+let specialities = ["Allergy & Inmunology","Anesthesiology","Dermatology",
+                    "Diagnostic Radiology", "Emergency Medicine", "Family Medicine",
+                    "Internal Medicine", "Medical Genetics", "Neurology",
+                    "Nuclear Medicine", "Opthalmology", "Pathology",
+                    "Pediatrics","Preventive Medicine", "Psychiatry",
+                    "Radiation Oncology", "Surgery", "Urology"]
 
 class HomeVC: UIViewController {
     
@@ -22,17 +28,6 @@ class HomeVC: UIViewController {
         setMenu()
     }
     
-    func openMenu() {
-        if (usertype! == "Admin") {
-            self.addChild(admin_menu)
-            self.view.addSubview(admin_menu.view)
-        } else {
-            self.addChild(doctor_menu)
-            self.view.addSubview(doctor_menu.view)
-        }
-        AppDelegate.menu_bool = false
-    }
-    
     @IBAction func didTapMenuButton(_ sender: Any) {
         if AppDelegate.menu_bool {
             openMenu()
@@ -41,16 +36,10 @@ class HomeVC: UIViewController {
         }
     }
     
-    @objc func respondToGesture(gesture: UISwipeGestureRecognizer) {
-        switch gesture.direction {
-        case UISwipeGestureRecognizer.Direction.right:
-            AppDelegate.menu_bool = false
-            openMenu()
-        case UISwipeGestureRecognizer.Direction.left:
-            close_on_swipe()
-        default:
-            break
-        }
+    func openMenu() {
+        let menu_view = getMenuView()
+        self.addChild(menu_view)
+        self.view.addSubview(menu_view.view)
     }
     
     func setMenu() {
@@ -59,28 +48,30 @@ class HomeVC: UIViewController {
         } else {
             doctor_menu = self.storyboard?.instantiateViewController(withIdentifier: "DoctorMenuVC") as? DoctorMenuVC
         }
-        let swipeRight = UISwipeGestureRecognizer(target: self, action:#selector(self.respondToGesture))
-        swipeRight.direction = UISwipeGestureRecognizer.Direction.right
-        let swipeLeft = UISwipeGestureRecognizer(target: self, action:#selector(self.respondToGesture))
-        swipeRight.direction = UISwipeGestureRecognizer.Direction.left
-        self.view.addGestureRecognizer(swipeRight)
-        self.view.addGestureRecognizer(swipeLeft)
     }
+}
 
-    func closeMenu() {
-        AppDelegate.menu_bool = true
-        if (usertype! == "Admin") {
-            admin_menu.closeMenu()
-        } else {
-            doctor_menu.closeMenu()
-        }
+func getMenuView() -> UIViewController {
+    AppDelegate.menu_bool = false
+    if (usertype! == "Admin") {
+        return admin_menu
     }
+    return doctor_menu
+}
 
-    func close_on_swipe() {
-        if AppDelegate.menu_bool {
-            AppDelegate.menu_bool = false
-        } else {
-            closeMenu()
-        }
+func closeMenu() {
+    AppDelegate.menu_bool = true
+    if (usertype! == "Admin") {
+        admin_menu.closeMenu()
+    } else {
+        doctor_menu.closeMenu()
+    }
+}
+
+func close_on_swipe() {
+    if AppDelegate.menu_bool {
+        AppDelegate.menu_bool = false
+    } else {
+        closeMenu()
     }
 }

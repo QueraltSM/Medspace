@@ -41,7 +41,7 @@ class AdminMenuVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
         CollapsableViewModel(label: "News", image: UIImage(named: "News.png"), children: [
             CollapsableViewModel(label: "All news"),
             CollapsableViewModel(label: "My news"),
-            CollapsableViewModel(label: "Create news")]),
+            CollapsableViewModel(label: "Create news", segue:"CreateNewsVC")]),
         CollapsableViewModel(label: "Cases", image: UIImage(named: "Cases.png")),
         CollapsableViewModel(label: "Discussions", image: UIImage(named: "Discussions.png")),
         CollapsableViewModel(label: "Researches", image: UIImage(named: "Researches.png")),
@@ -59,7 +59,7 @@ class AdminMenuVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
         self.view.backgroundColor = UIColor.clear
         self.fullname.text = username
     }
-
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }

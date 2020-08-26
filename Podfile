@@ -9,4 +9,5 @@ target 'Medspace' do
 	pod 'Firebase', '4.0.3'
 	pod 'Firebase/Database'
 	pod 'Firebase/Auth'
+	pod 'Firebase/Storage'
 end

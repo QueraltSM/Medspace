@@ -10,6 +10,9 @@ PODS:
   - Firebase/Database (4.0.3):
     - Firebase/Core
     - FirebaseDatabase (= 4.0.0)
+  - Firebase/Storage (4.0.3):
+    - Firebase/Core
+    - FirebaseStorage (= 2.0.0)
   - FirebaseAnalytics (4.0.2):
     - FirebaseCore (~> 4.0)
     - FirebaseInstanceID (~> 2.0)
@@ -24,6 +27,10 @@ PODS:
     - FirebaseAnalytics (~> 4.0)
   - FirebaseInstanceID (2.0.10):
     - FirebaseCore (~> 4.0)
+  - FirebaseStorage (2.0.0):
+    - FirebaseAnalytics (~> 4.0)
+    - FirebaseCore (~> 4.0)
+    - GTMSessionFetcher/Core (~> 1.1)
   - GoogleToolboxForMac/DebugUtils (2.2.2):
     - GoogleToolboxForMac/Defines (= 2.2.2)
   - GoogleToolboxForMac/Defines (2.2.2)
@@ -40,6 +47,7 @@ DEPENDENCIES:
   - Firebase (= 4.0.3)
   - Firebase/Auth
   - Firebase/Database
+  - Firebase/Storage
 
 SPEC CHECKSUMS:
   Firebase: 9e33fdfbca37cab635c693883caa90a4475b842b
@@ -48,9 +56,10 @@ SPEC CHECKSUMS:
   FirebaseCore: c709067051de07bdaffdc4e735cd7299a23c463a
   FirebaseDatabase: d829b3a8c3e2ac7a16773c5df226966b0805dfc2
   FirebaseInstanceID: 8d20d890d65c917f9f7d9950b6e10a760ad34321
+  FirebaseStorage: 8110a1ed2034c8fbfd83890d2acc9cdbbd99afec
   GoogleToolboxForMac: 800648f8b3127618c1b59c7f97684427630c5ea3
   GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
 
-PODFILE CHECKSUM: 2c6a27cd24964648440adcd6b79585659ab81593
+PODFILE CHECKSUM: 6bcae3684489cb7ccc56a6e810f5bf0687c174e1
 
 COCOAPODS: 1.4.0
