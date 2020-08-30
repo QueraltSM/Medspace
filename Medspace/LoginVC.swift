@@ -10,13 +10,14 @@ import UIKit
 import Firebase
 import FirebaseAuth
 
+var spinningActivityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
+var container: UIView = UIView()
+
 class LoginVC: UIViewController {
     
     @IBOutlet weak var email: IuFloatingTextFiledPlaceHolder!
     @IBOutlet weak var password: IuFloatingTextFiledPlaceHolder!
     @IBOutlet weak var login_button: UIButton!
-    var spinningActivityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
-    let container: UIView = UIView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,32 +31,6 @@ class LoginVC: UIViewController {
         login_button.layer.cornerRadius = login_button.frame.size.height / 2.0
     }
     
-    func stopAnimation() {
-        self.spinningActivityIndicator.stopAnimating()
-        UIApplication.shared.endIgnoringInteractionEvents()
-        self.container.removeFromSuperview()
-    }
-    
-    func setActivityIndicator() {
-        let window = UIApplication.shared.keyWindow
-        container.frame = UIScreen.main.bounds
-        container.backgroundColor = UIColor(hue: 0/360, saturation: 0/100, brightness: 0/100, alpha: 0.6)
-        let loadingView: UIView = UIView()
-        loadingView.frame = CGRect(x: 0, y: 0, width: 80, height: 80)
-        loadingView.center = container.center
-        loadingView.backgroundColor = UIColor.init(hexString: "#03264o")
-        loadingView.clipsToBounds = true
-        loadingView.layer.cornerRadius = 40
-        spinningActivityIndicator.frame =  CGRect(x: 0, y: 0, width: 40, height: 40)
-        spinningActivityIndicator.hidesWhenStopped = true
-        spinningActivityIndicator.style = UIActivityIndicatorView.Style.whiteLarge
-        spinningActivityIndicator.center = CGPoint(x: loadingView.frame.size.width / 2, y: loadingView.frame.size.height / 2)
-        loadingView.addSubview(spinningActivityIndicator)
-        container.addSubview(loadingView)
-        window!.addSubview(container)
-        spinningActivityIndicator.startAnimating()
-        UIApplication.shared.beginIgnoringInteractionEvents()
-    }
     
     @IBAction func login(_ sender: Any) {
         Auth.auth().signIn(withEmail: email.text!, password: password.text!) { (result, error) in
@@ -106,11 +81,5 @@ class LoginVC: UIViewController {
         alert.addAction(save)
         alert.preferredAction = save
         self.present(alert, animated: true, completion: nil)
-    }
-    
-    func showAlert(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-        self.present(alert, animated: true)
     }
 }

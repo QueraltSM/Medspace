@@ -7,9 +7,52 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseAuth
+
+struct Speciality {
+    let name: String
+    let color: UIColor?
+}
+
+struct News {
+    let id: String
+    let image: UIImage
+    let date: String
+    let title: String
+    let speciality: Speciality
+    let body: String
+    let userid: String
+}
+
+var admin_menu : AdminMenuVC!
+var doctor_menu: DoctorMenuVC!
+var usertype: String!
+var username: String!
+let specialities = [
+    Speciality(name: "Allergy & Inmunology", color: UIColor.init(hexString: "#990F02")),
+    Speciality(name: "Anesthesiology", color: UIColor.init(hexString: "#E4A199")),
+    Speciality(name: "Dermatology", color: UIColor.init(hexString: "#8D4585")),
+    Speciality(name: "Diagnostic Radiology", color: UIColor.init(hexString: "#95B8E3")),
+    Speciality(name: "Emergency Medicine", color: UIColor.init(hexString: "#74B72E")),
+    Speciality(name: "Family Medicine", color: UIColor.init(hexString: "#ECB7BF")),
+    Speciality(name: "Internal Medicine", color: UIColor.init(hexString: "#1F456E")),
+    Speciality(name: "Medical Genetics", color: UIColor.init(hexString: "#B43757")),
+    Speciality(name: "Neurology", color: UIColor.init(hexString: "#98BF64")),
+    Speciality(name: "Nuclear Medicine",  color: UIColor.init(hexString: "#420c09")),
+    Speciality(name: "Opthalmology", color: UIColor.init(hexString: "#702963")),
+    Speciality(name: "Pathology", color: UIColor.init(hexString: "#CC5801")),
+    Speciality(name: "Pediatrics", color: UIColor.init(hexString: "#FC6A03")),
+    Speciality(name: "Preventive Medicine", color: UIColor.init(hexString: "#3A5311")),
+    Speciality(name: "Radiation Oncology", color: UIColor.init(hexString: "#BC544B")),
+    Speciality(name: "Psychiatry", color: UIColor.init(hexString: "#0492C2")),
+    Speciality(name: "Surgery", color: UIColor.init(hexString: "#ED820E")),
+    Speciality(name: "Urology", color: UIColor.init(hexString: "#48AAAD"))]
+var refreshControl = UIRefreshControl()
+
 
 class ViewController: UIViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
@@ -183,5 +226,133 @@ extension UIColor {
             (a, r, g, b) = (255, 0, 0, 0)
         }
         self.init(red: CGFloat(r) / 255, green: CGFloat(g) / 255, blue: CGFloat(b) / 255, alpha: CGFloat(a) / 255)
+    }
+}
+
+extension UIViewController {
+    func setActivityIndicator() {
+        let window = UIApplication.shared.keyWindow
+        container.frame = UIScreen.main.bounds
+        container.backgroundColor = UIColor(hue: 0/360, saturation: 0/100, brightness: 0/100, alpha: 0.5)
+        let loadingView: UIView = UIView()
+        loadingView.frame = CGRect(x: 0, y: 0, width: 80, height: 80)
+        loadingView.center = container.center
+        loadingView.clipsToBounds = true
+        loadingView.layer.cornerRadius = 40
+        spinningActivityIndicator.frame =  CGRect(x: 0, y: 0, width: 40, height: 40)
+        spinningActivityIndicator.hidesWhenStopped = true
+        spinningActivityIndicator.style = UIActivityIndicatorView.Style.whiteLarge
+        spinningActivityIndicator.center = CGPoint(x: loadingView.frame.size.width / 2, y: loadingView.frame.size.height / 2)
+        loadingView.addSubview(spinningActivityIndicator)
+        container.addSubview(loadingView)
+        window!.addSubview(container)
+        spinningActivityIndicator.startAnimating()
+        UIApplication.shared.beginIgnoringInteractionEvents()
+    }
+    
+    func stopAnimation() {
+        spinningActivityIndicator.stopAnimating()
+        UIApplication.shared.endIgnoringInteractionEvents()
+        container.removeFromSuperview()
+    }
+    
+    func getFormattedDate(date: String) -> String {
+        let dateFormatterGet = DateFormatter()
+        dateFormatterGet.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
+        let dateFormatterPrint = DateFormatter()
+        dateFormatterPrint.dateFormat = "MMM d, HH:mm a"
+        if let date = dateFormatterGet.date(from: date) {
+            return dateFormatterPrint.string(from: date)
+        }
+        return ""
+    }
+    
+    func setMenu() {
+        if (usertype! == "Admin") {
+            admin_menu = self.storyboard?.instantiateViewController(withIdentifier: "AdminMenuVC") as? AdminMenuVC
+        } else {
+            doctor_menu = self.storyboard?.instantiateViewController(withIdentifier: "DoctorMenuVC") as? DoctorMenuVC
+        }
+    }
+    
+    func getMenuView() -> UIViewController {
+        AppDelegate.menu_bool = false
+        if (usertype! == "Admin") {
+            return admin_menu
+        }
+        return doctor_menu
+    }
+    
+    func closeMenu() {
+        getMenuView().view.removeFromSuperview()
+        AppDelegate.menu_bool = true
+    }
+    
+    func openMenu() {
+        let menu_view = getMenuView()
+        self.addChild(menu_view)
+        self.navigationController?.navigationBar.isTranslucent = false
+        self.view.addSubview(menu_view.view)
+        menu_view.view.backgroundColor = UIColor(hue: 0/360, saturation: 0/100, brightness: 0/100, alpha: 0.5)
+    }
+    
+    @objc func swipeMenu() {
+        if AppDelegate.menu_bool {
+            openMenu()
+        } else {
+            closeMenu()
+        }
+    }
+    
+    func logout() {
+        let firebaseAuth = Auth.auth()
+        do {
+            try firebaseAuth.signOut()
+            UserDefaults.standard.set(false, forKey: "isUserLoggedIn")
+            self.performSegue(withIdentifier: "LogoutVC", sender: nil)
+        } catch let signOutError as NSError {
+            showAlert(title: "Error signing out", message: signOutError.description)
+        }
+    }
+    
+    func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+        self.present(alert, animated: true)
+    }
+}
+
+extension UITableView {
+    func setEmptyView(title: String) {
+        let emptyView = UIView(frame: CGRect(x: self.center.x, y: self.center.y, width: self.bounds.size.width, height: self.bounds.size.height))
+        let titleLabel = UILabel()
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.textColor = UIColor.black
+        titleLabel.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.headline)
+        titleLabel.numberOfLines = 0
+        titleLabel.lineBreakMode = .byWordWrapping
+        titleLabel.textAlignment = .center
+        emptyView.addSubview(titleLabel)
+        titleLabel.centerYAnchor.constraint(equalTo: emptyView.centerYAnchor).isActive = true
+        titleLabel.centerXAnchor.constraint(equalTo: emptyView.centerXAnchor).isActive = true
+        titleLabel.text = title
+        self.backgroundView = emptyView
+        self.separatorStyle = .none
+    }
+    
+    func restore() {
+        self.backgroundView = nil
+        self.separatorStyle = .singleLine
+    }
+    
+   
+}
+
+extension UITextView {
+    func customTextView(view_text: String, view_color: UIColor, view_font: UIFont, view_scroll: Bool) {
+        text = view_text
+        textColor = view_color
+        font = view_font
+        isScrollEnabled = view_scroll
     }
 }

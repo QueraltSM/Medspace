@@ -53,11 +53,6 @@ class DoctorMenuVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         })
     }
     
-    func closeMenu() {
-        self.view.removeFromSuperview()
-        AppDelegate.menu_bool = true
-    }
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -95,22 +90,5 @@ class DoctorMenuVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             closeMenu()
             self.performSegue(withIdentifier: viewModel.segue!, sender: nil)
         }
-    }
-    
-    func logout() {
-        let firebaseAuth = Auth.auth()
-        do {
-            try firebaseAuth.signOut()
-            UserDefaults.standard.set(false, forKey: "isUserLoggedIn")
-            self.performSegue(withIdentifier: "LogoutVC", sender: nil)
-        } catch let signOutError as NSError {
-            showAlert(title: "Error signing out", message: signOutError.description)
-        }
-    }
-    
-    func showAlert(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-        self.present(alert, animated: true)
     }
 }

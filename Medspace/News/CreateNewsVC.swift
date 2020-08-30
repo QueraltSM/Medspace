@@ -25,9 +25,10 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         speciality_textfield.delegate = self
         speciality_box.layer.borderColor = UIColor.lightGray.cgColor
         speciality_box.layer.borderWidth = 1.0
-        titleview.isScrollEnabled = false
-        titleview.customTextView(view_text:"Write a title...",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: false)
-        speciality_textfield.text = specialities[specialities.count / 2]
+        titleview.layer.borderColor = UIColor.lightGray.cgColor
+        titleview.layer.borderWidth = 1.0
+        titleview.customTextView(view_text:"Write a title...",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
+        speciality_textfield.text = specialities[specialities.count / 2].name
         speciality_textfield.textColor = UIColor.gray
         createPickerView()
         dismissPickerView()
@@ -35,9 +36,9 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == UIColor.gray {
-            textView.customTextView(view_text:"",view_color:UIColor.black, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: false)
+            textView.customTextView(view_text:"",view_color:UIColor.black, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
         } else if (textView.textColor == UIColor.red) {
-            textView.customTextView(view_text:"",view_color:UIColor.black, view_font: UIFont.boldSystemFont(ofSize: 20.0),  view_scroll: false)
+            textView.customTextView(view_text:"",view_color:UIColor.black, view_font: UIFont.boldSystemFont(ofSize: 20.0),  view_scroll: true)
         }
     }
     
@@ -79,14 +80,16 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         return specialities.count
     }
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return specialities[row]
+        return specialities[row].name
     }
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        selectedSpeciality = specialities[row]
+        selectedSpeciality = specialities[row].name
         speciality_textfield.text = selectedSpeciality
     }
     
-    @IBAction func didTapCameraButton(_ sender: Any) {
+    
+    
+    @IBAction func choosePhoto(_ sender: Any) {
         let picker = UIImagePickerController()
         picker.delegate = self
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
@@ -103,7 +106,7 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         if (!image_header_invalid) {
             alert.addAction(UIAlertAction(title: "Remove Photo", style: .default, handler: {
                 action in
-                self.image_header.image = UIImage(named: "DefaultImage.jpg")
+                self.image_header.image = UIImage(named: "Medspace-News.png")
                 self.image_header_invalid = true
                 alert.dismiss(animated: true, completion: nil)
             }))
@@ -112,14 +115,15 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         self.present(alert, animated: true, completion: nil)
     }
     
-    func textViewDidChange(_ textView: UITextView) {
+    // Auto-layout textview
+    /*func textViewDidChange(_ textView: UITextView) {
         let fixedWidth = textView.frame.size.width
         textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
         let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
         var newFrame = textView.frame
         newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
         textView.frame = newFrame
-    }
+    }*/
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
@@ -127,39 +131,32 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
     }
     
     @IBAction func savePost(_ sender: Any) {
-        if (titleview.textColor == UIColor.black && !titleview.text.isEmpty) {
+        var error = ""
+        if (image_header_invalid) {
+            error += "Choose a valid image\n"
+        }
+        if (speciality_textfield.textColor == UIColor.gray) {
+            error += "Select a speciality"
+        }
+        if (error == "" && titleview.textColor == UIColor.black && !titleview.text.isEmpty) {
             let news_description_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "NewsDescriptionVC") as? NewsDescriptionVC
             news_description_vc!.title_news = titleview.text
             news_description_vc!.image_news = image_header.image
             news_description_vc!.speciality = speciality_textfield.text!
             navigationController?.pushViewController(news_description_vc!, animated: false)
-        } else {
+        } else if (titleview.text.isEmpty) {
             titleview.customTextView(view_text:"Title can't be empty",view_color:UIColor.red, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: false)
             titleview.resignFirstResponder()
         }
-    }
-    
-    func openMenu() {
-        let menu_view = getMenuView()
-        self.addChild(menu_view)
-        self.view.addSubview(menu_view.view)
+        if (error != "") {
+            showAlert(title: "Error in saving the news", message: error)
+        }
     }
     
     @IBAction func didTapMenuButton(_ sender: Any) {
-        if AppDelegate.menu_bool {
-            openMenu()
-        } else {
-            closeMenu()
-        }
+        swipeMenu()
     }
     
-    func setMenu() {
-        if (usertype! == "Admin") {
-            admin_menu = self.storyboard?.instantiateViewController(withIdentifier: "AdminMenuVC") as? AdminMenuVC
-        } else {
-            doctor_menu = self.storyboard?.instantiateViewController(withIdentifier: "DoctorMenuVC") as? DoctorMenuVC
-        }
-    }
 }
 
 extension CreateNewsVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -169,15 +166,15 @@ extension CreateNewsVC: UIImagePickerControllerDelegate, UINavigationControllerD
             image_header.image = pickedImage
             image_header_invalid = false
         }
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: false, completion: nil)
     }
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: false, completion: nil)
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: false, completion: nil)
     }
 }
 
@@ -205,14 +202,5 @@ extension UIView {
         case .bottom: border.frame = CGRect(x: self.frame.origin.x, y: self.frame.size.height - thickness, width: self.frame.size.width, height: thickness)
         }
         self.layer.addSublayer(border)
-    }
-}
-
-extension UITextView {
-    func customTextView(view_text: String, view_color: UIColor, view_font: UIFont, view_scroll: Bool) {
-        text = view_text
-        textColor = view_color
-        font = view_font
-        isScrollEnabled = view_scroll
     }
 }
