@@ -1,11 +1,3 @@
-//
-//  AdminMenuVC.swift
-//  Medspace
-//
-//  Created by Queralt Sosa Mompel on 21/8/20.
-//  Copyright © 2020 Queralt Sosa Mompel. All rights reserved.
-//
-
 import UIKit
 import Firebase
 import FirebaseAuth

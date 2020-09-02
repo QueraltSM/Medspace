@@ -1,11 +1,3 @@
-//
-//  ResearchesVC.swift
-//  Medspace
-//
-//  Created by Queralt Sosa Mompel on 1/9/20.
-//  Copyright © 2020 Queralt Sosa Mompel. All rights reserved.
-//
-
 import UIKit
 import FirebaseDatabase
 import FirebaseStorage
@@ -93,13 +85,21 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
                         color = s.color!
                     }
                 }
-                self.researches.append(Research(id: child.key, pdf: "", date: final_date, title: title, speciality: Speciality(name: speciality, color: color), description: description, user: User(id: userid, name: username)))
-                let sortedResearches = self.researches.sorted {
-                    $0.date > $1.date
+                print("Researches/\(child.key)")
+                let storageRef = Storage.storage().reference().child("Researches/\(child.key)")
+                storageRef.downloadURL { (url, error) in
+                    self.stopAnimation()
+                    if error == nil {
+                        self.researches.append(Research(id: child.key, pdf: url!, date: final_date, title: title, speciality: Speciality(name: speciality, color: color), description: description, user: User(id: userid, name: username)))
+                        let sortedResearches = self.researches.sorted {
+                            $0.date > $1.date
+                        }
+                        self.researches = sortedResearches
+                        self.researches_timeline.reloadData()
+                    } else {
+                        self.showAlert(title: "Error", message: (error?.localizedDescription)!)
+                    }
                 }
-                self.researches = sortedResearches
-                self.researches_timeline.reloadData()
-                self.stopAnimation()
             })
         }
     }
@@ -126,10 +126,10 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        /*let selected_research = researches[indexPath.row]
-        let show_research_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowResearchVC") as? ShowNewsVC
+        let selected_research = researches[indexPath.row]
+        let show_research_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowResearchVC") as? ShowResearchVC
         show_research_vc!.research = selected_research
-        navigationController?.pushViewController(show_research_vc!, animated: false)*/
+        navigationController?.pushViewController(show_research_vc!, animated: false)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

@@ -1,11 +1,3 @@
-//
-//  ViewController.swift
-//  Medspace
-//
-//  Created by Queralt Sosa Mompel on 16/8/20.
-//  Copyright © 2020 Queralt Sosa Mompel. All rights reserved.
-//
-
 import UIKit
 import Firebase
 import FirebaseAuth
@@ -27,7 +19,7 @@ struct News {
 
 struct Research {
     let id: String
-    let pdf: String
+    let pdf: URL
     let date: String
     let title: String
     let speciality: Speciality
@@ -333,7 +325,7 @@ extension UIViewController {
     func showAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-        self.present(alert, animated: true)
+        self.present(alert, animated: false)
     }
 }
 

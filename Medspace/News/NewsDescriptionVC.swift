@@ -1,11 +1,3 @@
-//
-//  NewsDescriptionVC.swift
-//  Medspace
-//
-//  Created by Queralt Sosa Mompel on 24/8/20.
-//  Copyright © 2020 Queralt Sosa Mompel. All rights reserved.
-//
-
 import UIKit
 import FirebaseDatabase
 import FirebaseAuth
@@ -46,13 +38,12 @@ class NewsDescriptionVC: UIViewController, UITextViewDelegate {
         swipeMenu()
     }
     
-    
     func saveNewsDB(path: String, user: String, date: String) {
-        self.ref.child("News/\(path)/title").setValue(title_news)
-        self.ref.child("News/\(path)/body").setValue(body_news.text!)
-        self.ref.child("News/\(path)/speciality").setValue(speciality)
-        self.ref.child("News/\(path)/user").setValue(user)
-        self.ref.child("News/\(path)/date").setValue(date)
+        self.ref.child("\(path)/title").setValue(title_news)
+        self.ref.child("\(path)/body").setValue(body_news.text!)
+        self.ref.child("\(path)/speciality").setValue(speciality)
+        self.ref.child("\(path)/user").setValue(user)
+        self.ref.child("\(path)/date").setValue(date)
     }
     
     @IBAction func askPost(_ sender: Any) {
@@ -75,7 +66,7 @@ class NewsDescriptionVC: UIViewController, UITextViewDelegate {
         self.setActivityIndicator()
         let user = Auth.auth().currentUser?.uid
         let now = Date().description
-        let path = now + "::" + user!
+        let path = "News/\(now)::\(user!)"
         guard let imageData: Data = image_news!.jpegData(compressionQuality: 0.1) else {
             return
         }

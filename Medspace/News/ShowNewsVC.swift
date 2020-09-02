@@ -1,11 +1,3 @@
-//
-//  ShowNewsVC.swift
-//  Medspace
-//
-//  Created by Queralt Sosa Mompel on 29/8/20.
-//  Copyright © 2020 Queralt Sosa Mompel. All rights reserved.
-//
-
 import UIKit
 
 class ShowNewsVC: UIViewController {
@@ -16,7 +8,6 @@ class ShowNewsVC: UIViewController {
     @IBOutlet weak var news_body: UILabel!
     @IBOutlet weak var news_date: UILabel!
     @IBOutlet weak var scrollview: UIScrollView!
-    
     var news: News?
     
     override func viewDidLoad() {

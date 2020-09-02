@@ -1,11 +1,3 @@
-//
-//  CreateNewsVC.swift
-//  Medspace
-//
-//  Created by Queralt Sosa Mompel on 24/8/20.
-//  Copyright © 2020 Queralt Sosa Mompel. All rights reserved.
-//
-
 import UIKit
 
 class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {

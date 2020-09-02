@@ -1,11 +1,3 @@
-//
-//  AppDelegate.swift
-//  Medspace
-//
-//  Created by Queralt Sosa Mompel on 16/8/20.
-//  Copyright © 2020 Queralt Sosa Mompel. All rights reserved.
-//
-
 import UIKit
 import CoreData
 import FirebaseCore

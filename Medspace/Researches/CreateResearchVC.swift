@@ -1,11 +1,3 @@
-//
-//  CreateResearchVC.swift
-//  Medspace
-//
-//  Created by Queralt Sosa Mompel on 2/9/20.
-//  Copyright © 2020 Queralt Sosa Mompel. All rights reserved.
-//
-
 import UIKit
 
 class CreateResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {

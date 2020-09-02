@@ -1,11 +1,3 @@
-//
-//  Home2VC.swift
-//  Medspace
-//
-//  Created by Queralt Sosa Mompel on 27/8/20.
-//  Copyright © 2020 Queralt Sosa Mompel. All rights reserved.
-//
-
 import UIKit
 import FirebaseDatabase
 import FirebaseStorage

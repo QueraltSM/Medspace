@@ -1,11 +1,3 @@
-//
-//  DataCell.swift
-//  Medspace
-//
-//  Created by Queralt Sosa Mompel on 1/9/20.
-//  Copyright © 2020 Queralt Sosa Mompel. All rights reserved.
-//
-
 import UIKit
 
 class DataCell: UITableViewCell {
