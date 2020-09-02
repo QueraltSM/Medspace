@@ -42,8 +42,8 @@ class LoginVC: UIViewController {
                 self.setActivityIndicator()
                 Database.database().reference().child("Users").child((Auth.auth().currentUser?.uid)!).observeSingleEvent(of: .value, with: { snapshot in
                         let value = snapshot.value as? NSDictionary
-                        let usertype = value?["Type"] as? String ?? ""
-                        let fullname = value?["Fullname"] as? String ?? ""
+                        let usertype = value?["type"] as? String ?? ""
+                        let fullname = value?["fullname"] as? String ?? ""
                         UserDefaults.standard.set(usertype, forKey: "usertype")
                         UserDefaults.standard.set(fullname, forKey: "fullname")
                         UserDefaults.standard.set(true, forKey: "isUserLoggedIn")

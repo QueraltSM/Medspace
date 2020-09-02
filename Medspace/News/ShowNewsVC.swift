@@ -21,6 +21,7 @@ class ShowNewsVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.shadowImage = UIImage()
         setMenu()
         image_header.image = news!.image
         news_title.text = news!.title

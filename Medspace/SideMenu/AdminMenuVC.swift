@@ -39,12 +39,11 @@ class AdminMenuVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
     let data = [
         CollapsableViewModel(label: "Home", image: UIImage(named: "Home.png"), segue:"HomeVC"),
         CollapsableViewModel(label: "News", image: UIImage(named: "News.png"), children: [
-            CollapsableViewModel(label: "All news"),
             CollapsableViewModel(label: "My news"),
             CollapsableViewModel(label: "Create news", segue:"CreateNewsVC")]),
         CollapsableViewModel(label: "Cases", image: UIImage(named: "Cases.png")),
         CollapsableViewModel(label: "Discussions", image: UIImage(named: "Discussions.png")),
-        CollapsableViewModel(label: "Researches", image: UIImage(named: "Researches.png")),
+        CollapsableViewModel(label: "Researches", image: UIImage(named: "Researches.png"), segue:"ResearchesVC"),
         CollapsableViewModel(label: "Account settings", image: UIImage(named: "Settings.png")),
         CollapsableViewModel(label: "Logout", image: UIImage(named: "Logout.png"))]
     

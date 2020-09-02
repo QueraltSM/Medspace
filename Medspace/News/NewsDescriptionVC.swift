@@ -14,7 +14,6 @@ import FirebaseStorage
 class NewsDescriptionVC: UIViewController, UITextViewDelegate {
     
     @IBOutlet weak var body_news: UITextView!
-    
     var title_news: String = ""
     var image_news: UIImage? = nil
     var speciality: String = ""
@@ -23,6 +22,7 @@ class NewsDescriptionVC: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         body_news.delegate = self
+        navigationController?.navigationBar.shadowImage = UIImage()
         ref = Database.database().reference()
         body_news.customTextView(view_text:"Write the body of the news...",view_color:UIColor.gray, view_font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body), view_scroll: true)
         setMenu()

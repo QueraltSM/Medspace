@@ -21,15 +21,15 @@ class DoctorMenuVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         CollapsableViewModel(label: "Clinical cases", image: UIImage(named: "Cases.png"), children: [
             CollapsableViewModel(label: "All cases"),
             CollapsableViewModel(label: "My cases"),
-            CollapsableViewModel(label: "Post new case")]),
+            CollapsableViewModel(label: "New case")]),
         CollapsableViewModel(label: "Discussions", image: UIImage(named: "Discussions.png"), children: [
             CollapsableViewModel(label: "All discussions"),
             CollapsableViewModel(label: "My discussions"),
-            CollapsableViewModel(label: "Post new discussion")]),
+            CollapsableViewModel(label: "New discussion")]),
         CollapsableViewModel(label: "Researches", image: UIImage(named: "Researches.png"), children: [
-            CollapsableViewModel(label: "All researches"),
+            CollapsableViewModel(label: "All researches", segue:"ResearchesVC"),
             CollapsableViewModel(label: "My researches"),
-            CollapsableViewModel(label: "Post new research")]),
+            CollapsableViewModel(label: "New research", segue:"CreateResearchVC")]),
         CollapsableViewModel(label: "Account settings", image: UIImage(named: "Settings.png")),
         CollapsableViewModel(label: "Logout", image: UIImage(named: "Logout.png"))]
     
@@ -42,15 +42,7 @@ class DoctorMenuVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         self.menu_table.dataSource = self
         menu_table.separatorStyle = .none
         self.view.backgroundColor = UIColor.clear
-        setFullname()
-    }
-
-    func setFullname() {
-        Database.database().reference().child("Users").child((Auth.auth().currentUser?.uid)!).observeSingleEvent(of: .value, with: { snapshot in
-            let value = snapshot.value as? NSDictionary
-            let username = value?["Fullname"] as? String ?? ""
-            self.fullname.text = username
-        })
+        self.fullname.text = username
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

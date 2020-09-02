@@ -20,6 +20,7 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.shadowImage = UIImage()
         setMenu()
         titleview.delegate = self
         speciality_textfield.delegate = self
@@ -34,11 +35,13 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         dismissPickerView()
     }
     
+    @objc func unwindToThisViewController(segue: UIStoryboardSegue) {
+        print("unw")
+    }
+    
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == UIColor.gray {
             textView.customTextView(view_text:"",view_color:UIColor.black, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
-        } else if (textView.textColor == UIColor.red) {
-            textView.customTextView(view_text:"",view_color:UIColor.black, view_font: UIFont.boldSystemFont(ofSize: 20.0),  view_scroll: true)
         }
     }
     
@@ -87,8 +90,6 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         speciality_textfield.text = selectedSpeciality
     }
     
-    
-    
     @IBAction func choosePhoto(_ sender: Any) {
         let picker = UIImagePickerController()
         picker.delegate = self
@@ -115,6 +116,7 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         self.present(alert, animated: true, completion: nil)
     }
     
+    
     // Auto-layout textview
     /*func textViewDidChange(_ textView: UITextView) {
         let fixedWidth = textView.frame.size.width
@@ -135,6 +137,9 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         if (image_header_invalid) {
             error += "Choose a valid image\n"
         }
+        if (titleview.textColor == UIColor.gray || titleview.text.isEmpty) {
+            error += "Write a title\n"
+        }
         if (speciality_textfield.textColor == UIColor.gray) {
             error += "Select a speciality"
         }
@@ -144,9 +149,6 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
             news_description_vc!.image_news = image_header.image
             news_description_vc!.speciality = speciality_textfield.text!
             navigationController?.pushViewController(news_description_vc!, animated: false)
-        } else if (titleview.text.isEmpty) {
-            titleview.customTextView(view_text:"Title can't be empty",view_color:UIColor.red, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: false)
-            titleview.resignFirstResponder()
         }
         if (error != "") {
             showAlert(title: "Error in saving the news", message: error)
@@ -175,32 +177,5 @@ extension CreateNewsVC: UIImagePickerControllerDelegate, UINavigationControllerD
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: false, completion: nil)
-    }
-}
-
-extension UIView {
-    func round(corners: UIRectCorner, cornerRadius: Double) {
-        let size = CGSize(width: cornerRadius, height: cornerRadius)
-        let bezierPath = UIBezierPath(roundedRect: self.bounds, byRoundingCorners: corners, cornerRadii: size)
-        let shapeLayer = CAShapeLayer()
-        shapeLayer.frame = self.bounds
-        shapeLayer.path = bezierPath.cgPath
-        self.layer.mask = shapeLayer
-    }
-    
-    enum ViewSide {
-        case left, right, top, bottom
-    }
-    
-    func addBorder(toSide side: ViewSide, withColor color: CGColor, andThickness thickness: CGFloat) {
-        let border = CALayer()
-        border.backgroundColor = color
-        switch side {
-        case .left: border.frame = CGRect(x: self.frame.origin.x, y: self.frame.origin.y, width: thickness, height: self.frame.size.height)
-        case .right: border.frame = CGRect(x: self.frame.size.width - thickness, y: self.frame.origin.y, width: thickness, height: self.frame.size.height)
-        case .top: border.frame = CGRect(x: self.frame.origin.x, y: self.frame.origin.y, width: self.frame.size.width, height: thickness)
-        case .bottom: border.frame = CGRect(x: self.frame.origin.x, y: self.frame.size.height - thickness, width: self.frame.size.width, height: thickness)
-        }
-        self.layer.addSublayer(border)
     }
 }

@@ -36,9 +36,13 @@
 		62CEF60C24F2776900625E9C /* Discussions.png in Resources */ = {isa = PBXBuildFile; fileRef = 62CEF60B24F2776900625E9C /* Discussions.png */; };
 		62CEF60E24F2784100625E9C /* Cases.png in Resources */ = {isa = PBXBuildFile; fileRef = 62CEF60D24F2784100625E9C /* Cases.png */; };
 		62CEF61024F2792100625E9C /* Researches.png in Resources */ = {isa = PBXBuildFile; fileRef = 62CEF60F24F2792100625E9C /* Researches.png */; };
+		62D8C7AD24FE75830031587E /* ResearchesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D8C7AC24FE75830031587E /* ResearchesVC.swift */; };
+		62D8C7B424FE7C100031587E /* DataCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D8C7B324FE7C100031587E /* DataCell.swift */; };
+		62D9782D24FF9328002E4664 /* CreateResearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D9782C24FF9328002E4664 /* CreateResearchVC.swift */; };
 		62DF80CB24F04B6E00E758E9 /* CollapsibleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DF80CA24F04B6E00E758E9 /* CollapsibleTableViewCell.swift */; };
 		62F1650D24F3B380007A931F /* CreateNewsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F1650C24F3B380007A931F /* CreateNewsVC.swift */; };
 		62F1650F24F3B75F007A931F /* Camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 62F1650E24F3B75F007A931F /* Camera.png */; };
+		62F6013924FFDD500023A8CC /* ResearchDescriptionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F6013824FFDD500023A8CC /* ResearchDescriptionVC.swift */; };
 		62FA30E724FABD4C00BB0C45 /* Medspace-Case.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FA30E324FABD4A00BB0C45 /* Medspace-Case.png */; };
 		62FA30E824FABD4C00BB0C45 /* Medspace-News.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FA30E424FABD4B00BB0C45 /* Medspace-News.png */; };
 		62FA30E924FABD4C00BB0C45 /* Medspace-Discussion.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FA30E524FABD4B00BB0C45 /* Medspace-Discussion.png */; };
@@ -77,9 +81,14 @@
 		62CEF60B24F2776900625E9C /* Discussions.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Discussions.png; sourceTree = "<group>"; };
 		62CEF60D24F2784100625E9C /* Cases.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Cases.png; sourceTree = "<group>"; };
 		62CEF60F24F2792100625E9C /* Researches.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Researches.png; sourceTree = "<group>"; };
+		62D8C7AC24FE75830031587E /* ResearchesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResearchesVC.swift; sourceTree = "<group>"; };
+		62D8C7B324FE7C100031587E /* DataCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataCell.swift; sourceTree = "<group>"; };
+		62D9782C24FF9328002E4664 /* CreateResearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateResearchVC.swift; sourceTree = "<group>"; };
 		62DF80CA24F04B6E00E758E9 /* CollapsibleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollapsibleTableViewCell.swift; sourceTree = "<group>"; };
 		62F1650C24F3B380007A931F /* CreateNewsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewsVC.swift; sourceTree = "<group>"; };
 		62F1650E24F3B75F007A931F /* Camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Camera.png; sourceTree = "<group>"; };
+		62F6013824FFDD500023A8CC /* ResearchDescriptionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResearchDescriptionVC.swift; sourceTree = "<group>"; };
+		62F6013A24FFF8EC0023A8CC /* Medspace.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Medspace.entitlements; sourceTree = "<group>"; };
 		62FA30E324FABD4A00BB0C45 /* Medspace-Case.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Medspace-Case.png"; sourceTree = "<group>"; };
 		62FA30E424FABD4B00BB0C45 /* Medspace-News.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Medspace-News.png"; sourceTree = "<group>"; };
 		62FA30E524FABD4B00BB0C45 /* Medspace-Discussion.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Medspace-Discussion.png"; sourceTree = "<group>"; };
@@ -121,20 +130,20 @@
 		6208307424E9C13A00291825 /* Medspace */ = {
 			isa = PBXGroup;
 			children = (
+				62F6013A24FFF8EC0023A8CC /* Medspace.entitlements */,
+				62D8C7B024FE7AA60031587E /*  Shared */,
+				62D8C7AB24FE755C0031587E /* Researches */,
 				6210027024F6EF37005374EA /* Home */,
 				62F1650B24F3B34B007A931F /* News */,
 				625DD09024F02177007F6994 /* SideMenu */,
 				6246D9C224EA77210057872E /* Images */,
 				6246D9C024EA6E370057872E /* GoogleService-Info.plist */,
 				6208307524E9C13A00291825 /* AppDelegate.swift */,
-				6208307724E9C13A00291825 /* ViewController.swift */,
 				6208307924E9C13A00291825 /* Main.storyboard */,
 				6208307F24E9C14200291825 /* Assets.xcassets */,
 				6208308124E9C14200291825 /* LaunchScreen.storyboard */,
 				6208308424E9C14200291825 /* Info.plist */,
 				6208307C24E9C13A00291825 /* Medspace.xcdatamodeld */,
-				6246D9C924EA7CD80057872E /* LoginVC.swift */,
-				621535AB24EACF14007B18BA /* SignupVC.swift */,
 			);
 			path = Medspace;
 			sourceTree = "<group>";
@@ -181,6 +190,27 @@
 				62DF80CA24F04B6E00E758E9 /* CollapsibleTableViewCell.swift */,
 			);
 			path = SideMenu;
+			sourceTree = "<group>";
+		};
+		62D8C7AB24FE755C0031587E /* Researches */ = {
+			isa = PBXGroup;
+			children = (
+				62D8C7AC24FE75830031587E /* ResearchesVC.swift */,
+				62D9782C24FF9328002E4664 /* CreateResearchVC.swift */,
+				62F6013824FFDD500023A8CC /* ResearchDescriptionVC.swift */,
+			);
+			path = Researches;
+			sourceTree = "<group>";
+		};
+		62D8C7B024FE7AA60031587E /*  Shared */ = {
+			isa = PBXGroup;
+			children = (
+				6208307724E9C13A00291825 /* ViewController.swift */,
+				6246D9C924EA7CD80057872E /* LoginVC.swift */,
+				621535AB24EACF14007B18BA /* SignupVC.swift */,
+				62D8C7B324FE7C100031587E /* DataCell.swift */,
+			);
+			path = " Shared";
 			sourceTree = "<group>";
 		};
 		62F1650B24F3B34B007A931F /* News */ = {
@@ -245,6 +275,11 @@
 				TargetAttributes = {
 					6208307124E9C13A00291825 = {
 						CreatedOnToolsVersion = 10.1;
+						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
@@ -361,16 +396,20 @@
 			files = (
 				6223B29824FA5634000F6E83 /* ShowNewsVC.swift in Sources */,
 				6208307824E9C13A00291825 /* ViewController.swift in Sources */,
+				62F6013924FFDD500023A8CC /* ResearchDescriptionVC.swift in Sources */,
 				621535AC24EACF14007B18BA /* SignupVC.swift in Sources */,
 				622691C524F8519100BDCB36 /* HomeVC.swift in Sources */,
 				62DF80CB24F04B6E00E758E9 /* CollapsibleTableViewCell.swift in Sources */,
 				62F1650D24F3B380007A931F /* CreateNewsVC.swift in Sources */,
 				6208307E24E9C13A00291825 /* Medspace.xcdatamodeld in Sources */,
+				62D8C7AD24FE75830031587E /* ResearchesVC.swift in Sources */,
 				625DD09224F0218B007F6994 /* AdminMenuVC.swift in Sources */,
 				6246D9CA24EA7CD80057872E /* LoginVC.swift in Sources */,
 				625DD09424F02199007F6994 /* DoctorMenuVC.swift in Sources */,
+				62D9782D24FF9328002E4664 /* CreateResearchVC.swift in Sources */,
 				6208307624E9C13A00291825 /* AppDelegate.swift in Sources */,
 				626EF45124F4319B00D8A59B /* NewsDescriptionVC.swift in Sources */,
+				62D8C7B424FE7C100031587E /* DataCell.swift in Sources */,
 				622691C724F8522500BDCB36 /* HomeCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

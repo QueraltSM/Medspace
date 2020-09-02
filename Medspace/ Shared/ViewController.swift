@@ -22,7 +22,22 @@ struct News {
     let title: String
     let speciality: Speciality
     let body: String
-    let userid: String
+    let user: User
+}
+
+struct Research {
+    let id: String
+    let pdf: String
+    let date: String
+    let title: String
+    let speciality: Speciality
+    let description: String
+    let user: User
+}
+
+struct User {
+    let id: String
+    let name: String
 }
 
 var admin_menu : AdminMenuVC!
@@ -55,7 +70,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             let user_logged = UserDefaults.standard.bool(forKey: "isUserLoggedIn")
             if(user_logged){
                 self.performSegue(withIdentifier: "HomeVC", sender: nil)
@@ -229,7 +244,7 @@ extension UIColor {
     }
 }
 
-extension UIViewController {
+extension UIViewController {    
     func setActivityIndicator() {
         let window = UIApplication.shared.keyWindow
         container.frame = UIScreen.main.bounds
@@ -344,8 +359,6 @@ extension UITableView {
         self.backgroundView = nil
         self.separatorStyle = .singleLine
     }
-    
-   
 }
 
 extension UITextView {
@@ -354,5 +367,32 @@ extension UITextView {
         textColor = view_color
         font = view_font
         isScrollEnabled = view_scroll
+    }
+}
+
+extension UIView {
+    func round(corners: UIRectCorner, cornerRadius: Double) {
+        let size = CGSize(width: cornerRadius, height: cornerRadius)
+        let bezierPath = UIBezierPath(roundedRect: self.bounds, byRoundingCorners: corners, cornerRadii: size)
+        let shapeLayer = CAShapeLayer()
+        shapeLayer.frame = self.bounds
+        shapeLayer.path = bezierPath.cgPath
+        self.layer.mask = shapeLayer
+    }
+    
+    enum ViewSide {
+        case left, right, top, bottom
+    }
+    
+    func addBorder(toSide side: ViewSide, withColor color: CGColor, andThickness thickness: CGFloat) {
+        let border = CALayer()
+        border.backgroundColor = color
+        switch side {
+        case .left: border.frame = CGRect(x: self.frame.origin.x, y: self.frame.origin.y, width: thickness, height: self.frame.size.height)
+        case .right: border.frame = CGRect(x: self.frame.size.width - thickness, y: self.frame.origin.y, width: thickness, height: self.frame.size.height)
+        case .top: border.frame = CGRect(x: self.frame.origin.x, y: self.frame.origin.y, width: self.frame.size.width, height: thickness)
+        case .bottom: border.frame = CGRect(x: self.frame.origin.x, y: self.frame.size.height - thickness, width: self.frame.size.width, height: thickness)
+        }
+        self.layer.addSublayer(border)
     }
 }
