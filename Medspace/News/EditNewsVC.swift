@@ -1,34 +1,32 @@
 import UIKit
 
-class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
+class EditNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
 
-    @IBOutlet weak var contentview: UIView!
     @IBOutlet weak var image_header: UIImageView!
-    @IBOutlet weak var titleview: UITextView!
-    var image_header_invalid = true
-    var selectedSpeciality: String?
-    @IBOutlet weak var speciality_textfield: UITextField!
     @IBOutlet weak var speciality_box: UIView!
+    @IBOutlet weak var titleview: UITextView!
+    @IBOutlet weak var speciality_textfield: UITextField!
+    var image_header_invalid = false
+    var selectedSpeciality: String?
+    var news: News?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.prefersLargeTitles = false
         setMenu()
         titleview.delegate = self
         speciality_textfield.delegate = self
+        speciality_textfield.textColor = UIColor.gray
         speciality_box.layer.borderColor = UIColor.lightGray.cgColor
         speciality_box.layer.borderWidth = 1.0
         titleview.layer.borderColor = UIColor.lightGray.cgColor
         titleview.layer.borderWidth = 1.0
-        titleview.customTextView(view_text:"Write a title...",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
-        speciality_textfield.text = specialities[specialities.count / 2].name
-        speciality_textfield.textColor = UIColor.gray
+        speciality_textfield.text = news?.speciality.name
+        titleview.customTextView(view_text:(news?.title)!,view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
+        image_header.image = news?.image
         createPickerView()
         dismissPickerView()
-    }
-    
-    @objc func unwindToThisViewController(segue: UIStoryboardSegue) {
-        print("unw")
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -39,7 +37,7 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
-            textView.customTextView(view_text:"Write a title...",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: false)
+            textView.customTextView(view_text:(news?.title)!,view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: false)
         }
     }
     
@@ -68,20 +66,6 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         view.endEditing(true)
     }
     
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return specialities.count
-    }
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return specialities[row].name
-    }
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        selectedSpeciality = specialities[row].name
-        speciality_textfield.text = selectedSpeciality
-    }
-    
     @IBAction func choosePhoto(_ sender: Any) {
         let picker = UIImagePickerController()
         picker.delegate = self
@@ -108,51 +92,53 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         self.present(alert, animated: true, completion: nil)
     }
     
-    // Auto-layout textview
-    /*func textViewDidChange(_ textView: UITextView) {
-        let fixedWidth = textView.frame.size.width
-        textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
-        let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
-        var newFrame = textView.frame
-        newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
-        textView.frame = newFrame
-    }*/
-    
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
-        return newText.count <= 80
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return specialities.count
+    }
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return specialities[row].name
+    }
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        selectedSpeciality = specialities[row].name
+        speciality_textfield.text = selectedSpeciality
     }
     
-    @IBAction func savePost(_ sender: Any) {
+    @IBAction func showDescription(_ sender: Any) {
         var error = ""
         if (image_header_invalid) {
             error += "Choose a valid image\n"
         }
-        if (titleview.textColor == UIColor.gray || titleview.text.isEmpty) {
+        if (titleview.text.isEmpty) {
             error += "Write a title\n"
         }
-        if (speciality_textfield.textColor == UIColor.gray) {
-            error += "Select a speciality"
-        }
-        if (error == "" && titleview.textColor == UIColor.black && !titleview.text.isEmpty) {
-            let news_description_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "NewsDescriptionVC") as? NewsDescriptionVC
-            news_description_vc!.title_news = titleview.text
-            news_description_vc!.image_news = image_header.image
-            news_description_vc!.speciality = speciality_textfield.text!
-            navigationController?.pushViewController(news_description_vc!, animated: false)
+        if (error == "" && !titleview.text.isEmpty) {
+            
+            showEditNewsDescriptionVC()
         }
         if (error != "") {
-            showAlert(title: "Error in saving the news", message: error)
+            showAlert(title: "Error in editing the news", message: error)
         }
     }
     
-    @IBAction func didTapMenuButton(_ sender: Any) {
-        swipeMenu()
+    func showEditNewsDescriptionVC(){
+        let news_description_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditNewsDescriptionVC") as? EditNewsDescriptionVC
+        var color = UIColor.init()
+        for s in specialities {
+            if s.name == speciality_textfield.text! {
+                color = s.color!
+            }
+        }
+        let final_news = News(id: (news?.id)!, image: image_header.image!, date: (news?.date)!, title: titleview.text!, speciality: Speciality(name: speciality_textfield.text!, color: color), body: (news?.body)!, user: (news?.user)!)
+        news_description_vc!.news = final_news
+        navigationController?.pushViewController(news_description_vc!, animated: false)
     }
     
 }
 
-extension CreateNewsVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension EditNewsVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             image_header.contentMode = .scaleToFill

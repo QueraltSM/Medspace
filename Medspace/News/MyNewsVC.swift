@@ -25,7 +25,7 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
         getNews()
         turnEditState(enabled: false, title: "")
         if news.count > 0 {
-             turnEditState(enabled: true, title: "Edit")
+             turnEditState(enabled: true, title: "Select to delete")
         }
         searchController.searchBar.delegate = self
         refreshControl.attributedTitle = NSAttributedString(string: "")
@@ -132,19 +132,21 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
     func getNews() {
         ref.child("News").observeSingleEvent(of: .value, with: { snapshot in
             if (snapshot.children.allObjects.count == 0) {
-                self.news_timeline.setEmptyView(title: "There is no news publish yet\n\n:(")
+                self.news_timeline.setEmptyView(title: "You have not post a news yet\n\n:(")
+                self.turnEditState(enabled: false, title: "")
             } else {
                 self.news_timeline.restore()
+                self.turnEditState(enabled: true, title: "Select to delete")
             }
             self.loopSnapshotChildren(ref: self.ref, snapshot: snapshot)
-            self.turnEditState(enabled: true, title: "Edit")
         })
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if (!edit) {
+            cancelSelections()
             let selected_news = news[indexPath.row]
-            let show_news_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowNewsVC") as? ShowNewsVC
+            let show_news_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditNewsVC") as? EditNewsVC
             show_news_vc!.news = selected_news
             navigationController?.pushViewController(show_news_vc!, animated: false)
         }
@@ -181,23 +183,23 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
         }
     }
     
-    func setToolbarDelete(add: Bool) {
+    func setToolbarDelete(hide: Bool) {
         let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: self, action: nil)
-        let deleteButton: UIBarButtonItem = UIBarButtonItem(title: "Delete", style: .plain, target: self, action: #selector(didPressDelete))
+        let deleteButton: UIBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(didPressDelete))
         self.toolbarItems = [flexible, deleteButton]
         self.navigationController?.toolbar.barTintColor = UIColor.white
-        self.navigationController?.setToolbarHidden(!add, animated: false)
+        self.navigationController?.setToolbarHidden(hide, animated: false)
     }
     
     @IBAction func didTapEditButton(_ sender: Any) {
         if !edit {
             editButton.title = "Cancel"
             edit = true
-            setToolbarDelete(add: true)
+            setToolbarDelete(hide: false)
         } else {
-            editButton.title = "Edit"
+            editButton.title = "Select to delete"
             edit = false
-            setToolbarDelete(add: false)
+            setToolbarDelete(hide: true)
             cancelSelections()
         }
     }
@@ -215,6 +217,7 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
     }
     
     @objc func didPressDelete() {
+        setToolbarDelete(hide: true)
         let selectedRows = self.news_timeline.indexPathsForSelectedRows
         if selectedRows != nil {
             for var selectionIndex in selectedRows! {
@@ -224,6 +227,11 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
                 }
                 tableView(news_timeline, commit: .delete, forRowAt: selectionIndex)
             }
+        }
+        if (news.count == 0) {
+            editButton.isEnabled = false
+            editButton.title = ""
+            news_timeline.setEmptyView(title: "You have not post a news yet\n\n:(")
         }
     }
     

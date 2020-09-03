@@ -1311,6 +1311,144 @@
             </objects>
             <point key="canvasLocation" x="2786" y="1"/>
         </scene>
+        <!--Edit news-->
+        <scene sceneID="rY8-Xa-bsB">
+            <objects>
+                <viewController storyboardIdentifier="EditNewsVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="AKX-uo-jNq" customClass="EditNewsVC" customModule="Medspace" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="CC2-FM-zBA">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qia-JB-8ra">
+                                <rect key="frame" x="0.0" y="44" width="414" height="852"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cP5-fs-X3z">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="904"/>
+                                        <subviews>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Ts-UA-X8O">
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="299"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            </imageView>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tKV-17-OAM">
+                                                <rect key="frame" x="35" y="528" width="344" height="149"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Select a speciality" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BRJ-KS-wKv">
+                                                        <rect key="frame" x="0.0" y="22" width="344" height="30"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="che-zb-B0q">
+                                                        <rect key="frame" x="0.0" y="75" width="344" height="30"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <nil key="textColor"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <textInputTraits key="textInputTraits"/>
+                                                    </textField>
+                                                </subviews>
+                                                <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </view>
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" indicatorStyle="black" text="Write a title..." textAlignment="center" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Eet-J4-s6J">
+                                                <rect key="frame" x="35" y="354" width="344" height="125"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                            </textView>
+                                        </subviews>
+                                        <color key="backgroundColor" red="0.95973664270000003" green="0.95842813049999998" blue="0.98128457869999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="cP5-fs-X3z" secondAttribute="trailing" id="4T0-55-vaL"/>
+                                    <constraint firstItem="cP5-fs-X3z" firstAttribute="top" secondItem="qia-JB-8ra" secondAttribute="top" id="T95-te-meD"/>
+                                    <constraint firstItem="cP5-fs-X3z" firstAttribute="leading" secondItem="qia-JB-8ra" secondAttribute="leading" id="XcD-u5-b5A"/>
+                                    <constraint firstAttribute="bottom" secondItem="cP5-fs-X3z" secondAttribute="bottom" constant="-52" id="vXR-m3-41v"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="qia-JB-8ra" firstAttribute="top" secondItem="Ve0-yD-SQz" secondAttribute="top" id="7ac-gU-1vO"/>
+                            <constraint firstAttribute="trailing" secondItem="qia-JB-8ra" secondAttribute="trailing" id="DPj-9Z-PVD"/>
+                            <constraint firstItem="qia-JB-8ra" firstAttribute="leading" secondItem="CC2-FM-zBA" secondAttribute="leading" id="pnX-FW-lci"/>
+                            <constraint firstAttribute="bottom" secondItem="qia-JB-8ra" secondAttribute="bottom" id="vJ2-F3-feD"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Ve0-yD-SQz"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Edit news" id="bCY-so-yAJ">
+                        <rightBarButtonItems>
+                            <barButtonItem title="Next" id="F4l-wT-Yyj">
+                                <connections>
+                                    <action selector="showDescription:" destination="AKX-uo-jNq" id="bb1-UF-WNA"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem systemItem="camera" id="Jae-r7-vdy">
+                                <color key="tintColor" red="0.0" green="0.32852089410000002" blue="0.57488495110000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <connections>
+                                    <action selector="choosePhoto:" destination="AKX-uo-jNq" id="iuA-bW-qbv"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="image_header" destination="4Ts-UA-X8O" id="fj2-SJ-9DU"/>
+                        <outlet property="speciality_box" destination="tKV-17-OAM" id="Qe9-3E-eTu"/>
+                        <outlet property="speciality_textfield" destination="che-zb-B0q" id="yZa-PQ-sBh"/>
+                        <outlet property="titleview" destination="Eet-J4-s6J" id="Or8-aD-593"/>
+                        <segue destination="vNb-xG-J93" kind="show" id="k0k-R7-mb9"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="KWP-wq-fdj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5125" y="-1596"/>
+        </scene>
+        <!--Edit news-->
+        <scene sceneID="IWV-pH-hNu">
+            <objects>
+                <viewController storyboardIdentifier="EditNewsDescriptionVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="vNb-xG-J93" customClass="EditNewsDescriptionVC" customModule="Medspace" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="EZG-D3-Zt6">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U0p-Kw-KUn">
+                                <rect key="frame" x="0.0" y="88" width="418" height="808"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" indicatorStyle="black" text="Write the body of the news..." adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xvY-xd-2dv">
+                                        <rect key="frame" x="34" y="30" width="358" height="701"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                </subviews>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="3AK-9C-lAO"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Edit news" id="K7J-Vz-HuS">
+                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="Gtc-lq-mzq">
+                            <connections>
+                                <action selector="askPost:" destination="vNb-xG-J93" id="VB1-A1-KwH"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="news_body" destination="xvY-xd-2dv" id="i9R-Qk-kIZ"/>
+                        <segue destination="PfC-dr-70G" kind="show" identifier="MyNewsVC" animates="NO" id="fEm-1Y-yq3"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="o9I-Ju-dxy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6265" y="-1596"/>
+        </scene>
         <!--My news-->
         <scene sceneID="B60-Wk-LJx">
             <objects>
@@ -1452,6 +1590,7 @@
                     <connections>
                         <outlet property="editButton" destination="pcG-Fa-4Gx" id="O0f-K0-IbK"/>
                         <outlet property="news_timeline" destination="SVy-1H-SXW" id="7M8-2S-PsY"/>
+                        <segue destination="AKX-uo-jNq" kind="show" id="waA-B2-8sf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="E9s-u5-KOX" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1461,6 +1600,7 @@
         <!--Navigation Controller-->
         <scene sceneID="OVC-oQ-tly">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zuI-Ng-DrE" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="mSE-9Q-j6E" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="6Ui-FH-iL5">
@@ -1472,7 +1612,6 @@
                         <segue destination="KKY-eO-xin" kind="relationship" relationship="rootViewController" id="Ovx-SP-qf1"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="zuI-Ng-DrE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="5531.884057971015" y="-729.24107142857144"/>
         </scene>
@@ -1565,8 +1704,10 @@
         <image name="Menu.png" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="waA-B2-8sf"/>
+        <segue reference="fEm-1Y-yq3"/>
         <segue reference="6xD-m3-mPF"/>
-        <segue reference="cF6-im-DVc"/>
+        <segue reference="033-3n-8wL"/>
         <segue reference="Zbh-xo-nph"/>
     </inferredMetricsTieBreakers>
 </document>
