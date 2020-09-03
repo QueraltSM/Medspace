@@ -49,6 +49,7 @@
 		62FA30E824FABD4C00BB0C45 /* Medspace-News.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FA30E424FABD4B00BB0C45 /* Medspace-News.png */; };
 		62FA30E924FABD4C00BB0C45 /* Medspace-Discussion.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FA30E524FABD4B00BB0C45 /* Medspace-Discussion.png */; };
 		62FA30EA24FABD4C00BB0C45 /* Medspace-Research.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FA30E624FABD4B00BB0C45 /* Medspace-Research.png */; };
+		62FB08B52500E01E0064C988 /* MyNewsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FB08B42500E01E0064C988 /* MyNewsVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -97,6 +98,7 @@
 		62FA30E424FABD4B00BB0C45 /* Medspace-News.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Medspace-News.png"; sourceTree = "<group>"; };
 		62FA30E524FABD4B00BB0C45 /* Medspace-Discussion.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Medspace-Discussion.png"; sourceTree = "<group>"; };
 		62FA30E624FABD4B00BB0C45 /* Medspace-Research.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Medspace-Research.png"; sourceTree = "<group>"; };
+		62FB08B42500E01E0064C988 /* MyNewsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNewsVC.swift; sourceTree = "<group>"; };
 		D433556773E8CCF78CB7B050 /* Pods_Medspace.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Medspace.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8BF7C33915A6B9F15E500A6 /* Pods-Medspace.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Medspace.release.xcconfig"; path = "Pods/Target Support Files/Pods-Medspace/Pods-Medspace.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -157,6 +159,7 @@
 			children = (
 				622691C424F8519100BDCB36 /* HomeVC.swift */,
 				622691C624F8522500BDCB36 /* HomeCell.swift */,
+				62FB08B42500E01E0064C988 /* MyNewsVC.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -417,6 +420,7 @@
 				62D9782D24FF9328002E4664 /* CreateResearchVC.swift in Sources */,
 				6208307624E9C13A00291825 /* AppDelegate.swift in Sources */,
 				626EF45124F4319B00D8A59B /* NewsDescriptionVC.swift in Sources */,
+				62FB08B52500E01E0064C988 /* MyNewsVC.swift in Sources */,
 				62D8C7B424FE7C100031587E /* DataCell.swift in Sources */,
 				622691C724F8522500BDCB36 /* HomeCell.swift in Sources */,
 			);
