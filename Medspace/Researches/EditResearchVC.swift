@@ -1,33 +1,35 @@
 import UIKit
 import MobileCoreServices
 
-class CreateResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, UIDocumentMenuDelegate,UIDocumentPickerDelegate,UINavigationControllerDelegate  {
+class EditResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, UIDocumentMenuDelegate,UIDocumentPickerDelegate,UINavigationControllerDelegate  {
 
-    @IBOutlet weak var titleview: UITextView!
+    @IBOutlet weak var document_box: UIView!
     @IBOutlet weak var speciality_box: UIView!
     @IBOutlet weak var speciality_textfield: UITextField!
-    var selectedSpeciality: String?
+    @IBOutlet weak var research_title: UITextView!
     @IBOutlet weak var documentButton: UIButton!
-    @IBOutlet weak var document_box: UIView!
-    var documentURL: URL!
     var invalid_document: Bool!
-    @IBOutlet weak var document_name: UILabel!
+    var research: Research?
+    var documentURL: URL!
+    var selectedSpeciality: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.navigationBar.prefersLargeTitles = false
         navigationController?.navigationBar.shadowImage = UIImage()
+        documentURL = research!.pdf
         setMenu()
-        invalid_document = true
-        titleview.delegate = self
+        invalid_document = false
+        research_title.delegate = self
         speciality_textfield.delegate = self
+        speciality_textfield.text = research!.speciality.name
         speciality_box.layer.borderColor = UIColor.lightGray.cgColor
         speciality_box.layer.borderWidth = 1.0
         document_box.layer.borderColor = UIColor.lightGray.cgColor
         document_box.layer.borderWidth = 1.0
-        titleview.layer.borderColor = UIColor.lightGray.cgColor
-        titleview.layer.borderWidth = 1.0
-        titleview.customTextView(view_text:"Write a title...",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
-        speciality_textfield.text = specialities[specialities.count / 2].name
+        research_title.layer.borderColor = UIColor.lightGray.cgColor
+        research_title.layer.borderWidth = 1.0
+        research_title.customTextView(view_text:research!.title,view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
         speciality_textfield.textColor = UIColor.gray
         createPickerView()
         dismissPickerView()
@@ -39,13 +41,18 @@ class CreateResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
         }
     }
     
+    @IBAction func viewDocument(_ sender: Any) {
+        let document_viewer_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "DocumentViewerVC") as? DocumentViewerVC
+        document_viewer_vc!.document = documentURL
+        navigationController?.pushViewController(document_viewer_vc!, animated: false)
+    }
+    
     public func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         guard let myURL = urls.first else {
             return
         }
         documentButton.titleLabel?.text = "Edit"
         documentURL = myURL
-        document_name.text = myURL.lastPathComponent
         invalid_document = false
     }
     
@@ -55,6 +62,11 @@ class CreateResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
         present(documentPicker, animated: false, completion: nil)
     }
     
+    @objc func action() {
+        speciality_textfield.textColor = UIColor.black
+        view.endEditing(true)
+    }
+    
     @IBAction func selectDocument(_ sender: Any) {
         let documentpicker = UIDocumentPickerViewController(documentTypes: [String(kUTTypePDF)], in: .import)
         documentpicker.delegate = self
@@ -62,28 +74,24 @@ class CreateResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
         present(documentpicker, animated: true, completion: nil)
     }
     
-    
-    @objc func action() {
-        speciality_textfield.textColor = UIColor.black
-        view.endEditing(true)
-    }
-    
-    @IBAction func savePost(_ sender: Any) {
+    @IBAction func nextDescription(_ sender: Any) {
         var error = ""
-        if (titleview.textColor == UIColor.gray || titleview.text.isEmpty) {
+        if (research_title.text.isEmpty) {
             error += "Write a title\n"
         }
-        if (speciality_textfield.textColor == UIColor.gray) {
-            error += "Select a speciality\n"
-        }
         if (invalid_document) {
-            error += "Uplod a document\n"
+            error += "Upload a document\n"
         }
-        if (error == "" && titleview.textColor == UIColor.black && !titleview.text.isEmpty) {
-            let research_description_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ResearchDescriptionVC") as? ResearchDescriptionVC
-            research_description_vc!.title_research = titleview.text
-            research_description_vc!.document_research = documentURL
-            research_description_vc!.speciality = speciality_textfield.text!
+        if (error == "") {
+            let research_description_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditResearchDescriptionVC") as? EditResearchDescriptionVC
+            var color = UIColor.init()
+            for s in specialities {
+                if s.name == speciality_textfield.text {
+                    color = s.color!
+                }
+            }
+            let final_research = Research(id: research!.id, pdf: documentURL, date: research!.date, title: research_title.text, speciality: Speciality(name: speciality_textfield!.text!, color:color), description: research!.description, user: User(id: research!.user.id, name:research!.user.name))
+            research_description_vc!.research = final_research
             navigationController?.pushViewController(research_description_vc!, animated: false)
         }
         if (error != "") {
@@ -91,15 +99,10 @@ class CreateResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
         }
     }
     
-    @IBAction func didTapMenuButton(_ sender: Any) {
-        swipeMenu()
-    }
-    
-    
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == UIColor.gray {
             textView.customTextView(view_text:"",view_color:UIColor.black, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
-        } 
+        }
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
@@ -127,7 +130,7 @@ class CreateResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
         toolBar.isUserInteractionEnabled = true
         speciality_textfield.inputAccessoryView = toolBar
     }
-
+    
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -146,4 +149,5 @@ class CreateResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
         return newText.count <= 80
     }
+    
 }

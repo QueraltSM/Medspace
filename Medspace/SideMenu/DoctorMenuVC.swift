@@ -9,19 +9,18 @@ class DoctorMenuVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     let data = [
         CollapsableViewModel(label: "Home", image: UIImage(named: "Home.png"), segue:"HomeVC"),
-        CollapsableViewModel(label: "News", image: UIImage(named: "News.png")),
         CollapsableViewModel(label: "Clinical cases", image: UIImage(named: "Cases.png"), children: [
-            CollapsableViewModel(label: "All cases"),
-            CollapsableViewModel(label: "My cases"),
-            CollapsableViewModel(label: "New case")]),
+            CollapsableViewModel(label: "All"),
+            CollapsableViewModel(label: "Mine"),
+            CollapsableViewModel(label: "New")]),
         CollapsableViewModel(label: "Discussions", image: UIImage(named: "Discussions.png"), children: [
-            CollapsableViewModel(label: "All discussions"),
-            CollapsableViewModel(label: "My discussions"),
-            CollapsableViewModel(label: "New discussion")]),
+            CollapsableViewModel(label: "All"),
+            CollapsableViewModel(label: "Mine"),
+            CollapsableViewModel(label: "New")]),
         CollapsableViewModel(label: "Researches", image: UIImage(named: "Researches.png"), children: [
-            CollapsableViewModel(label: "All researches", segue:"ResearchesVC"),
-            CollapsableViewModel(label: "My researches"),
-            CollapsableViewModel(label: "New research", segue:"CreateResearchVC")]),
+            CollapsableViewModel(label: "All", segue:"ResearchesVC"),
+            CollapsableViewModel(label: "Mine", segue:"MyResearchesVC"),
+            CollapsableViewModel(label: "New", segue:"CreateResearchVC")]),
         CollapsableViewModel(label: "Account settings", image: UIImage(named: "Settings.png")),
         CollapsableViewModel(label: "Logout", image: UIImage(named: "Logout.png"))]
     

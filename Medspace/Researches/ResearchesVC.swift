@@ -65,6 +65,10 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         }
     }
     
+    @IBAction func didTapMenuButton(_ sender: Any) {
+        swipeMenu()
+    }
+    
     func loopSnapshotChildren(ref: DatabaseReference, snapshot: DataSnapshot) {
         for child in snapshot.children.allObjects as! [DataSnapshot] {
             self.setActivityIndicator()

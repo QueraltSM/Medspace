@@ -80,7 +80,7 @@ class NewsDescriptionVC: UIViewController, UITextViewDelegate {
                 return
             } else {
                 self.saveNewsDB(path: path, user: user!, date: now)
-                self.performSegue(withIdentifier: "HomeVC", sender: nil)
+                self.performSegue(withIdentifier: "MyNewsVC", sender: nil)
             }
         }
     }

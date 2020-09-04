@@ -20,6 +20,9 @@
 		622691C524F8519100BDCB36 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622691C424F8519100BDCB36 /* HomeVC.swift */; };
 		622691C724F8522500BDCB36 /* HomeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622691C624F8522500BDCB36 /* HomeCell.swift */; };
 		622FA8D824F52A7E0028E00A /* DefaultImage.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 622FA8D724F52A7E0028E00A /* DefaultImage.jpg */; };
+		6246D17A250171A70067A382 /* MyResearchesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6246D179250171A70067A382 /* MyResearchesVC.swift */; };
+		6246D17C250176F00067A382 /* EditResearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6246D17B250176F00067A382 /* EditResearchVC.swift */; };
+		6246D17E2501770A0067A382 /* EditResearchDescriptionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6246D17D2501770A0067A382 /* EditResearchDescriptionVC.swift */; };
 		6246D9C124EA6E370057872E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6246D9C024EA6E370057872E /* GoogleService-Info.plist */; };
 		6246D9C424EA772A0057872E /* Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 6246D9C324EA772A0057872E /* Logo.png */; };
 		6246D9C624EA78800057872E /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6246D9C524EA787F0057872E /* Icon.png */; };
@@ -68,6 +71,9 @@
 		622691C424F8519100BDCB36 /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
 		622691C624F8522500BDCB36 /* HomeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCell.swift; sourceTree = "<group>"; };
 		622FA8D724F52A7E0028E00A /* DefaultImage.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = DefaultImage.jpg; sourceTree = "<group>"; };
+		6246D179250171A70067A382 /* MyResearchesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyResearchesVC.swift; sourceTree = "<group>"; };
+		6246D17B250176F00067A382 /* EditResearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditResearchVC.swift; sourceTree = "<group>"; };
+		6246D17D2501770A0067A382 /* EditResearchDescriptionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditResearchDescriptionVC.swift; sourceTree = "<group>"; };
 		6246D9C024EA6E370057872E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6246D9C324EA772A0057872E /* Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Logo.png; sourceTree = "<group>"; };
 		6246D9C524EA787F0057872E /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
@@ -204,6 +210,9 @@
 				62F6013824FFDD500023A8CC /* ResearchDescriptionVC.swift */,
 				62EC96752500254600E0B56E /* ShowResearchVC.swift */,
 				62EC967725002E7000E0B56E /* DocumentViewerVC.swift */,
+				6246D179250171A70067A382 /* MyResearchesVC.swift */,
+				6246D17B250176F00067A382 /* EditResearchVC.swift */,
+				6246D17D2501770A0067A382 /* EditResearchDescriptionVC.swift */,
 			);
 			path = Researches;
 			sourceTree = "<group>";
@@ -404,14 +413,17 @@
 				62EC96762500254600E0B56E /* ShowResearchVC.swift in Sources */,
 				6223B29824FA5634000F6E83 /* ShowNewsVC.swift in Sources */,
 				6208307824E9C13A00291825 /* ViewController.swift in Sources */,
+				6246D17C250176F00067A382 /* EditResearchVC.swift in Sources */,
 				62F6013924FFDD500023A8CC /* ResearchDescriptionVC.swift in Sources */,
 				62F612262501236A00892188 /* EditNewsDescriptionVC.swift in Sources */,
 				621535AC24EACF14007B18BA /* SignupVC.swift in Sources */,
 				622691C524F8519100BDCB36 /* HomeVC.swift in Sources */,
 				62DF80CB24F04B6E00E758E9 /* CollapsibleTableViewCell.swift in Sources */,
 				62EC967825002E7000E0B56E /* DocumentViewerVC.swift in Sources */,
+				6246D17A250171A70067A382 /* MyResearchesVC.swift in Sources */,
 				62F1650D24F3B380007A931F /* CreateNewsVC.swift in Sources */,
 				6208307E24E9C13A00291825 /* Medspace.xcdatamodeld in Sources */,
+				6246D17E2501770A0067A382 /* EditResearchDescriptionVC.swift in Sources */,
 				62D8C7AD24FE75830031587E /* ResearchesVC.swift in Sources */,
 				625DD09224F0218B007F6994 /* AdminMenuVC.swift in Sources */,
 				6246D9CA24EA7CD80057872E /* LoginVC.swift in Sources */,

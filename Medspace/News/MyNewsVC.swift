@@ -229,9 +229,10 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
             }
         }
         if (news.count == 0) {
-            editButton.isEnabled = false
-            editButton.title = ""
+            turnEditState(enabled: false, title: "")
             news_timeline.setEmptyView(title: "You have not post a news yet\n\n:(")
+        } else {
+            turnEditState(enabled: true, title: "Select to delete")
         }
     }
     
