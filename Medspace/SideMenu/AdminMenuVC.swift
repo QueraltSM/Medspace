@@ -33,8 +33,8 @@ class AdminMenuVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
         CollapsableViewModel(label: "News", image: UIImage(named: "News.png"), children: [
             CollapsableViewModel(label: "My news", segue:"MyNewsVC"),
             CollapsableViewModel(label: "Create news", segue:"CreateNewsVC")]),
-        CollapsableViewModel(label: "Cases", image: UIImage(named: "Cases.png")),
-        CollapsableViewModel(label: "Discussions", image: UIImage(named: "Discussions.png")),
+        CollapsableViewModel(label: "Cases", image: UIImage(named: "Cases.png"), segue:"CasesVC"),
+        CollapsableViewModel(label: "Discussions", image: UIImage(named: "Discussions.png"), segue:"DiscussionsVC"),
         CollapsableViewModel(label: "Researches", image: UIImage(named: "Researches.png"), segue:"ResearchesVC"),
         CollapsableViewModel(label: "Account settings", image: UIImage(named: "Settings.png")),
         CollapsableViewModel(label: "Logout", image: UIImage(named: "Logout.png"))]

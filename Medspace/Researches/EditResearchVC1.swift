@@ -83,7 +83,7 @@ class EditResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate
             error += "Upload a document\n"
         }
         if (error == "") {
-            let research_description_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditResearchDescriptionVC") as? EditResearchDescriptionVC
+            let research_description_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditResearchVC2") as? EditResearchVC2
             var color = UIColor.init()
             for s in specialities {
                 if s.name == speciality_textfield.text {

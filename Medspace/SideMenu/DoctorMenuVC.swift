@@ -10,17 +10,17 @@ class DoctorMenuVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     let data = [
         CollapsableViewModel(label: "Home", image: UIImage(named: "Home.png"), segue:"HomeVC"),
         CollapsableViewModel(label: "Clinical cases", image: UIImage(named: "Cases.png"), children: [
-            CollapsableViewModel(label: "All"),
-            CollapsableViewModel(label: "Mine"),
-            CollapsableViewModel(label: "New")]),
+            CollapsableViewModel(label: "All", segue:"CasesVC"),
+            CollapsableViewModel(label: "Mine", segue:"MyCasesVC"),
+            CollapsableViewModel(label: "New", segue:"CreateCaseVC1")]),
         CollapsableViewModel(label: "Discussions", image: UIImage(named: "Discussions.png"), children: [
-            CollapsableViewModel(label: "All"),
-            CollapsableViewModel(label: "Mine"),
-            CollapsableViewModel(label: "New")]),
+            CollapsableViewModel(label: "All", segue:"DiscussionsVC"),
+            CollapsableViewModel(label: "Mine", segue:"MyDiscussionsVC"),
+            CollapsableViewModel(label: "New", segue:"CreateDiscussionVC1")]),
         CollapsableViewModel(label: "Researches", image: UIImage(named: "Researches.png"), children: [
             CollapsableViewModel(label: "All", segue:"ResearchesVC"),
             CollapsableViewModel(label: "Mine", segue:"MyResearchesVC"),
-            CollapsableViewModel(label: "New", segue:"CreateResearchVC")]),
+            CollapsableViewModel(label: "New", segue:"CreateResearchVC1")]),
         CollapsableViewModel(label: "Account settings", image: UIImage(named: "Settings.png")),
         CollapsableViewModel(label: "Logout", image: UIImage(named: "Logout.png"))]
     
@@ -71,7 +71,7 @@ class DoctorMenuVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             logout()
         } else if (viewModel.segue != nil) {
             closeMenu()
-            self.performSegue(withIdentifier: viewModel.segue!, sender: nil)
+            presentVC(segue: viewModel.segue!)
         }
     }
 }

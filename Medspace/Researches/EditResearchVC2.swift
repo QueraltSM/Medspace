@@ -3,7 +3,7 @@ import FirebaseStorage
 import FirebaseDatabase
 import FirebaseAuth
 
-class EditResearchDescriptionVC: UIViewController, UITextViewDelegate {
+class EditResearchVC2: UIViewController, UITextViewDelegate {
     
     @IBOutlet weak var content: UIView!
     @IBOutlet weak var research_description: UITextView!

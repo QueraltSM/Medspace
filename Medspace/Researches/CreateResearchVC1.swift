@@ -1,7 +1,7 @@
 import UIKit
 import MobileCoreServices
 
-class CreateResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, UIDocumentMenuDelegate,UIDocumentPickerDelegate,UINavigationControllerDelegate  {
+class CreateResearchVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, UIDocumentMenuDelegate,UIDocumentPickerDelegate,UINavigationControllerDelegate  {
 
     @IBOutlet weak var titleview: UITextView!
     @IBOutlet weak var speciality_box: UIView!
@@ -80,7 +80,7 @@ class CreateResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
             error += "Uplod a document\n"
         }
         if (error == "" && titleview.textColor == UIColor.black && !titleview.text.isEmpty) {
-            let research_description_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ResearchDescriptionVC") as? ResearchDescriptionVC
+            let research_description_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "CreateResearchVC2") as? CreateResearchVC2
             research_description_vc!.title_research = titleview.text
             research_description_vc!.document_research = documentURL
             research_description_vc!.speciality = speciality_textfield.text!

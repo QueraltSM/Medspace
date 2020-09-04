@@ -27,6 +27,17 @@ struct Research {
     let user: User
 }
 
+struct Case {
+    let id: String
+    let title: String
+    let description: String
+    let history: String
+    let examination: String
+    let date: String
+    let speciality: Speciality
+    let user: User
+}
+
 struct User {
     let id: String
     let name: String
@@ -316,7 +327,7 @@ extension UIViewController {
         do {
             try firebaseAuth.signOut()
             UserDefaults.standard.set(false, forKey: "isUserLoggedIn")
-            self.performSegue(withIdentifier: "LogoutVC", sender: nil)
+            presentVC(segue: "LoginVC")
         } catch let signOutError as NSError {
             showAlert(title: "Error signing out", message: signOutError.description)
         }
@@ -326,6 +337,13 @@ extension UIViewController {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
         self.present(alert, animated: false)
+    }
+    
+    func presentVC(segue: String) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: segue)
+        let navigationController = UINavigationController(rootViewController: vc)
+        self.present(navigationController, animated: false, completion: nil)
     }
 }
 

@@ -2,29 +2,28 @@ import UIKit
 import FirebaseDatabase
 import FirebaseStorage
 
-class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchResultsUpdating {
-    
-    var researches = [Research]()
-    var researchesMatched = [Research]()
-    @IBOutlet weak var researches_timeline: UITableView!
+class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchResultsUpdating {
+
+    var cases = [Case]()
+    var researchesMatched = [Case]()
     var searchController = UISearchController()
+    @IBOutlet weak var cases_timeline: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.shadowImage = UIImage()
         setMenu()
-        researches_timeline.delegate = self
-        researches_timeline.dataSource = self
-        researches_timeline.separatorColor = UIColor.clear
-        researches_timeline.rowHeight = UITableView.automaticDimension
-        getResearches()
+        cases_timeline.delegate = self
+        cases_timeline.dataSource = self
+        cases_timeline.separatorColor = UIColor.clear
+        cases_timeline.rowHeight = UITableView.automaticDimension
+        getCases()
         searchController.searchBar.delegate = self
         refreshControl.attributedTitle = NSAttributedString(string: "")
         refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
-        researches_timeline.addSubview(refreshControl)
+        cases_timeline.addSubview(refreshControl)
     }
-    
-    
+
     func setSearchBar() {
         searchController.searchBar.delegate = self
         definesPresentationContext = true
@@ -33,17 +32,17 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         searchController.dimsBackgroundDuringPresentation = false
         searchController.searchBar.barTintColor = UIColor.white
         searchController.searchResultsUpdater = self
-        researches_timeline.tableHeaderView = searchController.searchBar
+        cases_timeline.tableHeaderView = searchController.searchBar
     }
     
     @objc func refresh(_ sender: AnyObject) {
-        researches = [Research]()
-        getResearches()
+        cases = [Case]()
+        getCases()
         refreshControl.endRefreshing()
     }
     
     func filterContent(for searchText: String) {
-        researchesMatched = researches.filter({ (n) -> Bool in
+        researchesMatched = cases.filter({ (n) -> Bool in
             let match = n.title.lowercased().range(of: searchText.lowercased()) != nil ||
                 n.speciality.name.lowercased().range(of: searchText.lowercased()) != nil ||
                 n.user.name.lowercased().range(of: searchText.lowercased()) != nil
@@ -53,16 +52,20 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     func updateSearchResults(for searchController: UISearchController) {
         if !searchController.isActive {
-            researches_timeline.tableHeaderView = nil
-            researches_timeline.reloadData()
+            cases_timeline.tableHeaderView = nil
+            cases_timeline.reloadData()
         } else {
             if let searchText = searchController.searchBar.text {
                 if (searchController.searchBar.text?.count)! > 2  {
                     filterContent(for: searchText)
-                    researches_timeline.reloadData()
+                    cases_timeline.reloadData()
                 }
             }
         }
+    }
+    
+    @IBAction func didTapMenuButton(_ sender: Any) {
+        swipeMenu()
     }
     
     func loopSnapshotChildren(ref: DatabaseReference, snapshot: DataSnapshot) {
@@ -70,10 +73,12 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             self.setActivityIndicator()
             let dict = child.value as? [String : AnyObject] ?? [:]
             let title = dict["title"]! as! String
+            let description = dict["description"]! as! String
+            let history = dict["history"]! as! String
+            let examination = dict["examination"]! as! String
             let speciality = dict["speciality"]! as! String
             let date = dict["date"]! as! String
             let final_date = self.getFormattedDate(date: date)
-            let description = dict["description"]! as! String
             let userid = dict["user"]! as! String
             ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
                 in
@@ -85,31 +90,24 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
                         color = s.color!
                     }
                 }
-                let storageRef = Storage.storage().reference().child("Researches/\(child.key)")
-                storageRef.downloadURL { (url, error) in
-                    self.stopAnimation()
-                    if error == nil {
-                        self.researches.append(Research(id: child.key, pdf: url!, date: final_date, title: title, speciality: Speciality(name: speciality, color: color), description: description, user: User(id: userid, name: username)))
-                        let sortedResearches = self.researches.sorted {
-                            $0.date > $1.date
-                        }
-                        self.researches = sortedResearches
-                        self.researches_timeline.reloadData()
-                    } else {
-                        self.showAlert(title: "Error", message: (error?.localizedDescription)!)
-                    }
+                self.cases.append(Case(id: child.key, title: title, description: description, history: history, examination: examination, date: final_date, speciality: Speciality(name: speciality, color: color), user: User(id: userid, name: username)))
+                let sortedResearches = self.cases.sorted {
+                    $0.date > $1.date
                 }
+                self.cases = sortedResearches
+                self.stopAnimation()
+                self.cases_timeline.reloadData()
             })
         }
     }
     
-    func getResearches() {
+    func getCases() {
         let ref = Database.database().reference()
-        ref.child("Researches").observeSingleEvent(of: .value, with: { snapshot in
+        ref.child("Cases").observeSingleEvent(of: .value, with: { snapshot in
             if (snapshot.children.allObjects.count == 0) {
-                self.researches_timeline.setEmptyView(title: "There is no research publish yet\n\n:(")
+                self.cases_timeline.setEmptyView(title: "There is no case publish yet\n\n:(")
             } else {
-                self.researches_timeline.restore()
+                self.cases_timeline.restore()
             }
             self.loopSnapshotChildren(ref: ref, snapshot: snapshot)
         })
@@ -119,16 +117,11 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         return 250
     }
     
-    
-    @IBAction func didTapMenu(_ sender: Any) {
-        swipeMenu()
-    }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selected_research = researches[indexPath.row]
+        /*let selected_research = cases[indexPath.row]
         let show_research_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowResearchVC") as? ShowResearchVC
-        show_research_vc!.research = selected_research
-        navigationController?.pushViewController(show_research_vc!, animated: false)
+        show_research_vc!.Case = selected_research
+        navigationController?.pushViewController(show_research_vc!, animated: false)*/
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -136,11 +129,11 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return searchController.isActive ? researchesMatched.count : researches.count
+        return searchController.isActive ? researchesMatched.count : cases.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let entry = searchController.isActive ? researchesMatched[indexPath.row] : researches[indexPath.row]
+        let entry = searchController.isActive ? researchesMatched[indexPath.row] : cases[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as? DataCell
         cell?.data_date.text = entry.date
         cell?.data_title.text = entry.title
@@ -151,8 +144,7 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         return cell!
     }
     
-    @IBAction func didTapSearch(_ sender: Any) {
+    @IBAction func didTapSearchButton(_ sender: Any) {
         setSearchBar()
     }
-    
 }

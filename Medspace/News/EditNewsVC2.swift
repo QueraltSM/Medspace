@@ -3,7 +3,7 @@ import FirebaseDatabase
 import FirebaseStorage
 import FirebaseAuth
 
-class EditNewsDescriptionVC: UIViewController, UITextViewDelegate {
+class EditNewsVC2: UIViewController, UITextViewDelegate {
     
     @IBOutlet weak var news_body: UITextView!
     var ref: DatabaseReference!

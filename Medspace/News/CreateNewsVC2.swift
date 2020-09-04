@@ -3,7 +3,7 @@ import FirebaseDatabase
 import FirebaseAuth
 import FirebaseStorage
 
-class NewsDescriptionVC: UIViewController, UITextViewDelegate {
+class CreateNewsVC2: UIViewController, UITextViewDelegate {
     
     @IBOutlet weak var body_news: UITextView!
     var title_news: String = ""
