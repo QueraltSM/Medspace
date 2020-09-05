@@ -122,10 +122,10 @@ class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        /*let selected_research = cases[indexPath.row]
-        let show_research_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowResearchVC") as? ShowResearchVC
-        show_research_vc!.Case = selected_research
-        navigationController?.pushViewController(show_research_vc!, animated: false)*/
+        let selected_case = cases[indexPath.row]
+        let show_case_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowCaseVC") as? ShowCaseVC
+        show_case_vc!.clinical_case = selected_case
+        navigationController?.pushViewController(show_case_vc!, animated: false)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

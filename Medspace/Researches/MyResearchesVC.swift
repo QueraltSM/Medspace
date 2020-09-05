@@ -1,11 +1,3 @@
-//
-//  MyResearchesVC.swift
-//  Medspace
-//
-//  Created by Queralt Sosa Mompel on 3/9/20.
-//  Copyright © 2020 Queralt Sosa Mompel. All rights reserved.
-//
-
 import UIKit
 import FirebaseDatabase
 import FirebaseStorage
@@ -155,7 +147,7 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         if (!edit) {
             cancelSelections()
             let selected_research = researches[indexPath.row]
-            let show_research_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditResearchVC1") as? EditResearchVC1
+            let show_research_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowResearchVC") as? ShowResearchVC
             show_research_vc!.research = selected_research
             navigationController?.pushViewController(show_research_vc!, animated: false)
         }
@@ -244,18 +236,10 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
     
-    func removeResearchStorage(path: String) {
-        Storage.storage().reference().child("Researches/\(path)").delete { error in
-            if error != nil {
-                self.showAlert(title: "Error", message: (error?.localizedDescription)!)
-            }
-        }
-    }
-    
     func removeResearchesDB(research: Research) {
         self.ref.child("Researches/\(research.id)").removeValue { error, _ in
             if error == nil {
-                self.removeResearchStorage(path: research.id)
+                self.removeResearchStorage(research: research)
             } else {
                 self.showAlert(title: "Error", message: (error?.localizedDescription)!)
             }

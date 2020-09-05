@@ -345,6 +345,57 @@ extension UIViewController {
         let navigationController = UINavigationController(rootViewController: vc)
         self.present(navigationController, animated: false, completion: nil)
     }
+    
+    func removeNewsDB(news: News) {
+        Database.database().reference().child("News/\(news.id)").removeValue { error, _ in
+            if error != nil {
+                self.showAlert(title: "Error", message: (error?.localizedDescription)!)
+            }
+        }
+    }
+    
+    func removeNewsStorage(news: News) {
+        Storage.storage().reference().child("News/\(news.id)").delete { error in
+            if error != nil {
+                self.showAlert(title: "Error", message: (error?.localizedDescription)!)
+            }
+        }
+    }
+    
+    func removeCaseDB(clinical_case: Case) {
+        Database.database().reference().child("Cases/\(clinical_case.id)").removeValue { error, _ in
+            if error != nil {
+                self.showAlert(title: "Error", message: (error?.localizedDescription)!)
+            }
+        }
+    }
+    
+    func removeResearchDB(research: Research) {
+        Database.database().reference().child("Researches/\(research.id)").removeValue { error, _ in
+            if error != nil {
+                self.showAlert(title: "Error", message: (error?.localizedDescription)!)
+            }
+        }
+    }
+    
+    func removeResearchStorage(research: Research) {
+        Storage.storage().reference().child("Researches/\(research.id)").delete { error in
+            if error != nil {
+                self.showAlert(title: "Error", message: (error?.localizedDescription)!)
+            }
+        }
+    }
+    
+    func hideToolbar(){
+        navigationController?.toolbar.setBackgroundImage(UIImage(), forToolbarPosition: .any, barMetrics: .default)
+        navigationController?.toolbar.setShadowImage(UIImage(), forToolbarPosition: .any)
+        navigationController?.toolbar.backgroundColor = .clear
+    }
+    
+    func setHeader(largeTitles: Bool){
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.prefersLargeTitles = largeTitles
+    }
 }
 
 extension UITableView {

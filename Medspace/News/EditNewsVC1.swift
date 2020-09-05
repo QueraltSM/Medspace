@@ -1,6 +1,6 @@
 import UIKit
 
-class EditNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
+class EditNewsVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
 
     @IBOutlet weak var image_header: UIImageView!
     @IBOutlet weak var speciality_box: UIView!
@@ -12,8 +12,8 @@ class EditNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.prefersLargeTitles = false
+        hideToolbar()
+        setHeader(largeTitles: false)
         setMenu()
         titleview.delegate = self
         speciality_textfield.delegate = self
@@ -136,7 +136,7 @@ class EditNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
     
 }
 
-extension EditNewsVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension EditNewsVC1: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             image_header.contentMode = .scaleToFill

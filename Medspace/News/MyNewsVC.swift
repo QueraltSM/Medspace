@@ -146,7 +146,7 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
         if (!edit) {
             cancelSelections()
             let selected_news = news[indexPath.row]
-            let show_news_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditNewsVC") as? EditNewsVC
+            let show_news_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowNewsVC") as? ShowNewsVC
             show_news_vc!.news = selected_news
             navigationController?.pushViewController(show_news_vc!, animated: false)
         }
@@ -234,24 +234,5 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
         } else {
             turnEditState(enabled: true, title: "Select to delete")
         }
-    }
-    
-    func removeNewsStorage(path: String) {
-        Storage.storage().reference().child("News/\(path)").delete { error in
-            if error != nil {
-                self.showAlert(title: "Error", message: (error?.localizedDescription)!)
-            }
-        }
-    }
-    
-    func removeNewsDB(news: News) {
-        self.ref.child("News/\(news.id)").removeValue { error, _ in
-            if error == nil {
-                self.removeNewsStorage(path: news.id)
-            } else {
-                self.showAlert(title: "Error", message: (error?.localizedDescription)!)
-            }
-        }
-        
     }
 }

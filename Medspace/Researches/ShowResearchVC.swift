@@ -1,4 +1,5 @@
 import UIKit
+import FirebaseAuth
 
 class ShowResearchVC: UIViewController {
 
@@ -22,6 +23,9 @@ class ShowResearchVC: UIViewController {
         speciality.round(corners: .allCorners, cornerRadius: 10)
         speciality.textAlignment = .center
         self.navigationController?.navigationBar.prefersLargeTitles = false
+        if (research?.user.id == Auth.auth().currentUser?.uid) {
+            setConfigDataToolbar()
+        }
     }
     
     
@@ -31,9 +35,32 @@ class ShowResearchVC: UIViewController {
         navigationController?.pushViewController(document_viewer_vc!, animated: false)
     }
     
-    @IBAction func didTapMenuButton(_ sender: Any) {
-        swipeMenu()
+    func setConfigDataToolbar() {
+        self.navigationController?.isToolbarHidden = false
+        var items = [UIBarButtonItem]()
+        items.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
+        items.append(UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deteleResearch)))
+        items.append(UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editResearch)))
+        items.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
+        self.navigationController?.toolbar.barTintColor = UIColor.white
+        self.toolbarItems = items
     }
     
+    @objc func editResearch() {
+        let show_research_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditResearchVC1") as? EditResearchVC1
+        show_research_vc!.research = self.research
+        navigationController?.pushViewController(show_research_vc!, animated: false)
+    }
     
+    @objc func deteleResearch(){
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+        alert.title = "Are you sure you want delete it?"
+        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
+            action in
+            self.removeResearchDB(research: self.research!)
+            self.presentVC(segue: "ResearchesVC")
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
 }

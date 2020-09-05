@@ -81,7 +81,7 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
         if (!edit) {
             cancelSelections()
             let selected_case = cases[indexPath.row]
-            let show_case_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditCaseVC1") as? EditCaseVC1
+            let show_case_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowCaseVC") as? ShowCaseVC
             show_case_vc!.clinical_case = selected_case
             navigationController?.pushViewController(show_case_vc!, animated: false)
         }
@@ -196,14 +196,6 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
             }
             self.loopSnapshotChildren(ref: self.ref, snapshot: snapshot)
         })
-    }
-    
-    func removeCaseDB(clinical_case: Case) {
-        self.ref.child("Cases/\(clinical_case.id)").removeValue { error, _ in
-            if error != nil {
-                self.showAlert(title: "Error", message: (error?.localizedDescription)!)
-            }
-        }
     }
     
     @IBAction func didTapEdit(_ sender: Any) {

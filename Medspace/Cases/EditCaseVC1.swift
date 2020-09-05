@@ -8,8 +8,8 @@ class EditCaseVC1: UIViewController, UITextViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.prefersLargeTitles = false
+        hideToolbar()
+        setHeader(largeTitles: false)
         case_title.delegate = self
         case_description.delegate = self
         case_title.setBorder()

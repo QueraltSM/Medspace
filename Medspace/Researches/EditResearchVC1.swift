@@ -12,11 +12,12 @@ class EditResearchVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegat
     var research: Research?
     var documentURL: URL!
     var selectedSpeciality: String?
+    var file_is_updated = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.prefersLargeTitles = false
-        navigationController?.navigationBar.shadowImage = UIImage()
+        hideToolbar()
+        setHeader(largeTitles: false)
         documentURL = research!.pdf
         setMenu()
         invalid_document = false
@@ -51,6 +52,7 @@ class EditResearchVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegat
         documentButton.titleLabel?.text = "Edit"
         documentURL = myURL
         invalid_document = false
+        file_is_updated = true
     }
     
     public func documentMenu(_ documentMenu: UIDocumentMenuViewController, didPickDocumentPicker documentPicker: UIDocumentPickerViewController) {
@@ -89,6 +91,7 @@ class EditResearchVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegat
             }
             let final_research = Research(id: research!.id, pdf: documentURL, date: research!.date, title: research_title.text, speciality: Speciality(name: speciality_textfield!.text!, color:color), description: research!.description, user: User(id: research!.user.id, name:research!.user.name))
             research_description_vc!.research = final_research
+            research_description_vc?.file_is_updated = file_is_updated
             navigationController?.pushViewController(research_description_vc!, animated: false)
         }
         if (error != "") {

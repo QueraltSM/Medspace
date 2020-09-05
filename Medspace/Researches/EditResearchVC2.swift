@@ -8,6 +8,7 @@ class EditResearchVC2: UIViewController, UITextViewDelegate {
     @IBOutlet weak var content: UIView!
     @IBOutlet weak var research_description: UITextView!
     var research: Research?
+    var file_is_updated: Bool?
     var ref: DatabaseReference!
     
     override func viewDidLoad() {
@@ -21,15 +22,10 @@ class EditResearchVC2: UIViewController, UITextViewDelegate {
     
     func storeDocumentStorage(path: String) {
         self.setActivityIndicator()
-        let storage = Storage.storage()
-        let storageRef = storage.reference()
-        let ref = storageRef.child(path)
-        ref.putFile(from: research!.pdf, metadata: nil) { metadata, error in
+        Storage.storage().reference().child(path).putFile(from: research!.pdf, metadata: nil) { metadata, error in
             self.stopAnimation()
-            if error == nil {
-                self.performSegue(withIdentifier: "MyResearchesVC", sender: nil)
-            } else {
-                self.showAlert(title: "Could't publish the research", message: (error?.localizedDescription)!)
+            if error != nil {
+                self.showAlert(title: "Could't upload the research paper", message: (error?.localizedDescription)!)
             }
         }
     }
@@ -50,12 +46,15 @@ class EditResearchVC2: UIViewController, UITextViewDelegate {
     
     func postResearch() {
         let path = "Researches/\(research!.id)"
+        if (file_is_updated!) {
+            self.storeDocumentStorage(path: path)
+        }
         self.ref.child("\(path)/title").setValue(research!.title)
         self.ref.child("\(path)/description").setValue(research_description.text!)
         self.ref.child("\(path)/speciality").setValue(research!.speciality.name)
         self.ref.child("\(path)/user").setValue(research!.user.id)
         self.ref.child("\(path)/date").setValue(research!.date)
-        self.storeDocumentStorage(path: path)
+        presentVC(segue: "MyResearchesVC")
     }
     
     @IBAction func askPost(_ sender: Any) {
@@ -65,6 +64,4 @@ class EditResearchVC2: UIViewController, UITextViewDelegate {
             self.postResearch()
         }
     }
-    
-    
 }
