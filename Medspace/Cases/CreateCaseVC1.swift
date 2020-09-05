@@ -11,10 +11,8 @@ class CreateCaseVC1: UIViewController, UITextViewDelegate {
         setMenu()
         title_view.delegate = self
         description_view.delegate = self
-        title_view.layer.borderColor = UIColor.lightGray.cgColor
-        title_view.layer.borderWidth = 1.0
-        description_view.layer.borderColor = UIColor.lightGray.cgColor
-        description_view.layer.borderWidth = 1.0
+        title_view.setBorder()
+        description_view.setBorder()
         title_view.customTextView(view_text:"Write a title...",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
         description_view.customTextView(view_text:"Description",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
     }

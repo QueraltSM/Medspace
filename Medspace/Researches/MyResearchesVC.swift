@@ -24,6 +24,7 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.prefersLargeTitles = true
         setMenu()
         ref = Database.database().reference()
         researches_timeline.delegate = self
@@ -154,7 +155,7 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         if (!edit) {
             cancelSelections()
             let selected_research = researches[indexPath.row]
-            let show_research_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditResearchVC") as? EditResearchVC
+            let show_research_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditResearchVC1") as? EditResearchVC1
             show_research_vc!.research = selected_research
             navigationController?.pushViewController(show_research_vc!, animated: false)
         }
@@ -228,7 +229,7 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         let selectedRows = self.researches_timeline.indexPathsForSelectedRows
         if selectedRows != nil {
             for var selectionIndex in selectedRows! {
-                removeNewsDB(research: researches[selectionIndex.item])
+                removeResearchesDB(research: researches[selectionIndex.item])
                 while selectionIndex.item >= researches.count {
                     selectionIndex.item -= 1
                 }
@@ -251,7 +252,7 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
     
-    func removeNewsDB(research: Research) {
+    func removeResearchesDB(research: Research) {
         self.ref.child("Researches/\(research.id)").removeValue { error, _ in
             if error == nil {
                 self.removeResearchStorage(path: research.id)

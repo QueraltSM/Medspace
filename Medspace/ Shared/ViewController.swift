@@ -405,4 +405,10 @@ extension UIView {
         }
         self.layer.addSublayer(border)
     }
+    
+    func setBorder() {
+        layer.borderColor = UIColor.lightGray.cgColor
+        layer.borderWidth = 1.0
+    }
+    
 }

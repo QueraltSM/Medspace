@@ -30,7 +30,6 @@ class EditNewsVC2: UIViewController, UITextViewDelegate {
     }
     
     func postNews() {
-        self.setActivityIndicator()
         guard let imageData: Data = news?.image.jpegData(compressionQuality: 0.1) else {
             return
         }

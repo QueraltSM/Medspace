@@ -1,7 +1,7 @@
 import UIKit
 import MobileCoreServices
 
-class EditResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, UIDocumentMenuDelegate,UIDocumentPickerDelegate,UINavigationControllerDelegate  {
+class EditResearchVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, UIDocumentMenuDelegate,UIDocumentPickerDelegate,UINavigationControllerDelegate  {
 
     @IBOutlet weak var document_box: UIView!
     @IBOutlet weak var speciality_box: UIView!
@@ -23,12 +23,9 @@ class EditResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate
         research_title.delegate = self
         speciality_textfield.delegate = self
         speciality_textfield.text = research!.speciality.name
-        speciality_box.layer.borderColor = UIColor.lightGray.cgColor
-        speciality_box.layer.borderWidth = 1.0
-        document_box.layer.borderColor = UIColor.lightGray.cgColor
-        document_box.layer.borderWidth = 1.0
-        research_title.layer.borderColor = UIColor.lightGray.cgColor
-        research_title.layer.borderWidth = 1.0
+        speciality_box.setBorder()
+        document_box.setBorder()
+        research_title.setBorder()
         research_title.customTextView(view_text:research!.title,view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
         speciality_textfield.textColor = UIColor.gray
         createPickerView()

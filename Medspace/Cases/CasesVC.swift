@@ -101,6 +101,10 @@ class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
         }
     }
     
+    @IBAction func didTapMenu(_ sender: Any) {
+        swipeMenu()
+    }
+    
     func getCases() {
         let ref = Database.database().reference()
         ref.child("Cases").observeSingleEvent(of: .value, with: { snapshot in

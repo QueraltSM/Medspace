@@ -21,12 +21,9 @@ class CreateCaseVC2: UIViewController, UITextViewDelegate, UIPickerViewDelegate,
         examination_view.delegate = self
         history_view.delegate = self
         speciality_textfield.delegate = self
-        examination_view.layer.borderColor = UIColor.lightGray.cgColor
-        examination_view.layer.borderWidth = 1.0
-        history_view.layer.borderColor = UIColor.lightGray.cgColor
-        history_view.layer.borderWidth = 1.0
-        speciality_box.layer.borderColor = UIColor.lightGray.cgColor
-        speciality_box.layer.borderWidth = 1.0
+        examination_view.setBorder()
+        history_view.setBorder()
+        speciality_box.setBorder()
         history_view.customTextView(view_text:"History",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
         examination_view.customTextView(view_text:"Examination",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
         speciality_textfield.text = specialities[specialities.count / 2].name

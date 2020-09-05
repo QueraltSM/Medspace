@@ -18,10 +18,8 @@ class EditNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
         titleview.delegate = self
         speciality_textfield.delegate = self
         speciality_textfield.textColor = UIColor.gray
-        speciality_box.layer.borderColor = UIColor.lightGray.cgColor
-        speciality_box.layer.borderWidth = 1.0
-        titleview.layer.borderColor = UIColor.lightGray.cgColor
-        titleview.layer.borderWidth = 1.0
+        speciality_box.setBorder()
+        titleview.setBorder()
         speciality_textfield.text = news?.speciality.name
         titleview.customTextView(view_text:(news?.title)!,view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
         image_header.image = news?.image

@@ -23,7 +23,6 @@ class LoginVC: UIViewController {
         login_button.layer.cornerRadius = login_button.frame.size.height / 2.0
     }
     
-    
     @IBAction func login(_ sender: Any) {
         Auth.auth().signIn(withEmail: email.text!, password: password.text!) { (result, error) in
             if let error = error, let _ = AuthErrorCode(rawValue: error._code) {

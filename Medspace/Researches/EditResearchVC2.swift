@@ -49,7 +49,6 @@ class EditResearchVC2: UIViewController, UITextViewDelegate {
     }
     
     func postResearch() {
-        self.setActivityIndicator()
         let path = "Researches/\(research!.id)"
         self.ref.child("\(path)/title").setValue(research!.title)
         self.ref.child("\(path)/description").setValue(research_description.text!)

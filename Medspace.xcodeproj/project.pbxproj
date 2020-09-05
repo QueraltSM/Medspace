@@ -19,6 +19,9 @@
 		6225EC9A24F07F2600231774 /* Menu.png in Resources */ = {isa = PBXBuildFile; fileRef = 6225EC9924F07F2600231774 /* Menu.png */; };
 		622691C524F8519100BDCB36 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622691C424F8519100BDCB36 /* HomeVC.swift */; };
 		622691C724F8522500BDCB36 /* HomeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622691C624F8522500BDCB36 /* HomeCell.swift */; };
+		6227CCE325037A0600EB676B /* MyCasesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6227CCE225037A0600EB676B /* MyCasesVC.swift */; };
+		6227CCE52503826900EB676B /* EditCaseVC1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6227CCE42503826900EB676B /* EditCaseVC1.swift */; };
+		6227CCE72503827600EB676B /* EditCaseVC2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6227CCE62503827600EB676B /* EditCaseVC2.swift */; };
 		6246D17A250171A70067A382 /* MyResearchesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6246D179250171A70067A382 /* MyResearchesVC.swift */; };
 		6246D17C250176F00067A382 /* EditResearchVC1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6246D17B250176F00067A382 /* EditResearchVC1.swift */; };
 		6246D17E2501770A0067A382 /* EditResearchVC2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6246D17D2501770A0067A382 /* EditResearchVC2.swift */; };
@@ -72,6 +75,9 @@
 		6225EC9924F07F2600231774 /* Menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Menu.png; sourceTree = "<group>"; };
 		622691C424F8519100BDCB36 /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
 		622691C624F8522500BDCB36 /* HomeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCell.swift; sourceTree = "<group>"; };
+		6227CCE225037A0600EB676B /* MyCasesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCasesVC.swift; sourceTree = "<group>"; };
+		6227CCE42503826900EB676B /* EditCaseVC1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCaseVC1.swift; sourceTree = "<group>"; };
+		6227CCE62503827600EB676B /* EditCaseVC2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCaseVC2.swift; sourceTree = "<group>"; };
 		6246D179250171A70067A382 /* MyResearchesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyResearchesVC.swift; sourceTree = "<group>"; };
 		6246D17B250176F00067A382 /* EditResearchVC1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditResearchVC1.swift; sourceTree = "<group>"; };
 		6246D17D2501770A0067A382 /* EditResearchVC2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditResearchVC2.swift; sourceTree = "<group>"; };
@@ -202,6 +208,9 @@
 				62D5FAB12502B1E800772594 /* CasesVC.swift */,
 				62D5FAB32502B59100772594 /* CreateCaseVC1.swift */,
 				62D5FAB52502BB2500772594 /* CreateCaseVC2.swift */,
+				6227CCE225037A0600EB676B /* MyCasesVC.swift */,
+				6227CCE42503826900EB676B /* EditCaseVC1.swift */,
+				6227CCE62503827600EB676B /* EditCaseVC2.swift */,
 			);
 			path = Cases;
 			sourceTree = "<group>";
@@ -418,10 +427,13 @@
 				62EC96762500254600E0B56E /* ShowResearchVC.swift in Sources */,
 				6223B29824FA5634000F6E83 /* ShowNewsVC.swift in Sources */,
 				6208307824E9C13A00291825 /* ViewController.swift in Sources */,
+				6227CCE325037A0600EB676B /* MyCasesVC.swift in Sources */,
 				6246D17C250176F00067A382 /* EditResearchVC1.swift in Sources */,
 				62F6013924FFDD500023A8CC /* CreateResearchVC2.swift in Sources */,
+				6227CCE52503826900EB676B /* EditCaseVC1.swift in Sources */,
 				62F612262501236A00892188 /* EditNewsVC2.swift in Sources */,
 				621535AC24EACF14007B18BA /* SignupVC.swift in Sources */,
+				6227CCE72503827600EB676B /* EditCaseVC2.swift in Sources */,
 				622691C524F8519100BDCB36 /* HomeVC.swift in Sources */,
 				62D5FAB22502B1E800772594 /* CasesVC.swift in Sources */,
 				62DF80CB24F04B6E00E758E9 /* CollapsibleTableViewCell.swift in Sources */,

@@ -16,10 +16,8 @@ class CreateNewsVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate,
         setMenu()
         titleview.delegate = self
         speciality_textfield.delegate = self
-        speciality_box.layer.borderColor = UIColor.lightGray.cgColor
-        speciality_box.layer.borderWidth = 1.0
-        titleview.layer.borderColor = UIColor.lightGray.cgColor
-        titleview.layer.borderWidth = 1.0
+        speciality_box.setBorder()
+        titleview.setBorder()
         titleview.customTextView(view_text:"Write a title...",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
         speciality_textfield.text = specialities[specialities.count / 2].name
         speciality_textfield.textColor = UIColor.gray
