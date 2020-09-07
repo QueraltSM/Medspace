@@ -56,7 +56,7 @@ class ShowCaseVC: UIViewController {
         alert.title = "Are you sure you want delete it?"
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
             action in
-            self.removeCaseDB(clinical_case: self.clinical_case!)
+            self.removeDataDB(path: "Cases/\(self.clinical_case!.id)")
             self.presentVC(segue: "CasesVC")
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))

@@ -16,7 +16,7 @@ class DoctorMenuVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         CollapsableViewModel(label: "Discussions", image: UIImage(named: "Discussions.png"), children: [
             CollapsableViewModel(label: "All", segue:"DiscussionsVC"),
             CollapsableViewModel(label: "Mine", segue:"MyDiscussionsVC"),
-            CollapsableViewModel(label: "New", segue:"CreateDiscussionVC1")]),
+            CollapsableViewModel(label: "New", segue:"CreateDiscussionVC")]),
         CollapsableViewModel(label: "Researches", image: UIImage(named: "Researches.png"), children: [
             CollapsableViewModel(label: "All", segue:"ResearchesVC"),
             CollapsableViewModel(label: "Mine", segue:"MyResearchesVC"),

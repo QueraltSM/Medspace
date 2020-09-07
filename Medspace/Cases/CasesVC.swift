@@ -5,7 +5,7 @@ import FirebaseStorage
 class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchResultsUpdating {
 
     var cases = [Case]()
-    var researchesMatched = [Case]()
+    var casesMatched = [Case]()
     var searchController = UISearchController()
     @IBOutlet weak var cases_timeline: UITableView!
     
@@ -42,7 +42,7 @@ class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     }
     
     func filterContent(for searchText: String) {
-        researchesMatched = cases.filter({ (n) -> Bool in
+        casesMatched = cases.filter({ (n) -> Bool in
             let match = n.title.lowercased().range(of: searchText.lowercased()) != nil ||
                 n.speciality.name.lowercased().range(of: searchText.lowercased()) != nil ||
                 n.user.name.lowercased().range(of: searchText.lowercased()) != nil
@@ -63,10 +63,7 @@ class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
             }
         }
     }
-    
-    @IBAction func didTapMenuButton(_ sender: Any) {
-        swipeMenu()
-    }
+
     
     func loopSnapshotChildren(ref: DatabaseReference, snapshot: DataSnapshot) {
         for child in snapshot.children.allObjects as! [DataSnapshot] {
@@ -91,10 +88,10 @@ class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
                     }
                 }
                 self.cases.append(Case(id: child.key, title: title, description: description, history: history, examination: examination, date: final_date, speciality: Speciality(name: speciality, color: color), user: User(id: userid, name: username)))
-                let sortedResearches = self.cases.sorted {
+                let sortedCases = self.cases.sorted {
                     $0.date > $1.date
                 }
-                self.cases = sortedResearches
+                self.cases = sortedCases
                 self.stopAnimation()
                 self.cases_timeline.reloadData()
             })
@@ -133,11 +130,11 @@ class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return searchController.isActive ? researchesMatched.count : cases.count
+        return searchController.isActive ? casesMatched.count : cases.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let entry = searchController.isActive ? researchesMatched[indexPath.row] : cases[indexPath.row]
+        let entry = searchController.isActive ? casesMatched[indexPath.row] : cases[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as? DataCell
         cell?.data_date.text = entry.date
         cell?.data_title.text = entry.title

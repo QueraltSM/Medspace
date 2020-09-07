@@ -53,8 +53,9 @@ class ShowNewsVC: UIViewController {
         alert.title = "Are you sure you want delete it?"
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
             action in
-            self.removeNewsDB(news: self.news!)
-            self.removeNewsStorage(news: self.news!)
+            let path = "News/\(self.news!.id)"
+            self.removeDataDB(path: path)
+            self.removeDataStorage(path: path)
             self.presentVC(segue: "HomeVC")
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))

@@ -132,7 +132,7 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
         let selectedRows = self.cases_timeline.indexPathsForSelectedRows
         if selectedRows != nil {
             for var selectionIndex in selectedRows! {
-                removeCaseDB(clinical_case: cases[selectionIndex.item])
+                removeDataDB(path: "Cases/\(cases[selectionIndex.item].id)")
                 while selectionIndex.item >= cases.count {
                     selectionIndex.item -= 1
                 }

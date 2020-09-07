@@ -57,7 +57,9 @@ class ShowResearchVC: UIViewController {
         alert.title = "Are you sure you want delete it?"
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
             action in
-            self.removeResearchDB(research: self.research!)
+            let path = "Researches/\(self.research!.id)"
+            self.removeDataDB(path: path)
+            self.removeDataStorage(path: path)
             self.presentVC(segue: "ResearchesVC")
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))

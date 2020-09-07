@@ -221,7 +221,9 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         let selectedRows = self.researches_timeline.indexPathsForSelectedRows
         if selectedRows != nil {
             for var selectionIndex in selectedRows! {
-                removeResearchesDB(research: researches[selectionIndex.item])
+                let path = "Researches/\(researches[selectionIndex.item].id)"
+                removeDataDB(path: path)
+                removeDataStorage(path: path)
                 while selectionIndex.item >= researches.count {
                     selectionIndex.item -= 1
                 }
@@ -233,16 +235,6 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
             researches_timeline.setEmptyView(title: "You have not post a research yet\n\n:(")
         } else {
             turnEditState(enabled: true, title: "Select to delete")
-        }
-    }
-    
-    func removeResearchesDB(research: Research) {
-        self.ref.child("Researches/\(research.id)").removeValue { error, _ in
-            if error == nil {
-                self.removeResearchStorage(research: research)
-            } else {
-                self.showAlert(title: "Error", message: (error?.localizedDescription)!)
-            }
         }
     }
 }

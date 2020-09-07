@@ -221,7 +221,9 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
         let selectedRows = self.news_timeline.indexPathsForSelectedRows
         if selectedRows != nil {
             for var selectionIndex in selectedRows! {
-                removeNewsDB(news: news[selectionIndex.item])
+                let path = "News/\(news[selectionIndex.item].id)"
+                removeDataDB(path: path)
+                removeDataStorage(path: path)
                 while selectionIndex.item >= news.count {
                     selectionIndex.item -= 1
                 }
