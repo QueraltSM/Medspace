@@ -2,65 +2,32 @@ import UIKit
 import FirebaseDatabase
 import FirebaseAuth
 
-class EditCaseVC2: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
+class EditDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
 
+    @IBOutlet weak var discussion_title: UITextView!
+    @IBOutlet weak var discussion_description: UITextView!
     @IBOutlet weak var speciality_box: UIView!
     @IBOutlet weak var speciality_textfield: UITextField!
-    @IBOutlet weak var case_examination: UITextView!
-    @IBOutlet weak var case_history: UITextView!
     var selectedSpeciality: String?
-    var clinical_case: Case?
+    var discussion: Discussion?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.prefersLargeTitles = false
-        navigationController?.navigationBar.shadowImage = UIImage()
-        case_examination.delegate = self
-        case_history.delegate = self
+        hideToolbar()
+        setHeader(largeTitles: false)
+        discussion_title.delegate = self
+        discussion_description.delegate = self
         speciality_box.setBorder()
-        case_examination.setBorder()
-        case_history.setBorder()
-        speciality_textfield.text = clinical_case!.speciality.name
+        discussion_title.setBorder()
+        discussion_description.setBorder()
+        speciality_textfield.text = discussion!.speciality.name
         speciality_textfield.textColor = UIColor.gray
-        case_examination.customTextView(view_text:clinical_case!.examination,view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
-        case_history.customTextView(view_text:clinical_case!.history,view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
+        discussion_title.customTextView(view_text:discussion!.title,view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
+        discussion_description.customTextView(view_text:discussion!.description,view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
         createPickerView()
         dismissPickerView()
     }
-    
-    @objc func action() {
-        speciality_textfield.textColor = UIColor.black
-        view.endEditing(true)
-    }
-    
-    @IBAction func savePost(_ sender: Any) {
-        var error = ""
-        if case_history.text.isEmpty {
-            error += "Write a history\n"
-        }
-        if case_examination.text.isEmpty {
-            error += "Write a examination\n"
-        }
-        if error == "" {
-            postCase()
-            presentVC(segue: "MyCasesVC")
-        } else {
-            showAlert(title: "Error saving the case", message: error)
-        }
-    }
-    
-    func postCase() {
-        let ref = Database.database().reference()
-        let path = "Cases/\(clinical_case!.id)"
-        ref.child("\(path)/title").setValue(clinical_case!.title)
-        ref.child("\(path)/description").setValue(clinical_case!.description)
-        ref.child("\(path)/history").setValue(case_history.text!)
-        ref.child("\(path)/examination").setValue(case_examination.text!)
-        ref.child("\(path)/speciality").setValue(speciality_textfield.text!)
-        ref.child("\(path)/user").setValue(clinical_case!.user.id)
-        ref.child("\(path)/date").setValue(clinical_case!.date)
-    }
-    
+
     func createPickerView() {
         let pickerView = UIPickerView()
         pickerView.delegate = self
@@ -79,6 +46,11 @@ class EditCaseVC2: UIViewController, UITextViewDelegate, UIPickerViewDelegate, U
         toolBar.setItems([space, button], animated: true)
         toolBar.isUserInteractionEnabled = true
         speciality_textfield.inputAccessoryView = toolBar
+    }
+    
+    @objc func action() {
+        speciality_textfield.textColor = UIColor.black
+        view.endEditing(true)
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -100,4 +72,32 @@ class EditCaseVC2: UIViewController, UITextViewDelegate, UIPickerViewDelegate, U
             textView.customTextView(view_text:"",view_color:UIColor.black, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
         }
     }
+    
+    func postDiscussion() {
+        let ref = Database.database().reference()
+        let path = "Discussions/\(discussion!.id)"
+        ref.child("\(path)/title").setValue(discussion_title.text!)
+        ref.child("\(path)/description").setValue(discussion_description.text!)
+        ref.child("\(path)/speciality").setValue(speciality_textfield.text!)
+        ref.child("\(path)/user").setValue(discussion!.user.id)
+        ref.child("\(path)/date").setValue(discussion!.date)
+    }
+    
+    @IBAction func saveDiscussion(_ sender: Any) {
+        var error = ""
+        if discussion_title.text.isEmpty {
+            error += "Write a title\n"
+        }
+        if discussion_description.text.isEmpty {
+            error += "Write a description"
+        }
+        if (error == "") {
+            postDiscussion()
+            presentVC(segue: "MyDiscussionsVC")
+        } else {
+            showAlert(title: "Error saving the discussion", message: error)
+        }
+    }
+    
+    
 }

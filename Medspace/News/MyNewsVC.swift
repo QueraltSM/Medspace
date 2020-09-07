@@ -23,10 +23,6 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
         news_timeline.separatorColor = UIColor.clear
         news_timeline.rowHeight = UITableView.automaticDimension
         getNews()
-        turnEditState(enabled: false, title: "")
-        if news.count > 0 {
-             turnEditState(enabled: true, title: "Select to delete")
-        }
         searchController.searchBar.delegate = self
         refreshControl.attributedTitle = NSAttributedString(string: "")
         refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
@@ -234,6 +230,7 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
             turnEditState(enabled: false, title: "")
             news_timeline.setEmptyView(title: "You have not post a news yet\n\n:(")
         } else {
+            edit = false
             turnEditState(enabled: true, title: "Select to delete")
         }
     }

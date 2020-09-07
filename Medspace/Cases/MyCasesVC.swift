@@ -23,10 +23,6 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
         cases_timeline.separatorColor = UIColor.clear
         cases_timeline.rowHeight = UITableView.automaticDimension
         getCases()
-        turnEditState(enabled: false, title: "")
-        if cases.count > 0 {
-            turnEditState(enabled: true, title: "Select to delete")
-        }
         searchController.searchBar.delegate = self
         refreshControl.attributedTitle = NSAttributedString(string: "")
         refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
@@ -143,6 +139,7 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
             turnEditState(enabled: false, title: "")
             cases_timeline.setEmptyView(title: "You have not post a case yet\n\n:(")
         } else {
+            edit = false
             turnEditState(enabled: true, title: "Select to delete")
         }
     }

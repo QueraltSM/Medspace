@@ -10,20 +10,15 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     var discussionsMatched = [Discussion]()
     var edit = false
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.shadowImage = UIImage()
+        setHeader(largeTitles: true)
         setMenu()
         discussions_timeline.delegate = self
         discussions_timeline.dataSource = self
         discussions_timeline.separatorColor = UIColor.clear
         discussions_timeline.rowHeight = UITableView.automaticDimension
         getDiscussions()
-        turnEditState(enabled: false, title: "")
-        if discussions.count > 0 {
-            turnEditState(enabled: true, title: "Select to delete")
-        }
         searchController.searchBar.delegate = self
         refreshControl.attributedTitle = NSAttributedString(string: "")
         refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
@@ -34,8 +29,10 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         let ref = Database.database().reference()
         ref.child("Discussions").observeSingleEvent(of: .value, with: { snapshot in
             if (snapshot.children.allObjects.count == 0) {
+                self.turnEditState(enabled: false, title: "")
                 self.discussions_timeline.setEmptyView(title: "There is no discussion posted yet\n\n:(")
             } else {
+                self.turnEditState(enabled: true, title: "Select to delete")
                 self.discussions_timeline.restore()
             }
             self.loopSnapshotChildren(ref: ref, snapshot: snapshot)
@@ -88,7 +85,6 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         setSearchBar()
     }
     
-    
     @IBAction func didTapMenu(_ sender: Any) {
         swipeMenu()
     }
@@ -127,10 +123,13 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        /*let selected_case = cases[indexPath.row]
-        let show_discussion_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowDiscussionVC") as? ShowDiscussionVC
-        show_discussion_vc!.discussion = selected_discussion
-        navigationController?.pushViewController(show_discussion_vc!, animated: false)*/
+        if (!edit) {
+            cancelSelections()
+            let selected_discussion = discussions[indexPath.row]
+            let show_discussion_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowDiscussionVC") as? ShowDiscussionVC
+            show_discussion_vc!.discussion = selected_discussion
+            navigationController?.pushViewController(show_discussion_vc!, animated: false)
+        }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -206,6 +205,7 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
             turnEditState(enabled: false, title: "")
             discussions_timeline.setEmptyView(title: "You have not post a discussion yet\n\n:(")
         } else {
+            edit = false
             turnEditState(enabled: true, title: "Select to delete")
         }
     }

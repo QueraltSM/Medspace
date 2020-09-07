@@ -24,10 +24,6 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         researches_timeline.separatorColor = UIColor.clear
         researches_timeline.rowHeight = UITableView.automaticDimension
         getResearches()
-        turnEditState(enabled: false, title: "")
-        if researches.count > 0 {
-            turnEditState(enabled: true, title: "Select to delete")
-        }
         searchController.searchBar.delegate = self
         refreshControl.attributedTitle = NSAttributedString(string: "")
         refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
@@ -234,6 +230,7 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
             turnEditState(enabled: false, title: "")
             researches_timeline.setEmptyView(title: "You have not post a research yet\n\n:(")
         } else {
+            edit = false
             turnEditState(enabled: true, title: "Select to delete")
         }
     }

@@ -10,7 +10,7 @@ class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.shadowImage = UIImage()
+        setHeader(largeTitles: true)
         setMenu()
         discussions_timeline.delegate = self
         discussions_timeline.dataSource = self
@@ -119,10 +119,10 @@ class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        /*let selected_case = cases[indexPath.row]
-         let show_discussion_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowDiscussionVC") as? ShowDiscussionVC
-         show_discussion_vc!.discussion = selected_discussion
-         navigationController?.pushViewController(show_discussion_vc!, animated: false)*/
+        let selected_discussion = discussions[indexPath.row]
+        let show_discussion_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowDiscussionVC") as? ShowDiscussionVC
+        show_discussion_vc!.discussion = selected_discussion
+        navigationController?.pushViewController(show_discussion_vc!, animated: false)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

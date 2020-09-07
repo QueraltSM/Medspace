@@ -4,9 +4,9 @@ import FirebaseAuth
 
 class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate{
 
-    @IBOutlet weak var dicussion_title: UITextView!
-    @IBOutlet weak var speciality_box: UIView!
     @IBOutlet weak var discussion_description: UITextView!
+    @IBOutlet weak var discussion_title: UITextView!
+    @IBOutlet weak var speciality_box: UIView!
     @IBOutlet weak var speciality_textfield: UITextField!
     var selectedSpeciality: String?
     
@@ -14,12 +14,12 @@ class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDele
         super.viewDidLoad()
         navigationController?.navigationBar.shadowImage = UIImage()
         setMenu()
-        dicussion_title.delegate = self
+        discussion_title.delegate = self
         discussion_description.delegate = self
-        dicussion_title.setBorder()
+        discussion_title.setBorder()
         discussion_description.setBorder()
         speciality_box.setBorder()
-        dicussion_title.customTextView(view_text:"Title",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
+        discussion_title.customTextView(view_text:"Title",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
         discussion_description.customTextView(view_text:"Description",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
         speciality_textfield.text = specialities[specialities.count / 2].name
         speciality_textfield.textColor = UIColor.gray
@@ -33,7 +33,7 @@ class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDele
         let user = Auth.auth().currentUser?.uid
         let now = Date().description
         let path = "Discussions/\(now)::\(user!)"
-        ref.child("\(path)/title").setValue(dicussion_title.text!)
+        ref.child("\(path)/title").setValue(discussion_title.text!)
         ref.child("\(path)/description").setValue(discussion_description.text!)
         ref.child("\(path)/speciality").setValue(speciality_textfield.text!)
         ref.child("\(path)/user").setValue(user)
@@ -42,10 +42,10 @@ class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDele
     
     @IBAction func saveDiscussion(_ sender: Any) {
         var error = ""
-        if (dicussion_title.textColor == UIColor.gray || dicussion_title.text.isEmpty) {
+        if (discussion_title.textColor == UIColor.gray || discussion_title.text.isEmpty) {
             error += "Write a title\n"
         }
-        if (dicussion_title.textColor == UIColor.gray || dicussion_title.text.isEmpty) {
+        if (discussion_title.textColor == UIColor.gray || discussion_title.text.isEmpty) {
             error += "Write a description\n"
         }
         if (speciality_textfield.textColor == UIColor.gray) {
@@ -53,7 +53,7 @@ class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDele
         }
         if (error == "") {
             postDiscussion()
-            presentVC(segue: "MyDiscussionsVC")
+            presentVC(segue: "DiscussionsVC")
         } else {
             showAlert(title: "Error saving the discussion", message: error)
         }

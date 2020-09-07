@@ -57,6 +57,8 @@
 		62F6013924FFDD500023A8CC /* CreateResearchVC2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F6013824FFDD500023A8CC /* CreateResearchVC2.swift */; };
 		62F6122225011C7100892188 /* EditNewsVC1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F6122125011C7100892188 /* EditNewsVC1.swift */; };
 		62F612262501236A00892188 /* EditNewsVC2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F612252501236A00892188 /* EditNewsVC2.swift */; };
+		62F9F875250651AF0015E30C /* ShowDiscussionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F9F874250651AF0015E30C /* ShowDiscussionVC.swift */; };
+		62F9F8772506530C0015E30C /* EditDiscussionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F9F8762506530C0015E30C /* EditDiscussionVC.swift */; };
 		62FA30E724FABD4C00BB0C45 /* Medspace-Case.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FA30E324FABD4A00BB0C45 /* Medspace-Case.png */; };
 		62FA30E824FABD4C00BB0C45 /* Medspace-News.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FA30E424FABD4B00BB0C45 /* Medspace-News.png */; };
 		62FA30E924FABD4C00BB0C45 /* Medspace-Discussion.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FA30E524FABD4B00BB0C45 /* Medspace-Discussion.png */; };
@@ -118,6 +120,8 @@
 		62F6013A24FFF8EC0023A8CC /* Medspace.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Medspace.entitlements; sourceTree = "<group>"; };
 		62F6122125011C7100892188 /* EditNewsVC1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNewsVC1.swift; sourceTree = "<group>"; };
 		62F612252501236A00892188 /* EditNewsVC2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNewsVC2.swift; sourceTree = "<group>"; };
+		62F9F874250651AF0015E30C /* ShowDiscussionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowDiscussionVC.swift; sourceTree = "<group>"; };
+		62F9F8762506530C0015E30C /* EditDiscussionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDiscussionVC.swift; sourceTree = "<group>"; };
 		62FA30E324FABD4A00BB0C45 /* Medspace-Case.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Medspace-Case.png"; sourceTree = "<group>"; };
 		62FA30E424FABD4B00BB0C45 /* Medspace-News.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Medspace-News.png"; sourceTree = "<group>"; };
 		62FA30E524FABD4B00BB0C45 /* Medspace-Discussion.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Medspace-Discussion.png"; sourceTree = "<group>"; };
@@ -207,6 +211,8 @@
 				625D738C2506304F00104DBB /* DiscussionsVC.swift */,
 				625D738E2506305A00104DBB /* MyDiscussionsVC.swift */,
 				625D7390250636FF00104DBB /* CreateDiscussionVC.swift */,
+				62F9F874250651AF0015E30C /* ShowDiscussionVC.swift */,
+				62F9F8762506530C0015E30C /* EditDiscussionVC.swift */,
 			);
 			path = Discussions;
 			sourceTree = "<group>";
@@ -454,6 +460,7 @@
 				62F6013924FFDD500023A8CC /* CreateResearchVC2.swift in Sources */,
 				6227CCE52503826900EB676B /* EditCaseVC1.swift in Sources */,
 				62F612262501236A00892188 /* EditNewsVC2.swift in Sources */,
+				62F9F8772506530C0015E30C /* EditDiscussionVC.swift in Sources */,
 				621535AC24EACF14007B18BA /* SignupVC.swift in Sources */,
 				6227CCE72503827600EB676B /* EditCaseVC2.swift in Sources */,
 				622691C524F8519100BDCB36 /* HomeVC.swift in Sources */,
@@ -475,6 +482,7 @@
 				626EF45124F4319B00D8A59B /* CreateNewsVC2.swift in Sources */,
 				625D7391250636FF00104DBB /* CreateDiscussionVC.swift in Sources */,
 				62FB08B52500E01E0064C988 /* MyNewsVC.swift in Sources */,
+				62F9F875250651AF0015E30C /* ShowDiscussionVC.swift in Sources */,
 				62D8C7B424FE7C100031587E /* DataCell.swift in Sources */,
 				62F6122225011C7100892188 /* EditNewsVC1.swift in Sources */,
 				622691C724F8522500BDCB36 /* HomeCell.swift in Sources */,
