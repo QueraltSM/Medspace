@@ -12,21 +12,17 @@ class CreateNewsVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate,
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.shadowImage = UIImage()
         setMenu()
+        setHeader(largeTitles: false)
         titleview.delegate = self
         speciality_textfield.delegate = self
         speciality_box.setBorder()
         titleview.setBorder()
-        titleview.customTextView(view_text:"Write a title...",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
+        titleview.customTextView(view_text:"Title",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
         speciality_textfield.text = specialities[specialities.count / 2].name
         speciality_textfield.textColor = UIColor.gray
         createPickerView()
         dismissPickerView()
-    }
-    
-    @objc func unwindToThisViewController(segue: UIStoryboardSegue) {
-        print("unw")
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -37,7 +33,7 @@ class CreateNewsVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate,
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
-            textView.customTextView(view_text:"Write a title...",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: false)
+            textView.customTextView(view_text:"Title",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: false)
         }
     }
     
@@ -84,11 +80,6 @@ class CreateNewsVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate,
         let picker = UIImagePickerController()
         picker.delegate = self
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: {
-            action in
-            picker.sourceType = .camera
-            self.present(picker, animated: true, completion: nil)
-        }))
         alert.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: {
             action in
             picker.sourceType = .photoLibrary
@@ -106,19 +97,9 @@ class CreateNewsVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate,
         self.present(alert, animated: true, completion: nil)
     }
     
-    // Auto-layout textview
-    /*func textViewDidChange(_ textView: UITextView) {
-        let fixedWidth = textView.frame.size.width
-        textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
-        let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
-        var newFrame = textView.frame
-        newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
-        textView.frame = newFrame
-    }*/
-    
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
-        return newText.count <= 80
+        return newText.count <= 100
     }
     
     @IBAction func savePost(_ sender: Any) {
@@ -140,14 +121,13 @@ class CreateNewsVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate,
             navigationController?.pushViewController(news_description_vc!, animated: false)
         }
         if (error != "") {
-            showAlert(title: "Error in saving the news", message: error)
+            showAlert(title: "Error", message: error)
         }
     }
     
     @IBAction func didTapMenuButton(_ sender: Any) {
         swipeMenu()
     }
-    
 }
 
 extension CreateNewsVC1: UIImagePickerControllerDelegate, UINavigationControllerDelegate {

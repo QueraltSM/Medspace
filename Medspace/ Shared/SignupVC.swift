@@ -46,9 +46,9 @@ class SignupVC: UIViewController {
                 self.showAlert(title: "Error", message: error!.localizedDescription)
             } else {
                 let uid = (authResult?.uid)!
-                self.ref.child("Users/\(uid)/Username").setValue(self.fullname.text)
-                self.ref.child("Users/\(uid)/Type").setValue("Doctor")
-                self.performSegue(withIdentifier: "HomeVC", sender: nil)
+                self.ref.child("Users/\(uid)/fullname").setValue(self.fullname.text)
+                self.ref.child("Users/\(uid)/type").setValue("Doctor")
+                self.setUserData(fullname: self.fullname.text!, usertype: "Doctor", isUserLoggedIn: true)
             }
         }
     }

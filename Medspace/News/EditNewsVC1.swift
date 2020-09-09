@@ -9,10 +9,10 @@ class EditNewsVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate, U
     var image_header_invalid = false
     var selectedSpeciality: String?
     var news: News?
+    var needsUpdate: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        hideToolbar()
         setHeader(largeTitles: false)
         setMenu()
         titleview.delegate = self
@@ -20,23 +20,11 @@ class EditNewsVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate, U
         speciality_textfield.textColor = UIColor.gray
         speciality_box.setBorder()
         titleview.setBorder()
-        speciality_textfield.text = news?.speciality.name
-        titleview.customTextView(view_text:(news?.title)!,view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
-        image_header.image = news?.image
+        speciality_textfield.text = news!.speciality.name
+        titleview.customTextView(view_text:news!.title,view_color:UIColor.black, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
+        image_header.image = news!.image
         createPickerView()
         dismissPickerView()
-    }
-    
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == UIColor.gray {
-            textView.customTextView(view_text:"",view_color:UIColor.black, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
-        }
-    }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        if textView.text.isEmpty {
-            textView.customTextView(view_text:(news?.title)!,view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: false)
-        }
     }
     
     func createPickerView() {
@@ -68,11 +56,6 @@ class EditNewsVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate, U
         let picker = UIImagePickerController()
         picker.delegate = self
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: {
-            action in
-            picker.sourceType = .camera
-            self.present(picker, animated: true, completion: nil)
-        }))
         alert.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: {
             action in
             picker.sourceType = .photoLibrary
@@ -113,11 +96,10 @@ class EditNewsVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate, U
             error += "Write a title\n"
         }
         if (error == "" && !titleview.text.isEmpty) {
-            
             showEditNewsDescriptionVC()
         }
         if (error != "") {
-            showAlert(title: "Error in editing the news", message: error)
+            showAlert(title: "Error", message: error)
         }
     }
     
@@ -129,9 +111,18 @@ class EditNewsVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate, U
                 color = s.color!
             }
         }
-        let final_news = News(id: (news?.id)!, image: image_header.image!, date: (news?.date)!, title: titleview.text!, speciality: Speciality(name: speciality_textfield.text!, color: color), body: (news?.body)!, user: (news?.user)!)
+        if (news!.image != image_header.image || news!.title != titleview.text || news!.speciality.name != speciality_textfield.text) {
+            needsUpdate = true
+        }
+        let final_news = News(id: news!.id, image: image_header.image!, date: news!.date, title: titleview.text!, speciality: Speciality(name: speciality_textfield.text!, color: color), body: news!.body, user: news!.user)
         news_description_vc!.news = final_news
+        news_description_vc!.needsUpdate = needsUpdate
         navigationController?.pushViewController(news_description_vc!, animated: false)
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
+        return newText.count <= 100
     }
     
 }

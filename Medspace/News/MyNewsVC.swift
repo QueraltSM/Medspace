@@ -15,7 +15,7 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.shadowImage = UIImage()
+        setHeader(largeTitles: true)
         setMenu()
         ref = Database.database().reference()
         news_timeline.delegate = self
@@ -83,19 +83,18 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 330
+         return UITableView.automaticDimension
     }
     
-    func loopSnapshotChildren(ref: DatabaseReference, snapshot: DataSnapshot) {
+    func loopNews(ref: DatabaseReference, snapshot: DataSnapshot) {
+        self.startAnimation()
         for child in snapshot.children.allObjects as! [DataSnapshot] {
-            self.setActivityIndicator()
             let dict = child.value as? [String : AnyObject] ?? [:]
             let storageRef = Storage.storage().reference().child("News/\(child.key)")
             storageRef.getData(maxSize: 1 * 1024 * 1024) { (data, error) -> Void in
                 let title = dict["title"]! as! String
                 let speciality = dict["speciality"]! as! String
                 let date = dict["date"]! as! String
-                let final_date = self.getFormattedDate(date: date)
                 let body = dict["body"]! as! String
                 let pic = UIImage(data: data!)
                 let userid = dict["user"]! as! String
@@ -110,13 +109,14 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
                                 color = s.color!
                             }
                         }
-                        self.news.append(News(id: child.key, image: pic!, date: final_date, title: title, speciality: Speciality(name: speciality, color: color), body: body, user: User(id: userid, name: username)))
+                        self.news.append(News(id: child.key, image: pic!, date: date, title: title, speciality: Speciality(name: speciality, color: color), body: body, user: User(id: userid, name: username)))
                         let sortedNews = self.news.sorted {
                             $0.date > $1.date
                         }
                         self.news = sortedNews
                         self.news_timeline.reloadData()
                         self.stopAnimation()
+                        self.turnEditState(enabled: true, title: "Edit")
                     })
                 } else {
                     self.stopAnimation()
@@ -132,14 +132,13 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
                 self.turnEditState(enabled: false, title: "")
             } else {
                 self.news_timeline.restore()
-                self.turnEditState(enabled: true, title: "Select to delete")
+                self.loopNews(ref: self.ref, snapshot: snapshot)
             }
-            self.loopSnapshotChildren(ref: self.ref, snapshot: snapshot)
         })
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if (!edit) {
+        if !edit {
             cancelSelections()
             let selected_news = news[indexPath.row]
             let show_news_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowNewsVC") as? ShowNewsVC
@@ -158,7 +157,7 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let entry = searchController.isActive ? newsMatched[indexPath.row] : news[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as? HomeCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as? NewsCell
         cell?.news_date.text = entry.date
         cell?.news_title.text = entry.title
         cell?.image_header.image = entry.image
@@ -180,9 +179,11 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
     }
     
     func setToolbarDelete(hide: Bool) {
-        let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: self, action: nil)
+        let flexible1 = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: self, action: nil)
+        let selectAllButton: UIBarButtonItem = UIBarButtonItem(title: "Select All", style: .plain, target: self, action: #selector(didPressSelectAll))
         let deleteButton: UIBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(didPressDelete))
-        self.toolbarItems = [flexible, deleteButton]
+        let flexible2 = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: self, action: nil)
+        self.toolbarItems = [flexible1, selectAllButton, deleteButton, flexible2]
         self.navigationController?.toolbar.barTintColor = UIColor.white
         self.navigationController?.setToolbarHidden(hide, animated: false)
     }
@@ -193,7 +194,7 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
             edit = true
             setToolbarDelete(hide: false)
         } else {
-            editButton.title = "Select to delete"
+            editButton.title = "Edit"
             edit = false
             setToolbarDelete(hide: true)
             cancelSelections()
@@ -212,26 +213,50 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
         news_timeline.setEditing(editing, animated: true)
     }
     
-    @objc func didPressDelete() {
+    func deleteSelectedRows() {
         setToolbarDelete(hide: true)
-        let selectedRows = self.news_timeline.indexPathsForSelectedRows
-        if selectedRows != nil {
-            for var selectionIndex in selectedRows! {
-                let path = "News/\(news[selectionIndex.item].id)"
+        if let selectedRows = news_timeline.indexPathsForSelectedRows {
+            var items = [News]()
+            for indexPath in selectedRows  {
+                items.append(news[indexPath.row])
+            }
+            for _ in items {
+                let index = news.index(where: { (item) -> Bool in
+                    item.id == item.id
+                })
+                let path = "News/\(news[index!].id)"
                 removeDataDB(path: path)
                 removeDataStorage(path: path)
-                while selectionIndex.item >= news.count {
-                    selectionIndex.item -= 1
-                }
-                tableView(news_timeline, commit: .delete, forRowAt: selectionIndex)
+                news.remove(at: index!)
             }
+            news_timeline.beginUpdates()
+            news_timeline.deleteRows(at: selectedRows, with: .automatic)
+            news_timeline.endUpdates()
         }
         if (news.count == 0) {
             turnEditState(enabled: false, title: "")
             news_timeline.setEmptyView(title: "You have not post a news yet\n\n:(")
         } else {
             edit = false
-            turnEditState(enabled: true, title: "Select to delete")
+            turnEditState(enabled: true, title: "Edit")
+        }
+    }
+    
+    @objc func didPressDelete() {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+        alert.title = "Are you sure you want to delete the \(self.news_timeline.indexPathsForSelectedRows!.count) selected news?"
+        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
+            action in
+                self.deleteSelectedRows()
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    @objc func didPressSelectAll() {
+        let totalRows = news_timeline.numberOfRows(inSection: 0)
+        for row in 0..<totalRows {
+            news_timeline.selectRow(at: NSIndexPath(row: row, section: 0) as IndexPath, animated: false, scrollPosition: UITableView.ScrollPosition.none)
         }
     }
 }

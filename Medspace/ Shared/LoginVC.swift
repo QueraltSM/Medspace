@@ -13,11 +13,7 @@ class LoginVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        customLoginBttn()
         self.navigationController?.isNavigationBarHidden = true
-    }
-    
-    func customLoginBttn(){
         login_button.layer.borderColor = UIColor.black.cgColor
         login_button.layer.borderWidth = 1
         login_button.layer.cornerRadius = login_button.frame.size.height / 2.0
@@ -30,18 +26,12 @@ class LoginVC: UIViewController {
                 self.password.setUnderline(color: UIColor.red)
                 self.showAlert(title: "Error", message: error.localizedDescription)
             } else {
-                self.setActivityIndicator()
                 Database.database().reference().child("Users").child((Auth.auth().currentUser?.uid)!).observeSingleEvent(of: .value, with: { snapshot in
                         let value = snapshot.value as? NSDictionary
                         let usertype = value?["type"] as? String ?? ""
                         let fullname = value?["fullname"] as? String ?? ""
-                        UserDefaults.standard.set(usertype, forKey: "usertype")
-                        UserDefaults.standard.set(fullname, forKey: "fullname")
-                        UserDefaults.standard.set(true, forKey: "isUserLoggedIn")
-                        self.stopAnimation()
-                        self.performSegue(withIdentifier: "HomeVC", sender: nil)
+                        self.setUserData(fullname: fullname, usertype: usertype, isUserLoggedIn: true)
                     })
-                
             }
         }
     }

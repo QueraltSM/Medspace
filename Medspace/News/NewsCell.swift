@@ -1,6 +1,6 @@
 import UIKit
 
-class HomeCell: UITableViewCell {
+class NewsCell: UITableViewCell {
     @IBOutlet weak var image_header: UIImageView!
     @IBOutlet weak var labels_container: UIView!
     @IBOutlet weak var news_title: UILabel!
@@ -9,18 +9,27 @@ class HomeCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        //labels_container.round(corners: .allCorners, cornerRadius: 30)
-        labels_container.layer.borderWidth = 0.5
-        labels_container.layer.borderColor = UIColor.lightGray.cgColor
-        news_speciality.textColor = UIColor.white
-        news_speciality.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline)
+        news_speciality.textColor = UIColor.black
+        news_speciality.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.headline)
         news_speciality.round(corners: .allCorners, cornerRadius: 10)
         news_speciality.textAlignment = .center
         news_title.numberOfLines = 0
         news_title.lineBreakMode = .byWordWrapping
+        selectedBackgroundView = {
+            let view = UIView.init()
+            view.backgroundColor = UIColor.clear
+            return view
+        }()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+        if selected {
+            labels_container.layer.borderColor = UIColor.init(hexString: "#2a9df4").cgColor
+            labels_container.layer.borderWidth = 2
+        } else {
+            labels_container.layer.borderWidth = 0.5
+            labels_container.layer.borderColor = UIColor.lightGray.cgColor
+        }
     }
 }

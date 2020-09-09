@@ -11,7 +11,7 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.shadowImage = UIImage()
+        setHeader(largeTitles: true)
         setMenu()
         researches_timeline.delegate = self
         researches_timeline.dataSource = self
@@ -65,9 +65,9 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         }
     }
     
-    func loopSnapshotChildren(ref: DatabaseReference, snapshot: DataSnapshot) {
+    func loopResearches(ref: DatabaseReference, snapshot: DataSnapshot) {
+        self.startAnimation()
         for child in snapshot.children.allObjects as! [DataSnapshot] {
-            self.setActivityIndicator()
             let dict = child.value as? [String : AnyObject] ?? [:]
             let title = dict["title"]! as! String
             let speciality = dict["speciality"]! as! String
@@ -107,11 +107,11 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         let ref = Database.database().reference()
         ref.child("Researches").observeSingleEvent(of: .value, with: { snapshot in
             if (snapshot.children.allObjects.count == 0) {
-                self.researches_timeline.setEmptyView(title: "There is no research publish yet\n\n:(")
+                self.researches_timeline.setEmptyView(title: "No research has been posted yet\n\n:(")
             } else {
                 self.researches_timeline.restore()
+                self.loopResearches(ref: ref, snapshot: snapshot)
             }
-            self.loopSnapshotChildren(ref: ref, snapshot: snapshot)
         })
     }
     
@@ -119,10 +119,6 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         return 250
     }
     
-    
-    @IBAction func didTapMenu(_ sender: Any) {
-        swipeMenu()
-    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selected_research = researches[indexPath.row]
@@ -154,5 +150,10 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     @IBAction func didTapSearch(_ sender: Any) {
         setSearchBar()
     }
+    
+    @IBAction func didTapMenu(_ sender: Any) {
+        swipeMenu()
+    }
+    
     
 }

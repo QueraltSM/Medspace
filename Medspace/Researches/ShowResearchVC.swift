@@ -28,7 +28,6 @@ class ShowResearchVC: UIViewController {
         }
     }
     
-    
     @IBAction func viewDocument(_ sender: Any) {
         let document_viewer_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "DocumentViewerVC") as? DocumentViewerVC
         document_viewer_vc!.document = research!.pdf

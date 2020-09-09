@@ -1,5 +1,4 @@
 import UIKit
-import FirebaseDatabase
 import FirebaseAuth
 import FirebaseStorage
 
@@ -9,13 +8,11 @@ class CreateNewsVC2: UIViewController, UITextViewDelegate {
     var title_news: String = ""
     var image_news: UIImage? = nil
     var speciality: String = ""
-    var ref: DatabaseReference!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setHeader(largeTitles: false)
         body_news.delegate = self
-        navigationController?.navigationBar.shadowImage = UIImage()
-        ref = Database.database().reference()
         body_news.customTextView(view_text:"Write the body of the news...",view_color:UIColor.gray, view_font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body), view_scroll: true)
         setMenu()
     }
@@ -38,14 +35,6 @@ class CreateNewsVC2: UIViewController, UITextViewDelegate {
         swipeMenu()
     }
     
-    func saveNewsDB(path: String, user: String, date: String) {
-        self.ref.child("\(path)/title").setValue(title_news)
-        self.ref.child("\(path)/body").setValue(body_news.text!)
-        self.ref.child("\(path)/speciality").setValue(speciality)
-        self.ref.child("\(path)/user").setValue(user)
-        self.ref.child("\(path)/date").setValue(date)
-    }
-    
     @IBAction func askPost(_ sender: Any) {
         if (body_news.textColor == UIColor.black && !body_news.text.isEmpty) {
             let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
@@ -63,9 +52,10 @@ class CreateNewsVC2: UIViewController, UITextViewDelegate {
     }
     
     func postNews() {
-        self.setActivityIndicator()
+        self.startAnimation()
         let user = Auth.auth().currentUser?.uid
-        let now = Date().description
+        let now = Date()
+        let final_date = self.getFormattedDate(date: now.description)
         let path = "News/\(now)::\(user!)"
         guard let imageData: Data = image_news!.jpegData(compressionQuality: 0.1) else {
             return
@@ -76,11 +66,11 @@ class CreateNewsVC2: UIViewController, UITextViewDelegate {
         storageRef.putData(imageData, metadata: metaDataConfig){ (metaData, error) in
             self.stopAnimation()
             if let error = error {
-                self.showAlert(title: "Could't publish the news", message: error.localizedDescription)
+                self.showAlert(title: "Could not post the news", message: error.localizedDescription)
                 return
             } else {
-                self.saveNewsDB(path: path, user: user!, date: now)
-                self.performSegue(withIdentifier: "MyNewsVC", sender: nil)
+                self.postNewsDB(path: path, title: self.title_news, body: self.body_news.text!, speciality: self.speciality, user: user!, date: final_date)
+                self.presentVC(segue: "MyNewsVC")
             }
         }
     }

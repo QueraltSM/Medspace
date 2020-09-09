@@ -12,7 +12,7 @@ class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.shadowImage = UIImage()
+        setHeader(largeTitles: false)
         setMenu()
         discussion_title.delegate = self
         discussion_description.delegate = self
@@ -29,7 +29,6 @@ class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDele
     
     func postDiscussion() {
         let ref = Database.database().reference()
-        self.setActivityIndicator()
         let user = Auth.auth().currentUser?.uid
         let now = Date().description
         let path = "Discussions/\(now)::\(user!)"

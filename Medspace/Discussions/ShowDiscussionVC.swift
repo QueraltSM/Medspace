@@ -12,8 +12,8 @@ class ShowDiscussionVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.shadowImage = UIImage()
         setMenu()
+        setHeader(largeTitles: false)
         discussion_title.text = discussion!.title
         discussion_description.text = discussion!.description
         date.text = discussion!.date
@@ -23,7 +23,7 @@ class ShowDiscussionVC: UIViewController {
         speciality.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline)
         speciality.round(corners: .allCorners, cornerRadius: 10)
         speciality.textAlignment = .center
-        self.navigationController?.navigationBar.prefersLargeTitles = false
+        
         if (discussion!.user.id == Auth.auth().currentUser!.uid) {
             setConfigDataToolbar()
         }
@@ -57,6 +57,5 @@ class ShowDiscussionVC: UIViewController {
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
-    
 
 }

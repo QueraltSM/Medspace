@@ -78,7 +78,6 @@ class CreateCaseVC2: UIViewController, UITextViewDelegate, UIPickerViewDelegate,
     
     func postCase() {
         let ref = Database.database().reference()
-        self.setActivityIndicator()
         let user = Auth.auth().currentUser?.uid
         let now = Date().description
         let path = "Cases/\(now)::\(user!)"

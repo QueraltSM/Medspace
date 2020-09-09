@@ -11,7 +11,7 @@ class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.shadowImage = UIImage()
+        setHeader(largeTitles: true)
         setMenu()
         cases_timeline.delegate = self
         cases_timeline.dataSource = self
@@ -65,9 +65,9 @@ class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     }
 
     
-    func loopSnapshotChildren(ref: DatabaseReference, snapshot: DataSnapshot) {
+    func loopCases(ref: DatabaseReference, snapshot: DataSnapshot) {
+        self.startAnimation()
         for child in snapshot.children.allObjects as! [DataSnapshot] {
-            self.setActivityIndicator()
             let dict = child.value as? [String : AnyObject] ?? [:]
             let title = dict["title"]! as! String
             let description = dict["description"]! as! String
@@ -92,8 +92,8 @@ class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
                     $0.date > $1.date
                 }
                 self.cases = sortedCases
-                self.stopAnimation()
                 self.cases_timeline.reloadData()
+                self.stopAnimation()
             })
         }
     }
@@ -106,11 +106,11 @@ class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
         let ref = Database.database().reference()
         ref.child("Cases").observeSingleEvent(of: .value, with: { snapshot in
             if (snapshot.children.allObjects.count == 0) {
-                self.cases_timeline.setEmptyView(title: "There is no case publish yet\n\n:(")
+                self.cases_timeline.setEmptyView(title: "No case has been posted yet\n\n:(")
             } else {
                 self.cases_timeline.restore()
+                self.loopCases(ref: ref, snapshot: snapshot)
             }
-            self.loopSnapshotChildren(ref: ref, snapshot: snapshot)
         })
     }
     

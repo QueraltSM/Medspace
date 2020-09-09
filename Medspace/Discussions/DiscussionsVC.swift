@@ -27,9 +27,9 @@ class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         swipeMenu()
     }
     
-    func loopSnapshotChildren(ref: DatabaseReference, snapshot: DataSnapshot) {
+    func loopDiscussions(ref: DatabaseReference, snapshot: DataSnapshot) {
+        self.startAnimation()
         for child in snapshot.children.allObjects as! [DataSnapshot] {
-            self.setActivityIndicator()
             let dict = child.value as? [String : AnyObject] ?? [:]
             let title = dict["title"]! as! String
             let description = dict["description"]! as! String
@@ -52,8 +52,8 @@ class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
                     $0.date > $1.date
                 }
                 self.discussions = sortedDiscussions
-                self.stopAnimation()
                 self.discussions_timeline.reloadData()
+                self.stopAnimation()
             })
         }
     }
@@ -77,11 +77,11 @@ class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         let ref = Database.database().reference()
         ref.child("Discussions").observeSingleEvent(of: .value, with: { snapshot in
             if (snapshot.children.allObjects.count == 0) {
-                self.discussions_timeline.setEmptyView(title: "There is no discussion publish yet\n\n:(")
+                self.discussions_timeline.setEmptyView(title: "No discussion has been posted yet\n\n:(")
             } else {
                 self.discussions_timeline.restore()
+                self.loopDiscussions(ref: ref, snapshot: snapshot)
             }
-            self.loopSnapshotChildren(ref: ref, snapshot: snapshot)
         })
     }
     
@@ -144,5 +144,8 @@ class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         cell?.data_view.layer.borderColor = entry.speciality.color?.cgColor
         return cell!
     }
+    
+    
+    
     
 }

@@ -8,20 +8,20 @@ class DoctorMenuVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     @IBOutlet weak var menu_table: UITableView!
     
     let data = [
-        CollapsableViewModel(label: "Home", image: UIImage(named: "Home.png"), segue:"HomeVC"),
-        CollapsableViewModel(label: "Clinical cases", image: UIImage(named: "Cases.png"), children: [
-            CollapsableViewModel(label: "All", segue:"CasesVC"),
-            CollapsableViewModel(label: "Mine", segue:"MyCasesVC"),
-            CollapsableViewModel(label: "New", segue:"CreateCaseVC1")]),
-        CollapsableViewModel(label: "Discussions", image: UIImage(named: "Discussions.png"), children: [
-            CollapsableViewModel(label: "All", segue:"DiscussionsVC"),
-            CollapsableViewModel(label: "Mine", segue:"MyDiscussionsVC"),
-            CollapsableViewModel(label: "New", segue:"CreateDiscussionVC")]),
-        CollapsableViewModel(label: "Researches", image: UIImage(named: "Researches.png"), children: [
-            CollapsableViewModel(label: "All", segue:"ResearchesVC"),
-            CollapsableViewModel(label: "Mine", segue:"MyResearchesVC"),
-            CollapsableViewModel(label: "New", segue:"CreateResearchVC1")]),
-        CollapsableViewModel(label: "Account settings", image: UIImage(named: "Settings.png")),
+        CollapsableViewModel(label: "Home", image: UIImage(named: "Home.png"), segue:"NewsVC"),
+        CollapsableViewModel(label: "My posts", image: UIImage(named: "MyPosts.png"), children: [
+            CollapsableViewModel(label: "Clinical cases", image: UIImage(named: "Cases.png"), segue:"MyCasesVC"),
+            CollapsableViewModel(label: "Discussions", image: UIImage(named: "Discussions.png"), segue:"MyDiscussionsVC"),
+            CollapsableViewModel(label: "Researches", image: UIImage(named: "Researches.png"), segue:"MyResearchesVC")]),
+        CollapsableViewModel(label: "Add new post", image: UIImage(named: "NewPost.png"), children: [
+            CollapsableViewModel(label: "Clinical cases", segue:"CreateCaseVC1"),
+            CollapsableViewModel(label: "Discussions", segue:"CreateDiscussionsVC"),
+            CollapsableViewModel(label: "Researches", segue:"CreateResearchesVC1")]),
+        CollapsableViewModel(label: "Posts", image: UIImage(named: "Posts.png"), children: [
+            CollapsableViewModel(label: "Clinical cases", image: UIImage(named: "Cases.png"), segue:"CasesVC"),
+            CollapsableViewModel(label: "Discussions", image: UIImage(named: "Discussions.png"), segue:"DiscussionsVC"),
+            CollapsableViewModel(label: "Researches", image: UIImage(named: "Researches.png"), segue:"ResearchesVC")]),
+        CollapsableViewModel(label: "Profile", image: UIImage(named: "Account.png"), segue:"ProfileVC"),
         CollapsableViewModel(label: "Logout", image: UIImage(named: "Logout.png"))]
     
     var displayedRows: [CollapsableViewModel] = []

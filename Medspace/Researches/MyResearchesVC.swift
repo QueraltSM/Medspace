@@ -86,7 +86,6 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func loopSnapshotChildren(ref: DatabaseReference, snapshot: DataSnapshot) {
         for child in snapshot.children.allObjects as! [DataSnapshot] {
-            self.setActivityIndicator()
             let dict = child.value as? [String : AnyObject] ?? [:]
             let title = dict["title"]! as! String
             let speciality = dict["speciality"]! as! String

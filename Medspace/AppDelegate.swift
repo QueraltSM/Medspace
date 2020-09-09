@@ -1,6 +1,7 @@
 import UIKit
 import CoreData
 import FirebaseCore
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -12,14 +13,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         FirebaseApp.configure()
         return true
-    }
-
-    func startVC(view: String) {
-        self.window = UIWindow(frame: UIScreen.main.bounds)
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyboard.instantiateViewController(withIdentifier: view)
-        self.window?.rootViewController = vc
-        self.window?.makeKeyAndVisible()
     }
     
     func applicationWillResignActive(_ application: UIApplication) {

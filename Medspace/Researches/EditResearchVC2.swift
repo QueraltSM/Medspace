@@ -21,7 +21,6 @@ class EditResearchVC2: UIViewController, UITextViewDelegate {
     }
     
     func storeDocumentStorage(path: String) {
-        self.setActivityIndicator()
         Storage.storage().reference().child(path).putFile(from: research!.pdf, metadata: nil) { metadata, error in
             self.stopAnimation()
             if error != nil {
@@ -52,8 +51,6 @@ class EditResearchVC2: UIViewController, UITextViewDelegate {
         self.ref.child("\(path)/title").setValue(research!.title)
         self.ref.child("\(path)/description").setValue(research_description.text!)
         self.ref.child("\(path)/speciality").setValue(research!.speciality.name)
-        self.ref.child("\(path)/user").setValue(research!.user.id)
-        self.ref.child("\(path)/date").setValue(research!.date)
         presentVC(segue: "MyResearchesVC")
     }
     

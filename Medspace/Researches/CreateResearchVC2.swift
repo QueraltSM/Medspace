@@ -21,7 +21,6 @@ class CreateResearchVC2: UIViewController, UITextViewDelegate {
     }
     
     func storeDocumentStorage(path: String) {
-        self.setActivityIndicator()
         let storage = Storage.storage()
         let storageRef = storage.reference()
         let ref = storageRef.child(path)
@@ -65,7 +64,6 @@ class CreateResearchVC2: UIViewController, UITextViewDelegate {
     }
     
     func postResearch() {
-        self.setActivityIndicator()
         let user = Auth.auth().currentUser?.uid
         let now = Date().description
         let path = "Researches/\(now)::\(user!)"

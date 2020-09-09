@@ -5,7 +5,6 @@ import FirebaseDatabase
 class ShowCaseVC: UIViewController {
 
     var clinical_case: Case?
-    
     @IBOutlet weak var examination: UILabel!
     @IBOutlet weak var history: UILabel!
     @IBOutlet weak var date: UILabel!

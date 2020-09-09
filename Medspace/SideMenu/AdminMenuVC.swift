@@ -2,43 +2,21 @@ import UIKit
 import Firebase
 import FirebaseAuth
 
-class CollapsableViewModel {
-    let label: String
-    let image: UIImage?
-    let children: [CollapsableViewModel]
-    var isCollapsed: Bool
-    var needsSeparator: Bool = true
-    let segue: String?
-    
-    init(label: String, image: UIImage? = nil, children: [CollapsableViewModel] = [], isCollapsed: Bool = true, segue: String? = nil) {
-        self.label = label
-        self.image = image
-        self.children = children
-        self.isCollapsed = isCollapsed
-        self.segue = segue
-        for child in self.children {
-            child.needsSeparator = false
-        }
-        self.children.last?.needsSeparator = true
-    }
-}
-
 class AdminMenuVC: UIViewController, UITableViewDelegate, UITableViewDataSource  {
     
     @IBOutlet weak var fullname: UILabel!
     @IBOutlet weak var menu_table: UITableView!
     
     let data = [
-        CollapsableViewModel(label: "Home", image: UIImage(named: "Home.png"), segue:"HomeVC"),
-        CollapsableViewModel(label: "News", image: UIImage(named: "News.png"), children: [
-            CollapsableViewModel(label: "My news", segue:"MyNewsVC"),
-            CollapsableViewModel(label: "Create news", segue:"CreateNewsVC")]),
-        CollapsableViewModel(label: "Cases", image: UIImage(named: "Cases.png"), segue:"CasesVC"),
-        CollapsableViewModel(label: "Discussions", image: UIImage(named: "Discussions.png"), segue:"DiscussionsVC"),
-        CollapsableViewModel(label: "Researches", image: UIImage(named: "Researches.png"), segue:"ResearchesVC"),
-        CollapsableViewModel(label: "Account settings", image: UIImage(named: "Settings.png")),
+        CollapsableViewModel(label: "Home", image: UIImage(named: "Home.png"), segue:"NewsVC"),
+        CollapsableViewModel(label: "My posts", image: UIImage(named: "MyPosts.png"), segue:"MyNewsVC"),
+        CollapsableViewModel(label: "Add new post", image: UIImage(named: "NewPost.png"), segue:"CreateNewsVC1"),
+        CollapsableViewModel(label: "Posts", image: UIImage(named: "Posts.png"), children: [
+            CollapsableViewModel(label: "Clinical cases", image: UIImage(named: "Cases.png"), segue:"CasesVC"),
+            CollapsableViewModel(label: "Discussions", image: UIImage(named: "Discussions.png"), segue:"DiscussionsVC"),
+            CollapsableViewModel(label: "Researches", image: UIImage(named: "Researches.png"), segue:"ResearchesVC")]),
+        CollapsableViewModel(label: "Profile", image: UIImage(named: "Account.png"), segue:"ProfileVC"),
         CollapsableViewModel(label: "Logout", image: UIImage(named: "Logout.png"))]
-    
     var displayedRows: [CollapsableViewModel] = []
     
     override func viewDidLoad() {
@@ -86,7 +64,7 @@ class AdminMenuVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
             logout()
         } else if (viewModel.segue != nil) {
             closeMenu()
-            self.performSegue(withIdentifier: viewModel.segue!, sender: nil)
+            presentVC(segue: viewModel.segue!)
         }
     }
 }

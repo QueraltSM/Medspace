@@ -2,79 +2,29 @@ import UIKit
 import Firebase
 import FirebaseAuth
 
-struct Speciality {
-    let name: String
-    let color: UIColor?
-}
-
-struct News {
-    let id: String
-    let image: UIImage
-    let date: String
-    let title: String
-    let speciality: Speciality
-    let body: String
-    let user: User
-}
-
-struct Case {
-    let id: String
-    let title: String
-    let description: String
-    let history: String
-    let examination: String
-    let date: String
-    let speciality: Speciality
-    let user: User
-}
-
-struct Discussion {
-    let id: String
-    let title: String
-    let description: String
-    let date: String
-    let speciality: Speciality
-    let user: User
-}
-
-struct Research {
-    let id: String
-    let pdf: URL
-    let date: String
-    let title: String
-    let speciality: Speciality
-    let description: String
-    let user: User
-}
-
-struct User {
-    let id: String
-    let name: String
-}
-
 var admin_menu : AdminMenuVC!
 var doctor_menu: DoctorMenuVC!
 var usertype: String!
 var username: String!
 let specialities = [
-    Speciality(name: "Allergy & Inmunology", color: UIColor.init(hexString: "#990F02")),
-    Speciality(name: "Anesthesiology", color: UIColor.init(hexString: "#E4A199")),
-    Speciality(name: "Dermatology", color: UIColor.init(hexString: "#8D4585")),
-    Speciality(name: "Diagnostic Radiology", color: UIColor.init(hexString: "#95B8E3")),
+    Speciality(name: "Allergy & Inmunology", color: UIColor.init(hexString: "#daf0ff")), // blue
+    Speciality(name: "Anesthesiology", color: UIColor.init(hexString: "#ff6961")), // red
+    Speciality(name: "Dermatology", color: UIColor.init(hexString: "#339933")), // green
+    Speciality(name: "Diagnostic Radiology", color: UIColor.init(hexString: "#8fd3fe")), // blue
     Speciality(name: "Emergency Medicine", color: UIColor.init(hexString: "#74B72E")),
-    Speciality(name: "Family Medicine", color: UIColor.init(hexString: "#ECB7BF")),
-    Speciality(name: "Internal Medicine", color: UIColor.init(hexString: "#1F456E")),
-    Speciality(name: "Medical Genetics", color: UIColor.init(hexString: "#B43757")),
-    Speciality(name: "Neurology", color: UIColor.init(hexString: "#98BF64")),
-    Speciality(name: "Nuclear Medicine",  color: UIColor.init(hexString: "#420c09")),
-    Speciality(name: "Opthalmology", color: UIColor.init(hexString: "#702963")),
-    Speciality(name: "Pathology", color: UIColor.init(hexString: "#CC5801")),
-    Speciality(name: "Pediatrics", color: UIColor.init(hexString: "#FC6A03")),
-    Speciality(name: "Preventive Medicine", color: UIColor.init(hexString: "#3A5311")),
-    Speciality(name: "Radiation Oncology", color: UIColor.init(hexString: "#BC544B")),
-    Speciality(name: "Psychiatry", color: UIColor.init(hexString: "#0492C2")),
-    Speciality(name: "Surgery", color: UIColor.init(hexString: "#ED820E")),
-    Speciality(name: "Urology", color: UIColor.init(hexString: "#48AAAD"))]
+    Speciality(name: "Family Medicine", color: UIColor.init(hexString: "#f98d8d")), // pink
+    Speciality(name: "Internal Medicine", color: UIColor.init(hexString: "#6ac5fe")), // blue
+    Speciality(name: "Medical Genetics", color: UIColor.init(hexString: "#ffffbf")), // yellow
+    Speciality(name: "Neurology", color: UIColor.init(hexString: "#f8abba")), // pink
+    Speciality(name: "Nuclear Medicine",  color: UIColor.init(hexString: "#66b366")), // green
+    Speciality(name: "Opthalmology", color: UIColor.init(hexString: "#d8c7ff")), // violet
+    Speciality(name: "Pathology", color: UIColor.init(hexString: "#efde7b")), // yellow
+    Speciality(name: "Pediatrics", color: UIColor.init(hexString: "#f2b8c6")), // pink
+    Speciality(name: "Preventive Medicine", color: UIColor.init(hexString: "#99cc99")), // green
+    Speciality(name: "Radiation Oncology", color: UIColor.init(hexString: "#d1bea8")), // vainilla
+    Speciality(name: "Psychiatry", color: UIColor.init(hexString: "#b3cfdd")), // blue
+    Speciality(name: "Surgery", color: UIColor.init(hexString: "#fff4c6")), // yellow
+    Speciality(name: "Urology", color: UIColor.init(hexString: "#b99aff"))] // violet
 var refreshControl = UIRefreshControl()
 
 
@@ -83,11 +33,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            let user_logged = UserDefaults.standard.bool(forKey: "isUserLoggedIn")
-            if(user_logged){
-                self.performSegue(withIdentifier: "HomeVC", sender: nil)
+            if UserDefaults.standard.bool(forKey: "isUserLoggedIn") {
+                self.presentVC(segue: "NewsVC")
             } else {
-                self.performSegue(withIdentifier: "LoginVC", sender: nil)
+                self.presentVC(segue: "LoginVC")
             }
         }
     }
@@ -256,8 +205,9 @@ extension UIColor {
     }
 }
 
-extension UIViewController {    
-    func setActivityIndicator() {
+extension UIViewController {
+    
+    func startAnimation() {
         let window = UIApplication.shared.keyWindow
         container.frame = UIScreen.main.bounds
         container.backgroundColor = UIColor(hue: 0/360, saturation: 0/100, brightness: 0/100, alpha: 0.5)
@@ -335,8 +285,7 @@ extension UIViewController {
         let firebaseAuth = Auth.auth()
         do {
             try firebaseAuth.signOut()
-            UserDefaults.standard.set(false, forKey: "isUserLoggedIn")
-            presentVC(segue: "LoginVC")
+            setUserData(fullname: "", usertype: "", isUserLoggedIn: false)
         } catch let signOutError as NSError {
             showAlert(title: "Error signing out", message: signOutError.description)
         }
@@ -353,6 +302,15 @@ extension UIViewController {
         let vc = storyboard.instantiateViewController(withIdentifier: segue)
         let navigationController = UINavigationController(rootViewController: vc)
         self.present(navigationController, animated: false, completion: nil)
+    }
+    
+    func postNewsDB(path: String, title: String, body: String, speciality: String, user: String, date: String) {
+        let ref = Database.database().reference()
+        ref.child("\(path)/title").setValue(title)
+        ref.child("\(path)/body").setValue(body)
+        ref.child("\(path)/speciality").setValue(speciality)
+        ref.child("\(path)/user").setValue(user)
+        ref.child("\(path)/date").setValue(date)
     }
     
     func removeDataDB(path: String) {
@@ -380,6 +338,22 @@ extension UIViewController {
     func setHeader(largeTitles: Bool){
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.prefersLargeTitles = largeTitles
+        navigationController?.navigationBar.isTranslucent = false
+        UINavigationBar.appearance().barTintColor = UIColor.white
+        if largeTitles {
+            navigationController?.navigationItem.largeTitleDisplayMode = .always
+        }
+    }
+    
+    func setUserData(fullname: String, usertype: String, isUserLoggedIn: Bool) {
+        UserDefaults.standard.set(usertype, forKey: "usertype")
+        UserDefaults.standard.set(fullname, forKey: "fullname")
+        UserDefaults.standard.set(isUserLoggedIn, forKey: "isUserLoggedIn")
+        if isUserLoggedIn {
+            self.presentVC(segue: "NewsVC")
+        } else {
+            self.presentVC(segue: "LoginVC")
+        }
     }
 }
 
