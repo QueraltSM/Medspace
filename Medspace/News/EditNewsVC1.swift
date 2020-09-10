@@ -13,8 +13,8 @@ class EditNewsVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate, U
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setHeader(largeTitles: false)
         setMenu()
+        setHeader(largeTitles: false)
         titleview.delegate = self
         speciality_textfield.delegate = self
         speciality_textfield.textColor = UIColor.gray
@@ -96,15 +96,14 @@ class EditNewsVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate, U
             error += "Write a title\n"
         }
         if (error == "" && !titleview.text.isEmpty) {
-            showEditNewsDescriptionVC()
-        }
-        if (error != "") {
+            showEditNewsVC2()
+        } else {
             showAlert(title: "Error", message: error)
         }
     }
     
-    func showEditNewsDescriptionVC(){
-        let news_description_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditNewsVC2") as? EditNewsVC2
+    func showEditNewsVC2(){
+        let edit_news_vc2 = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditNewsVC2") as? EditNewsVC2
         var color = UIColor.init()
         for s in specialities {
             if s.name == speciality_textfield.text! {
@@ -114,10 +113,10 @@ class EditNewsVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate, U
         if (news!.image != image_header.image || news!.title != titleview.text || news!.speciality.name != speciality_textfield.text) {
             needsUpdate = true
         }
-        let final_news = News(id: news!.id, image: image_header.image!, date: news!.date, title: titleview.text!, speciality: Speciality(name: speciality_textfield.text!, color: color), body: news!.body, user: news!.user)
-        news_description_vc!.news = final_news
-        news_description_vc!.needsUpdate = needsUpdate
-        navigationController?.pushViewController(news_description_vc!, animated: false)
+        let final_news = News(id: news!.id, image: image_header.image!, date: news!.date, title: titleview.text!, speciality: Speciality(name: speciality_textfield.text!, color: color), description: news!.description, user: news!.user)
+        edit_news_vc2!.news = final_news
+        edit_news_vc2!.needsUpdate = needsUpdate
+        navigationController?.pushViewController(edit_news_vc2!, animated: false)
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {

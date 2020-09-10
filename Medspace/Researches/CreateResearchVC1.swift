@@ -1,7 +1,7 @@
 import UIKit
 import MobileCoreServices
 
-class CreateResearchVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, UIDocumentMenuDelegate,UIDocumentPickerDelegate,UINavigationControllerDelegate  {
+class CreateResearchVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, UIDocumentPickerDelegate,UINavigationControllerDelegate  {
 
     @IBOutlet weak var titleview: UITextView!
     @IBOutlet weak var speciality_box: UIView!
@@ -15,15 +15,15 @@ class CreateResearchVC1: UIViewController, UITextViewDelegate, UIPickerViewDeleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.shadowImage = UIImage()
         setMenu()
+        setHeader(largeTitles: false)
         invalid_document = true
         titleview.delegate = self
         speciality_textfield.delegate = self
         speciality_box.setBorder()
         document_box.setBorder()
         titleview.setBorder()
-        titleview.customTextView(view_text:"Write a title...",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
+        titleview.customTextView(view_text:"Title",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
         speciality_textfield.text = specialities[specialities.count / 2].name
         speciality_textfield.textColor = UIColor.gray
         createPickerView()
@@ -46,7 +46,7 @@ class CreateResearchVC1: UIViewController, UITextViewDelegate, UIPickerViewDeleg
         invalid_document = false
     }
     
-    public func documentMenu(_ documentMenu: UIDocumentMenuViewController, didPickDocumentPicker documentPicker: UIDocumentPickerViewController) {
+    public func documentMenu(documentPicker: UIDocumentPickerViewController) {
         documentPicker.delegate = self
         invalid_document = true
         present(documentPicker, animated: false, completion: nil)
@@ -74,17 +74,17 @@ class CreateResearchVC1: UIViewController, UITextViewDelegate, UIPickerViewDeleg
             error += "Select a speciality\n"
         }
         if (invalid_document) {
-            error += "Uplod a document\n"
+            error += "Upload a document\n"
         }
         if (error == "" && titleview.textColor == UIColor.black && !titleview.text.isEmpty) {
-            let research_description_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "CreateResearchVC2") as? CreateResearchVC2
-            research_description_vc!.title_research = titleview.text
-            research_description_vc!.document_research = documentURL
-            research_description_vc!.speciality = speciality_textfield.text!
-            navigationController?.pushViewController(research_description_vc!, animated: false)
+            let create_research_vc2 = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "CreateResearchVC2") as? CreateResearchVC2
+            create_research_vc2!.title_research = titleview.text
+            create_research_vc2!.document_research = documentURL
+            create_research_vc2!.speciality = speciality_textfield.text!
+            navigationController?.pushViewController(create_research_vc2!, animated: false)
         }
         if (error != "") {
-            showAlert(title: "Error in saving the research", message: error)
+            showAlert(title: "Error", message: error)
         }
     }
     
@@ -101,7 +101,7 @@ class CreateResearchVC1: UIViewController, UITextViewDelegate, UIPickerViewDeleg
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
-            textView.customTextView(view_text:"Write a title...",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: false)
+            textView.customTextView(view_text:"Title",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: false)
         }
     }
     
@@ -141,6 +141,6 @@ class CreateResearchVC1: UIViewController, UITextViewDelegate, UIPickerViewDeleg
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
-        return newText.count <= 80
+        return newText.count <= 100
     }
 }

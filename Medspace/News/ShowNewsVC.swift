@@ -8,20 +8,19 @@ class ShowNewsVC: UIViewController {
     @IBOutlet weak var image_header: UIImageView!
     @IBOutlet weak var news_title: UILabel!
     @IBOutlet weak var speciality: UILabel!
-    @IBOutlet weak var news_body: UILabel!
+    @IBOutlet weak var news_description: UILabel!
     @IBOutlet weak var news_date: UILabel!
     @IBOutlet weak var scrollview: UIScrollView!
     var news: News?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setHeader(largeTitles: false)
         setMenu()
-        scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: news_body.bottomAnchor).isActive = true
+        setHeader(largeTitles: false)
+        scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: news_description.bottomAnchor).isActive = true
         image_header.image = news!.image
         news_title.text = news!.title
-        news_body.text = news!.body
-        print("date=\(news!.date)")
+        news_description.text = news!.description
         news_date.text = news!.date
         speciality.text = news!.speciality.name.description
         speciality.backgroundColor = news!.speciality.color
@@ -57,7 +56,7 @@ class ShowNewsVC: UIViewController {
             let path = "News/\(self.news!.id)"
             self.removeDataDB(path: path)
             self.removeDataStorage(path: path)
-            self.presentVC(segue: "NewsVC")
+            self.presentVC(segue: "MyNewsVC")
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)

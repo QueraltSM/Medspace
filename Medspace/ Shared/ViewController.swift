@@ -304,10 +304,19 @@ extension UIViewController {
         self.present(navigationController, animated: false, completion: nil)
     }
     
-    func postNewsDB(path: String, title: String, body: String, speciality: String, user: String, date: String) {
+    func postNewsDB(path: String, title: String, description: String, speciality: String, user: String, date: String) {
         let ref = Database.database().reference()
         ref.child("\(path)/title").setValue(title)
-        ref.child("\(path)/body").setValue(body)
+        ref.child("\(path)/description").setValue(description)
+        ref.child("\(path)/speciality").setValue(speciality)
+        ref.child("\(path)/user").setValue(user)
+        ref.child("\(path)/date").setValue(date)
+    }
+    
+    func postResearch(path: String, title: String, description: String, speciality: String, user: String, date: String) {
+        let ref = Database.database().reference()
+        ref.child("\(path)/title").setValue(title)
+        ref.child("\(path)/description").setValue(description)
         ref.child("\(path)/speciality").setValue(speciality)
         ref.child("\(path)/user").setValue(user)
         ref.child("\(path)/date").setValue(date)
@@ -421,4 +430,19 @@ extension UIView {
         layer.borderWidth = 1.0
     }
     
+}
+
+extension UIFont {
+    func withTraits(traits:UIFontDescriptor.SymbolicTraits) -> UIFont {
+        let descriptor = fontDescriptor.withSymbolicTraits(traits)
+        return UIFont(descriptor: descriptor!, size: 0) //size 0 means keep the size as it is
+    }
+    
+    func bold() -> UIFont {
+        return withTraits(traits: .traitBold)
+    }
+    
+    func italic() -> UIFont {
+        return withTraits(traits: .traitItalic)
+    }
 }

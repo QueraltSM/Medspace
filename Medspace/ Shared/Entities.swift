@@ -12,7 +12,7 @@ struct News {
     let date: String
     let title: String
     let speciality: Speciality
-    let body: String
+    let description: String
     let user: User
 }
 

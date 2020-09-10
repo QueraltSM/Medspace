@@ -1,18 +1,19 @@
 import UIKit
 import MobileCoreServices
 
-class EditResearchVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, UIDocumentMenuDelegate,UIDocumentPickerDelegate,UINavigationControllerDelegate  {
+class EditResearchVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, UIDocumentPickerDelegate,UINavigationControllerDelegate  {
 
     @IBOutlet weak var document_box: UIView!
     @IBOutlet weak var speciality_box: UIView!
     @IBOutlet weak var speciality_textfield: UITextField!
     @IBOutlet weak var research_title: UITextView!
     @IBOutlet weak var documentButton: UIButton!
-    var invalid_document: Bool!
+    var invalid_document: Bool = false
     var research: Research?
     var documentURL: URL!
     var selectedSpeciality: String?
     var file_is_updated = false
+    var needsUpdate: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,26 +21,26 @@ class EditResearchVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegat
         setHeader(largeTitles: false)
         documentURL = research!.pdf
         setMenu()
-        invalid_document = false
         research_title.delegate = self
         speciality_textfield.delegate = self
         speciality_textfield.text = research!.speciality.name
         speciality_box.setBorder()
         document_box.setBorder()
         research_title.setBorder()
-        research_title.customTextView(view_text:research!.title,view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
-        speciality_textfield.textColor = UIColor.gray
-        createPickerView()
-        dismissPickerView()
+        research_title.customTextView(view_text:research!.title,view_color:UIColor.black, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
+        speciality_textfield.textColor = UIColor.black
         documentButton.titleLabel?.textAlignment = .center
         if (!invalid_document) {
             documentButton.setTitle("Edit", for: .normal)
         } else {
             documentButton.setTitle("Add", for: .normal)
         }
+        createPickerView()
+        dismissPickerView()
     }
     
     @IBAction func viewDocument(_ sender: Any) {
+        print("doc url = \(documentURL.absoluteString)")
         let document_viewer_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "DocumentViewerVC") as? DocumentViewerVC
         document_viewer_vc!.document = documentURL
         navigationController?.pushViewController(document_viewer_vc!, animated: false)
@@ -55,9 +56,10 @@ class EditResearchVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegat
         file_is_updated = true
     }
     
-    public func documentMenu(_ documentMenu: UIDocumentMenuViewController, didPickDocumentPicker documentPicker: UIDocumentPickerViewController) {
+    public func documentMenu(didPickDocumentPicker documentPicker: UIDocumentPickerViewController) {
         documentPicker.delegate = self
         invalid_document = true
+        documentButton.titleLabel?.text = "Add"
         present(documentPicker, animated: false, completion: nil)
     }
     
@@ -73,41 +75,36 @@ class EditResearchVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegat
         present(documentpicker, animated: true, completion: nil)
     }
     
+    func showEditResearchesVC2(){
+        let edit_research_vc2 = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditResearchVC2") as? EditResearchVC2
+        var color = UIColor.init()
+        for s in specialities {
+            if s.name == speciality_textfield.text {
+                color = s.color!
+            }
+        }
+        if file_is_updated || research!.title != research_title.text || research!.speciality.name != speciality_textfield.text {
+            needsUpdate = true
+        }
+        let final_research = Research(id: research!.id, pdf: documentURL, date: research!.date, title: research_title.text, speciality: Speciality(name: speciality_textfield!.text!, color:color), description: research!.description, user: User(id: research!.user.id, name:research!.user.name))
+        edit_research_vc2!.research = final_research
+        edit_research_vc2?.file_is_updated = file_is_updated
+        edit_research_vc2?.needsUpdate = needsUpdate
+        navigationController?.pushViewController(edit_research_vc2!, animated: false)
+    }
+    
     @IBAction func nextDescription(_ sender: Any) {
         var error = ""
-        if (research_title.text.isEmpty) {
+        if research_title.text.isEmpty {
             error += "Write a title\n"
         }
-        if (invalid_document) {
+        if invalid_document {
             error += "Upload a document\n"
         }
-        if (error == "") {
-            let research_description_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditResearchVC2") as? EditResearchVC2
-            var color = UIColor.init()
-            for s in specialities {
-                if s.name == speciality_textfield.text {
-                    color = s.color!
-                }
-            }
-            let final_research = Research(id: research!.id, pdf: documentURL, date: research!.date, title: research_title.text, speciality: Speciality(name: speciality_textfield!.text!, color:color), description: research!.description, user: User(id: research!.user.id, name:research!.user.name))
-            research_description_vc!.research = final_research
-            research_description_vc?.file_is_updated = file_is_updated
-            navigationController?.pushViewController(research_description_vc!, animated: false)
-        }
-        if (error != "") {
-            showAlert(title: "Error in saving the research", message: error)
-        }
-    }
-    
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == UIColor.gray {
-            textView.customTextView(view_text:"",view_color:UIColor.black, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
-        }
-    }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        if textView.text.isEmpty {
-            textView.customTextView(view_text:"Write a title...",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: false)
+        if error == "" {
+            showEditResearchesVC2()
+        } else {
+            showAlert(title: "Error", message: error)
         }
     }
     
@@ -147,7 +144,7 @@ class EditResearchVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegat
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
-        return newText.count <= 80
+        return newText.count <= 100
     }
     
 }

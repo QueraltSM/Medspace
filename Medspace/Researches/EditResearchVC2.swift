@@ -10,6 +10,7 @@ class EditResearchVC2: UIViewController, UITextViewDelegate {
     var research: Research?
     var file_is_updated: Bool?
     var ref: DatabaseReference!
+    var needsUpdate: Bool?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -17,29 +18,16 @@ class EditResearchVC2: UIViewController, UITextViewDelegate {
         research_description.delegate = self
         navigationController?.navigationBar.shadowImage = UIImage()
         ref = Database.database().reference()
-        research_description.customTextView(view_text:research!.description,view_color:UIColor.gray, view_font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body), view_scroll: true)
+        research_description.customTextView(view_text:research!.description,view_color:UIColor.black, view_font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body), view_scroll: true)
     }
     
     func storeDocumentStorage(path: String) {
+        self.startAnimation()
         Storage.storage().reference().child(path).putFile(from: research!.pdf, metadata: nil) { metadata, error in
             self.stopAnimation()
             if error != nil {
-                self.showAlert(title: "Could't upload the research paper", message: (error?.localizedDescription)!)
+                self.showAlert(title: "Error", message: (error?.localizedDescription)!)
             }
-        }
-    }
-    
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == UIColor.gray {
-            textView.customTextView(view_text:"",view_color:UIColor.black, view_font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body), view_scroll: true)
-        } else if (textView.textColor == UIColor.red) {
-            textView.customTextView(view_text:"",view_color:UIColor.black, view_font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body), view_scroll: true)
-        }
-    }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        if textView.text.isEmpty {
-            textView.customTextView(view_text:research!.description,view_color:UIColor.gray, view_font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body), view_scroll: true)
         }
     }
     
@@ -55,10 +43,24 @@ class EditResearchVC2: UIViewController, UITextViewDelegate {
     }
     
     @IBAction func askPost(_ sender: Any) {
-        if (research_description.text.isEmpty) {
-            showAlert(title: "Error in saving the research", message: "Write a description")
+        var error = ""
+        if research_description.text.isEmpty {
+            error = "Write a description"
+        }
+        if research!.description == research_description.text && !needsUpdate! {
+            error = "There is no data that needs to be updated"
+        }
+        if error == "" {
+            let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+            alert.title = "Do you want to update the research?"
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
+                action in
+                self.postResearch()
+            }))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         } else {
-            self.postResearch()
+            showAlert(title: "Error", message: error)
         }
     }
 }

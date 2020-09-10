@@ -95,7 +95,7 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
                 let title = dict["title"]! as! String
                 let speciality = dict["speciality"]! as! String
                 let date = dict["date"]! as! String
-                let body = dict["body"]! as! String
+                let description = dict["description"]! as! String
                 let pic = UIImage(data: data!)
                 let userid = dict["user"]! as! String
                 if (userid == Auth.auth().currentUser!.uid) {
@@ -109,7 +109,7 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
                                 color = s.color!
                             }
                         }
-                        self.news.append(News(id: child.key, image: pic!, date: date, title: title, speciality: Speciality(name: speciality, color: color), body: body, user: User(id: userid, name: username)))
+                        self.news.append(News(id: child.key, image: pic!, date: date, title: title, speciality: Speciality(name: speciality, color: color), description: description, user: User(id: userid, name: username)))
                         let sortedNews = self.news.sorted {
                             $0.date > $1.date
                         }
@@ -162,7 +162,7 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
         cell?.news_title.text = entry.title
         cell?.image_header.image = entry.image
         cell?.news_speciality.text = entry.speciality.name
-        cell?.news_speciality.backgroundColor = entry.speciality.color
+        cell?.speciality_color = entry.speciality.color
         return cell!
     }
     
@@ -243,14 +243,18 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
     }
     
     @objc func didPressDelete() {
-        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        alert.title = "Are you sure you want to delete the \(self.news_timeline.indexPathsForSelectedRows!.count) selected news?"
-        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
-            action in
+        if self.news_timeline.indexPathsForSelectedRows == nil {
+            showAlert(title: "Error", message: "You have not selected any news")
+        } else {
+            let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+            alert.title = "Are you sure you want to delete the \(self.news_timeline.indexPathsForSelectedRows!.count) selected news?"
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
+                action in
                 self.deleteSelectedRows()
-        }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        self.present(alert, animated: true, completion: nil)
+            }))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     
     @objc func didPressSelectAll() {

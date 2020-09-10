@@ -116,11 +116,12 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 250
+        return UITableView.automaticDimension
     }
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        researches_timeline.deselectRow(at: indexPath, animated: false)
         let selected_research = researches[indexPath.row]
         let show_research_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowResearchVC") as? ShowResearchVC
         show_research_vc!.research = selected_research
@@ -141,9 +142,8 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         cell?.data_date.text = entry.date
         cell?.data_title.text = entry.title
         cell?.data_speciality.text = entry.speciality.name
-        cell?.data_user.text = entry.user.name
-        cell?.data_speciality.backgroundColor = entry.speciality.color
-        cell?.data_view.layer.borderColor = entry.speciality.color?.cgColor
+        cell?.speciality_color = entry.speciality.color
+        cell?.data_user.text = "Posted by \(entry.user.name)"
         return cell!
     }
     

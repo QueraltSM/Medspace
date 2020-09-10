@@ -15,9 +15,8 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.prefersLargeTitles = true
         setMenu()
+        setHeader(largeTitles: true)
         ref = Database.database().reference()
         researches_timeline.delegate = self
         researches_timeline.dataSource = self
@@ -44,7 +43,7 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         searchController.searchBar.delegate = self
         definesPresentationContext = true
         searchController = UISearchController(searchResultsController: nil)
-        searchController.searchBar.placeholder = "Search by title, doctor or speciality"
+        searchController.searchBar.placeholder = "Search by title or speciality"
         searchController.dimsBackgroundDuringPresentation = false
         searchController.searchBar.barTintColor = UIColor.white
         searchController.searchResultsUpdater = self
@@ -60,8 +59,7 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     func filterContent(for searchText: String) {
         researchesMatched = researches.filter({ (n) -> Bool in
             let match = n.title.lowercased().range(of: searchText.lowercased()) != nil ||
-                n.speciality.name.lowercased().range(of: searchText.lowercased()) != nil ||
-                n.user.name.lowercased().range(of: searchText.lowercased()) != nil
+                n.speciality.name.lowercased().range(of: searchText.lowercased()) != nil
             return match
         })
     }
@@ -81,16 +79,16 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 330
+        return UITableView.automaticDimension
     }
     
-    func loopSnapshotChildren(ref: DatabaseReference, snapshot: DataSnapshot) {
+    func loopResearches(ref: DatabaseReference, snapshot: DataSnapshot) {
+        self.startAnimation()
         for child in snapshot.children.allObjects as! [DataSnapshot] {
             let dict = child.value as? [String : AnyObject] ?? [:]
             let title = dict["title"]! as! String
             let speciality = dict["speciality"]! as! String
             let date = dict["date"]! as! String
-            let final_date = self.getFormattedDate(date: date)
             let description = dict["description"]! as! String
             let userid = dict["user"]! as! String
             if (userid == Auth.auth().currentUser!.uid) {
@@ -108,14 +106,15 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
                     storageRef.downloadURL { (url, error) in
                         self.stopAnimation()
                         if error == nil {
-                            self.researches.append(Research(id: child.key, pdf: url!, date: final_date, title: title, speciality: Speciality(name: speciality, color: color), description: description, user: User(id: userid, name: username)))
+                            self.researches.append(Research(id: child.key, pdf: url!, date: date, title: title, speciality: Speciality(name: speciality, color: color), description: description, user: User(id: userid, name: username)))
                             let sortedResearches = self.researches.sorted {
                                 $0.date > $1.date
                             }
                             self.researches = sortedResearches
                             self.researches_timeline.reloadData()
+                            self.turnEditState(enabled: true, title: "Edit")
                         } else {
-                            self.showAlert(title: "Error", message: (error?.localizedDescription)!)
+                            self.showAlert(title: "Error", message: error!.localizedDescription)
                         }
                     }
                 })
@@ -132,9 +131,9 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
                 self.turnEditState(enabled: false, title: "")
             } else {
                 self.researches_timeline.restore()
-                self.turnEditState(enabled: true, title: "Select to delete")
+                self.loopResearches(ref: self.ref, snapshot: snapshot)
             }
-            self.loopSnapshotChildren(ref: self.ref, snapshot: snapshot)
+            
         })
     }
     
@@ -162,7 +161,7 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
             edit = true
             setToolbarDelete(hide: false)
         } else {
-            editButton.title = "Select to delete"
+            editButton.title = "Edit"
             edit = false
             setToolbarDelete(hide: true)
             cancelSelections()
@@ -175,7 +174,8 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         cell?.data_date.text = entry.date
         cell?.data_title.text = entry.title
         cell?.data_speciality.text = entry.speciality.name
-        cell?.data_speciality.backgroundColor = entry.speciality.color
+        cell?.speciality_color = entry.speciality.color
+        cell?.data_user.text = "Posted by \(entry.user.name)"
         return cell!
     }
     
@@ -192,9 +192,11 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func setToolbarDelete(hide: Bool) {
-        let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: self, action: nil)
+        let flexible1 = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: self, action: nil)
+        let selectAllButton: UIBarButtonItem = UIBarButtonItem(title: "Select All", style: .plain, target: self, action: #selector(didPressSelectAll))
         let deleteButton: UIBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(didPressDelete))
-        self.toolbarItems = [flexible, deleteButton]
+        let flexible2 = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: self, action: nil)
+        self.toolbarItems = [flexible1, selectAllButton, deleteButton, flexible2]
         self.navigationController?.toolbar.barTintColor = UIColor.white
         self.navigationController?.setToolbarHidden(hide, animated: false)
     }
@@ -211,26 +213,61 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         researches_timeline.setEditing(editing, animated: true)
     }
     
-    @objc func didPressDelete() {
+    func deleteSelectedRows() {
         setToolbarDelete(hide: true)
-        let selectedRows = self.researches_timeline.indexPathsForSelectedRows
-        if selectedRows != nil {
-            for var selectionIndex in selectedRows! {
-                let path = "Researches/\(researches[selectionIndex.item].id)"
+        if let selectedRows = researches_timeline.indexPathsForSelectedRows {
+            var items = [Research]()
+            for indexPath in selectedRows  {
+                items.append(researches[indexPath.row])
+            }
+            for _ in items {
+                let index = researches.index(where: { (item) -> Bool in
+                    item.id == item.id
+                })
+                let path = "Researches/\(researches[index!].id)"
                 removeDataDB(path: path)
                 removeDataStorage(path: path)
-                while selectionIndex.item >= researches.count {
-                    selectionIndex.item -= 1
-                }
-                tableView(researches_timeline, commit: .delete, forRowAt: selectionIndex)
+                researches.remove(at: index!)
             }
+            researches_timeline.beginUpdates()
+            researches_timeline.deleteRows(at: selectedRows, with: .automatic)
+            researches_timeline.endUpdates()
         }
         if (researches.count == 0) {
             turnEditState(enabled: false, title: "")
             researches_timeline.setEmptyView(title: "You have not post a research yet\n\n:(")
         } else {
             edit = false
-            turnEditState(enabled: true, title: "Select to delete")
+            turnEditState(enabled: true, title: "Edit")
         }
     }
+    
+    @objc func didPressDelete() {
+        if self.researches_timeline.indexPathsForSelectedRows == nil {
+            showAlert(title: "Error", message: "You have not selected any research")
+        } else {
+            let selected_researches = self.researches_timeline.indexPathsForSelectedRows!.count
+            let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+            var r = "research"
+            if selected_researches > 1 {
+                r += "es"
+            }
+            alert.title = "Are you sure you want to delete the \(selected_researches) selected \(r)?"
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
+            action in
+                self.deleteSelectedRows()
+            }))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    @objc func didPressSelectAll() {
+        let totalRows = researches_timeline.numberOfRows(inSection: 0)
+        for row in 0..<totalRows {
+            researches_timeline.selectRow(at: NSIndexPath(row: row, section: 0) as IndexPath, animated: false, scrollPosition: UITableView.ScrollPosition.none)
+        }
+    }
+    
+
 }

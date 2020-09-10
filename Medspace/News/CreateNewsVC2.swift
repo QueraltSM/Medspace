@@ -4,7 +4,7 @@ import FirebaseStorage
 
 class CreateNewsVC2: UIViewController, UITextViewDelegate {
     
-    @IBOutlet weak var body_news: UITextView!
+    @IBOutlet weak var description_news: UITextView!
     var title_news: String = ""
     var image_news: UIImage? = nil
     var speciality: String = ""
@@ -12,8 +12,8 @@ class CreateNewsVC2: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         setHeader(largeTitles: false)
-        body_news.delegate = self
-        body_news.customTextView(view_text:"Write the body of the news...",view_color:UIColor.gray, view_font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body), view_scroll: true)
+        description_news.delegate = self
+        description_news.customTextView(view_text:"Write the description of the news...",view_color:UIColor.gray, view_font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body), view_scroll: true)
         setMenu()
     }
     
@@ -27,7 +27,7 @@ class CreateNewsVC2: UIViewController, UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
-            textView.customTextView(view_text:"Write the body of the news...",view_color:UIColor.gray, view_font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body), view_scroll: true)
+            textView.customTextView(view_text:"Write the description of the news...",view_color:UIColor.gray, view_font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body), view_scroll: true)
         }
     }
 
@@ -36,7 +36,9 @@ class CreateNewsVC2: UIViewController, UITextViewDelegate {
     }
     
     @IBAction func askPost(_ sender: Any) {
-        if (body_news.textColor == UIColor.black && !body_news.text.isEmpty) {
+        if (description_news.textColor == UIColor.gray || description_news.text.isEmpty) {
+            showAlert(title: "Error", message: "Write a description")
+        } else {
             let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
             alert.title = "Do you want to post the news?"
             alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
@@ -45,9 +47,6 @@ class CreateNewsVC2: UIViewController, UITextViewDelegate {
             }))
             alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
             self.present(alert, animated: true, completion: nil)
-        } else {
-            body_news.customTextView(view_text:"Body can't be empty",view_color:UIColor.red, view_font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body), view_scroll: true)
-            body_news.resignFirstResponder()
         }
     }
     
@@ -65,12 +64,11 @@ class CreateNewsVC2: UIViewController, UITextViewDelegate {
         let storageRef = Storage.storage().reference(withPath: path)
         storageRef.putData(imageData, metadata: metaDataConfig){ (metaData, error) in
             self.stopAnimation()
-            if let error = error {
-                self.showAlert(title: "Could not post the news", message: error.localizedDescription)
-                return
-            } else {
-                self.postNewsDB(path: path, title: self.title_news, body: self.body_news.text!, speciality: self.speciality, user: user!, date: final_date)
+            if error == nil {
+                self.postNewsDB(path: path, title: self.title_news, description: self.description_news.text!, speciality: self.speciality, user: user!, date: final_date)
                 self.presentVC(segue: "MyNewsVC")
+            } else {
+                self.showAlert(title: "Error", message: error!.localizedDescription)
             }
         }
     }
