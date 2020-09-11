@@ -1,5 +1,6 @@
 import UIKit
 import FirebaseDatabase
+import FirebaseAuth
 
 class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchResultsUpdating{
 
@@ -8,12 +9,14 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     var searchController = UISearchController()
     var discussions = [Discussion]()
     var discussionsMatched = [Discussion]()
+    var ref: DatabaseReference!
     var edit = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setHeader(largeTitles: true)
         setMenu()
+        ref = Database.database().reference()
         discussions_timeline.delegate = self
         discussions_timeline.dataSource = self
         discussions_timeline.separatorColor = UIColor.clear
@@ -23,49 +26,54 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         refreshControl.attributedTitle = NSAttributedString(string: "")
         refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
         discussions_timeline.addSubview(refreshControl)
+        discussions_timeline.allowsMultipleSelection = true
     }
     
     func getDiscussions() {
-        let ref = Database.database().reference()
         ref.child("Discussions").observeSingleEvent(of: .value, with: { snapshot in
             if (snapshot.children.allObjects.count == 0) {
                 self.turnEditState(enabled: false, title: "")
-                self.discussions_timeline.setEmptyView(title: "There is no discussion posted yet\n\n:(")
+                self.discussions_timeline.setEmptyView(title: "You have not post a discussion yet\n\n:(")
             } else {
-                self.turnEditState(enabled: true, title: "Select to delete")
                 self.discussions_timeline.restore()
+                self.loopDiscussions(ref: self.ref, snapshot: snapshot)
             }
-            self.loopSnapshotChildren(ref: ref, snapshot: snapshot)
         })
     }
     
-    func loopSnapshotChildren(ref: DatabaseReference, snapshot: DataSnapshot) {
+    func loopDiscussions(ref: DatabaseReference, snapshot: DataSnapshot) {
+        self.startAnimation()
         for child in snapshot.children.allObjects as! [DataSnapshot] {
             let dict = child.value as? [String : AnyObject] ?? [:]
             let title = dict["title"]! as! String
             let description = dict["description"]! as! String
             let speciality = dict["speciality"]! as! String
             let date = dict["date"]! as! String
-            let final_date = self.getFormattedDate(date: date)
             let userid = dict["user"]! as! String
-            ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
-                in
-                let dict = snapshot.value as? [String : AnyObject] ?? [:]
-                let username = dict["fullname"]! as! String
-                var color = UIColor.init()
-                for s in specialities {
-                    if s.name == speciality {
-                        color = s.color!
+            if (userid == Auth.auth().currentUser!.uid) {
+                ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
+                    in
+                    let dict = snapshot.value as? [String : AnyObject] ?? [:]
+                    let username = dict["fullname"]! as! String
+                    var color = UIColor.init()
+                    for s in specialities {
+                        if s.name == speciality {
+                            color = s.color!
+                        }
                     }
-                }
-                self.discussions.append(Discussion(id: child.key, title: title, description: description, date: final_date, speciality: Speciality(name: speciality, color: color), user: User(id: userid, name: username)))
-                let sortedDiscussions = self.discussions.sorted {
-                    $0.date > $1.date
-                }
-                self.discussions = sortedDiscussions
+                    self.discussions.append(Discussion(id: child.key, title: title, description: description, date: date, speciality: Speciality(name: speciality, color: color), user: User(id: userid, name: username)))
+                    let sortedDiscussions = self.discussions.sorted {
+                        $0.date > $1.date
+                    }
+                    self.discussions = sortedDiscussions
+                    self.discussions_timeline.reloadData()
+                    self.turnEditState(enabled: true, title: "Edit")
+                    self.stopAnimation()
+                    
+                })
+            } else {
                 self.stopAnimation()
-                self.discussions_timeline.reloadData()
-            })
+            }
         }
     }
     
@@ -97,8 +105,7 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     func filterContent(for searchText: String) {
         discussionsMatched = discussions.filter({ (n) -> Bool in
             let match = n.title.lowercased().range(of: searchText.lowercased()) != nil ||
-                n.speciality.name.lowercased().range(of: searchText.lowercased()) != nil ||
-                n.user.name.lowercased().range(of: searchText.lowercased()) != nil
+                n.speciality.name.lowercased().range(of: searchText.lowercased()) != nil
             return match
         })
     }
@@ -118,7 +125,7 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 250
+        return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -145,9 +152,8 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         cell?.data_date.text = entry.date
         cell?.data_title.text = entry.title
         cell?.data_speciality.text = entry.speciality.name
-        cell?.data_user.text = entry.user.name
-        cell?.data_speciality.backgroundColor = entry.speciality.color
-        cell?.data_view.layer.borderColor = entry.speciality.color?.cgColor
+        cell?.speciality_color = entry.speciality.color
+        cell?.data_user.text = "Posted by \(entry.user.name)"
         return cell!
     }
     
@@ -164,9 +170,11 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     func setToolbarDelete(hide: Bool) {
-        let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: self, action: nil)
+        let flexible1 = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: self, action: nil)
+        let selectAllButton: UIBarButtonItem = UIBarButtonItem(title: "Select All", style: .plain, target: self, action: #selector(didPressSelectAll))
         let deleteButton: UIBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(didPressDelete))
-        self.toolbarItems = [flexible, deleteButton]
+        let flexible2 = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: self, action: nil)
+        self.toolbarItems = [flexible1, selectAllButton, deleteButton, flexible2]
         self.navigationController?.toolbar.barTintColor = UIColor.white
         self.navigationController?.setToolbarHidden(hide, animated: false)
     }
@@ -188,24 +196,58 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         discussions_timeline.setEditing(editing, animated: true)
     }
     
-    @objc func didPressDelete() {
+    func deleteSelectedRows() {
         setToolbarDelete(hide: true)
-        let selectedRows = self.discussions_timeline.indexPathsForSelectedRows
-        if selectedRows != nil {
-            for var selectionIndex in selectedRows! {
-                removeDataDB(path: "Discussions/\(discussions[selectionIndex.item].id)")
-                while selectionIndex.item >= discussions.count {
-                    selectionIndex.item -= 1
-                }
-                tableView(discussions_timeline, commit: .delete, forRowAt: selectionIndex)
+        if let selectedRows = discussions_timeline.indexPathsForSelectedRows {
+            var items = [Discussion]()
+            for indexPath in selectedRows  {
+                items.append(discussions[indexPath.row])
             }
+            for _ in items {
+                let index = discussions.index(where: { (item) -> Bool in
+                    item.id == item.id
+                })
+                let path = "Discussions/\(discussions[index!].id)"
+                removeDataDB(path: path)
+                discussions.remove(at: index!)
+            }
+            discussions_timeline.beginUpdates()
+            discussions_timeline.deleteRows(at: selectedRows, with: .automatic)
+            discussions_timeline.endUpdates()
         }
         if (discussions.count == 0) {
             turnEditState(enabled: false, title: "")
             discussions_timeline.setEmptyView(title: "You have not post a discussion yet\n\n:(")
         } else {
             edit = false
-            turnEditState(enabled: true, title: "Select to delete")
+            turnEditState(enabled: true, title: "Edit")
+        }
+    }
+    
+    @objc func didPressDelete() {
+        if self.discussions_timeline.indexPathsForSelectedRows == nil {
+            showAlert(title: "Error", message: "You have not selected any discussion")
+        } else {
+            let selected_discussions = self.discussions_timeline.indexPathsForSelectedRows!.count
+            let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+            var r = "discussion"
+            if selected_discussions > 1 {
+                r += "s"
+            }
+            alert.title = "Are you sure you want to delete the \(selected_discussions) selected \(r)?"
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
+                action in
+                self.deleteSelectedRows()
+            }))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    @objc func didPressSelectAll() {
+        let totalRows = discussions_timeline.numberOfRows(inSection: 0)
+        for row in 0..<totalRows {
+            discussions_timeline.selectRow(at: NSIndexPath(row: row, section: 0) as IndexPath, animated: false, scrollPosition: UITableView.ScrollPosition.none)
         }
     }
     
@@ -215,7 +257,7 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
             edit = true
             setToolbarDelete(hide: false)
         } else {
-            editButton.title = "Select to delete"
+            editButton.title = "Edit"
             edit = false
             setToolbarDelete(hide: true)
             cancelSelections()

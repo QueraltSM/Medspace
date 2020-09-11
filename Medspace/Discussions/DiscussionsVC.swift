@@ -10,8 +10,8 @@ class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setHeader(largeTitles: true)
         setMenu()
+        setHeader(largeTitles: true)
         discussions_timeline.delegate = self
         discussions_timeline.dataSource = self
         discussions_timeline.separatorColor = UIColor.clear
@@ -35,7 +35,6 @@ class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
             let description = dict["description"]! as! String
             let speciality = dict["speciality"]! as! String
             let date = dict["date"]! as! String
-            let final_date = self.getFormattedDate(date: date)
             let userid = dict["user"]! as! String
             ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
                 in
@@ -47,7 +46,7 @@ class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
                         color = s.color!
                     }
                 }
-                self.discussions.append(Discussion(id: child.key, title: title, description: description, date: final_date, speciality: Speciality(name: speciality, color: color), user: User(id: userid, name: username)))
+                self.discussions.append(Discussion(id: child.key, title: title, description: description, date: date, speciality: Speciality(name: speciality, color: color), user: User(id: userid, name: username)))
                 let sortedDiscussions = self.discussions.sorted {
                     $0.date > $1.date
                 }
@@ -115,10 +114,11 @@ class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 250
+        return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        discussions_timeline.deselectRow(at: indexPath, animated: false)
         let selected_discussion = discussions[indexPath.row]
         let show_discussion_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowDiscussionVC") as? ShowDiscussionVC
         show_discussion_vc!.discussion = selected_discussion
@@ -139,13 +139,8 @@ class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         cell?.data_date.text = entry.date
         cell?.data_title.text = entry.title
         cell?.data_speciality.text = entry.speciality.name
-        cell?.data_user.text = entry.user.name
-        cell?.data_speciality.backgroundColor = entry.speciality.color
-        cell?.data_view.layer.borderColor = entry.speciality.color?.cgColor
+        cell?.speciality_color = entry.speciality.color
+        cell?.data_user.text = "Posted by \(entry.user.name)"
         return cell!
     }
-    
-    
-    
-    
 }

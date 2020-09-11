@@ -146,5 +146,4 @@ class EditResearchVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegat
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
         return newText.count <= 100
     }
-    
 }

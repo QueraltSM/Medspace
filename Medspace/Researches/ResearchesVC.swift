@@ -72,7 +72,6 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             let title = dict["title"]! as! String
             let speciality = dict["speciality"]! as! String
             let date = dict["date"]! as! String
-            let final_date = self.getFormattedDate(date: date)
             let description = dict["description"]! as! String
             let userid = dict["user"]! as! String
             ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
@@ -89,7 +88,7 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
                 storageRef.downloadURL { (url, error) in
                     self.stopAnimation()
                     if error == nil {
-                        self.researches.append(Research(id: child.key, pdf: url!, date: final_date, title: title, speciality: Speciality(name: speciality, color: color), description: description, user: User(id: userid, name: username)))
+                        self.researches.append(Research(id: child.key, pdf: url!, date: date, title: title, speciality: Speciality(name: speciality, color: color), description: description, user: User(id: userid, name: username)))
                         let sortedResearches = self.researches.sorted {
                             $0.date > $1.date
                         }

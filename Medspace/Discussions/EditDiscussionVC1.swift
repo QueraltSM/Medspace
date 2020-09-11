@@ -2,28 +2,24 @@ import UIKit
 import FirebaseDatabase
 import FirebaseAuth
 
-class EditDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
+class EditDiscussionVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
 
     @IBOutlet weak var discussion_title: UITextView!
-    @IBOutlet weak var discussion_description: UITextView!
-    @IBOutlet weak var speciality_box: UIView!
     @IBOutlet weak var speciality_textfield: UITextField!
+    @IBOutlet weak var speciality_box: UIView!
     var selectedSpeciality: String?
     var discussion: Discussion?
+    var needsUpdate: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        hideToolbar()
         setHeader(largeTitles: false)
         discussion_title.delegate = self
-        discussion_description.delegate = self
         speciality_box.setBorder()
         discussion_title.setBorder()
-        discussion_description.setBorder()
         speciality_textfield.text = discussion!.speciality.name
-        speciality_textfield.textColor = UIColor.gray
-        discussion_title.customTextView(view_text:discussion!.title,view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
-        discussion_description.customTextView(view_text:discussion!.description,view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
+        speciality_textfield.textColor = UIColor.black
+        discussion_title.customTextView(view_text:discussion!.title,view_color:UIColor.black, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
         createPickerView()
         dismissPickerView()
     }
@@ -67,37 +63,37 @@ class EditDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
         speciality_textfield.text = selectedSpeciality
     }
     
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == UIColor.gray {
-            textView.customTextView(view_text:"",view_color:UIColor.black, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
-        }
-    }
-    
-    func postDiscussion() {
-        let ref = Database.database().reference()
-        let path = "Discussions/\(discussion!.id)"
-        ref.child("\(path)/title").setValue(discussion_title.text!)
-        ref.child("\(path)/description").setValue(discussion_description.text!)
-        ref.child("\(path)/speciality").setValue(speciality_textfield.text!)
-        ref.child("\(path)/user").setValue(discussion!.user.id)
-        ref.child("\(path)/date").setValue(discussion!.date)
-    }
-    
     @IBAction func saveDiscussion(_ sender: Any) {
         var error = ""
         if discussion_title.text.isEmpty {
             error += "Write a title\n"
         }
-        if discussion_description.text.isEmpty {
-            error += "Write a description"
-        }
         if (error == "") {
-            postDiscussion()
-            presentVC(segue: "MyDiscussionsVC")
+            showEditDiscussionVC2()
         } else {
             showAlert(title: "Error saving the discussion", message: error)
         }
     }
     
+    func showEditDiscussionVC2(){
+        let edit_discussion_vc2 = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditDiscussionVC2") as? EditDiscussionVC2
+        var color = UIColor.init()
+        for s in specialities {
+            if s.name == speciality_textfield.text {
+                color = s.color!
+            }
+        }
+        if discussion!.title != discussion_title.text || discussion!.speciality.name != speciality_textfield.text {
+            needsUpdate = true
+        }
+        let final_discussion = Discussion(id: discussion!.id, title: discussion_title.text, description: discussion!.description, date: discussion!.date, speciality: Speciality(name: speciality_textfield!.text!, color:color), user: User(id: discussion!.user.id, name:discussion!.user.name))
+        edit_discussion_vc2!.discussion = final_discussion
+        edit_discussion_vc2?.needsUpdate = needsUpdate
+        navigationController?.pushViewController(edit_discussion_vc2!, animated: false)
+    }
     
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
+        return newText.count <= 100
+    }
 }

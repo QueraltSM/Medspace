@@ -313,6 +313,15 @@ extension UIViewController {
         ref.child("\(path)/date").setValue(date)
     }
     
+    func postDiscussion(path: String, title: String, description: String, speciality: String, user: String, date: String) {
+        let ref = Database.database().reference()
+        ref.child("\(path)/title").setValue(title)
+        ref.child("\(path)/description").setValue(description)
+        ref.child("\(path)/speciality").setValue(speciality)
+        ref.child("\(path)/user").setValue(user)
+        ref.child("\(path)/date").setValue(date)
+    }
+    
     func postResearch(path: String, title: String, description: String, speciality: String, user: String, date: String) {
         let ref = Database.database().reference()
         ref.child("\(path)/title").setValue(title)

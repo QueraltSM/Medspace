@@ -14,9 +14,8 @@ class EditResearchVC2: UIViewController, UITextViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.prefersLargeTitles = false
+        setHeader(largeTitles: false)
         research_description.delegate = self
-        navigationController?.navigationBar.shadowImage = UIImage()
         ref = Database.database().reference()
         research_description.customTextView(view_text:research!.description,view_color:UIColor.black, view_font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body), view_scroll: true)
     }

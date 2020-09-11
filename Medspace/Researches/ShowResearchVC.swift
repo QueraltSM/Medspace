@@ -4,6 +4,7 @@ import FirebaseAuth
 class ShowResearchVC: UIViewController {
 
     @IBOutlet weak var scrollview: UIScrollView!
+    @IBOutlet weak var user: UILabel!
     @IBOutlet weak var deleteButton: UIBarButtonItem!
     @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var speciality: UILabel!
@@ -20,14 +21,15 @@ class ShowResearchVC: UIViewController {
         research_title.text = research!.title
         research_description.text = research!.description
         research_date.text = research!.date
+        user.text = "Posted by \(research!.user.name)"
+        user.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline).italic()
         speciality.text = research!.speciality.name.description
         speciality.backgroundColor = research!.speciality.color
         speciality.textColor = UIColor.black
         speciality.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline)
         speciality.round(corners: .allCorners, cornerRadius: 10)
         speciality.textAlignment = .center
-        self.navigationController?.navigationBar.prefersLargeTitles = false
-        if (research?.user.id == Auth.auth().currentUser?.uid) {
+        if (research!.user.id == Auth.auth().currentUser!.uid) {
             configResearch(enabled: true)
         }
     }
@@ -45,9 +47,7 @@ class ShowResearchVC: UIViewController {
         let edit_research_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditResearchVC1") as? EditResearchVC1
         edit_research_vc!.research = self.research
         navigationController?.pushViewController(edit_research_vc!, animated: false)
-        
     }
-    
     
     @IBAction func deleteResearch(_ sender: Any) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)

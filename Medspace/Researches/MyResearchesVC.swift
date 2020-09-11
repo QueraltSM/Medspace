@@ -268,6 +268,4 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
             researches_timeline.selectRow(at: NSIndexPath(row: row, section: 0) as IndexPath, animated: false, scrollPosition: UITableView.ScrollPosition.none)
         }
     }
-    
-
 }

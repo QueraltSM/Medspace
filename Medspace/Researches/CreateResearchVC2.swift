@@ -16,15 +16,12 @@ class CreateResearchVC2: UIViewController, UITextViewDelegate {
         super.viewDidLoad()
         setHeader(largeTitles: false)
         research_description.delegate = self
-        navigationController?.navigationBar.shadowImage = UIImage()
         ref = Database.database().reference()
         research_description.customTextView(view_text:"Write a description of the research...",view_color:UIColor.gray, view_font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body), view_scroll: true)
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == UIColor.gray {
-            textView.customTextView(view_text:"",view_color:UIColor.black, view_font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body), view_scroll: true)
-        } else if (textView.textColor == UIColor.red) {
             textView.customTextView(view_text:"",view_color:UIColor.black, view_font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body), view_scroll: true)
         }
     }

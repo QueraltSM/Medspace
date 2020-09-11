@@ -2,9 +2,8 @@ import UIKit
 import FirebaseDatabase
 import FirebaseAuth
 
-class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate{
+class CreateDiscussionVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
 
-    @IBOutlet weak var discussion_description: UITextView!
     @IBOutlet weak var discussion_title: UITextView!
     @IBOutlet weak var speciality_box: UIView!
     @IBOutlet weak var speciality_textfield: UITextField!
@@ -12,31 +11,16 @@ class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setHeader(largeTitles: false)
         setMenu()
+        setHeader(largeTitles: false)
         discussion_title.delegate = self
-        discussion_description.delegate = self
         discussion_title.setBorder()
-        discussion_description.setBorder()
         speciality_box.setBorder()
         discussion_title.customTextView(view_text:"Title",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
-        discussion_description.customTextView(view_text:"Description",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
         speciality_textfield.text = specialities[specialities.count / 2].name
         speciality_textfield.textColor = UIColor.gray
         createPickerView()
         dismissPickerView()
-    }
-    
-    func postDiscussion() {
-        let ref = Database.database().reference()
-        let user = Auth.auth().currentUser?.uid
-        let now = Date().description
-        let path = "Discussions/\(now)::\(user!)"
-        ref.child("\(path)/title").setValue(discussion_title.text!)
-        ref.child("\(path)/description").setValue(discussion_description.text!)
-        ref.child("\(path)/speciality").setValue(speciality_textfield.text!)
-        ref.child("\(path)/user").setValue(user)
-        ref.child("\(path)/date").setValue(now)
     }
     
     @IBAction func saveDiscussion(_ sender: Any) {
@@ -44,17 +28,16 @@ class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDele
         if (discussion_title.textColor == UIColor.gray || discussion_title.text.isEmpty) {
             error += "Write a title\n"
         }
-        if (discussion_title.textColor == UIColor.gray || discussion_title.text.isEmpty) {
-            error += "Write a description\n"
-        }
         if (speciality_textfield.textColor == UIColor.gray) {
             error += "Choose a speciality\n"
         }
         if (error == "") {
-            postDiscussion()
-            presentVC(segue: "DiscussionsVC")
+            let create_discussion_vc2 = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "CreateDiscussionVC2") as? CreateDiscussionVC2
+            create_discussion_vc2!.title_discussion = discussion_title.text!
+            create_discussion_vc2!.speciality = speciality_textfield.text!
+            navigationController?.pushViewController(create_discussion_vc2!, animated: false)
         } else {
-            showAlert(title: "Error saving the discussion", message: error)
+            showAlert(title: "Error", message: error)
         }
     }
     
@@ -104,7 +87,7 @@ class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDele
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
-        return newText.count <= 80
+        return newText.count <= 100
     }
     
     @objc func action() {
