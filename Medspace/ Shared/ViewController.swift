@@ -313,6 +313,17 @@ extension UIViewController {
         ref.child("\(path)/date").setValue(date)
     }
     
+    func postCase(path: String, title: String, description: String, history: String, examination: String, speciality: String, user: String, date: String) {
+        let ref = Database.database().reference()
+        ref.child("\(path)/title").setValue(title)
+        ref.child("\(path)/description").setValue(description)
+        ref.child("\(path)/history").setValue(history)
+        ref.child("\(path)/examination").setValue(examination)
+        ref.child("\(path)/speciality").setValue(speciality)
+        ref.child("\(path)/user").setValue(user)
+        ref.child("\(path)/date").setValue(date)
+    }
+    
     func postDiscussion(path: String, title: String, description: String, speciality: String, user: String, date: String) {
         let ref = Database.database().reference()
         ref.child("\(path)/title").setValue(title)
@@ -345,12 +356,6 @@ extension UIViewController {
                 self.showAlert(title: "Error", message: (error?.localizedDescription)!)
             }
         }
-    }
-    
-    func hideToolbar(){
-        navigationController?.toolbar.setBackgroundImage(UIImage(), forToolbarPosition: .any, barMetrics: .default)
-        navigationController?.toolbar.setShadowImage(UIImage(), forToolbarPosition: .any)
-        navigationController?.toolbar.backgroundColor = .clear
     }
     
     func setHeader(largeTitles: Bool){

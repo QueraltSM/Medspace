@@ -69,7 +69,6 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                     self.discussions_timeline.reloadData()
                     self.turnEditState(enabled: true, title: "Edit")
                     self.stopAnimation()
-                    
                 })
             } else {
                 self.stopAnimation()

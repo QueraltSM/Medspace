@@ -2,20 +2,30 @@ import UIKit
 
 class EditCaseVC1: UIViewController, UITextViewDelegate {
 
+    @IBOutlet weak var title_label: UILabel!
+    @IBOutlet weak var description_label: UILabel!
+    @IBOutlet weak var scrollview: UIScrollView!
     @IBOutlet weak var case_title: UITextView!
     @IBOutlet weak var case_description: UITextView!
     var clinical_case: Case?
+    var needsUpdate: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        hideToolbar()
         setHeader(largeTitles: false)
         case_title.delegate = self
         case_description.delegate = self
-        case_title.setBorder()
-        case_description.setBorder()
-        case_title.customTextView(view_text:clinical_case!.title,view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
-        case_description.customTextView(view_text:clinical_case!.description,view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
+        scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: case_description.bottomAnchor).isActive = true
+        title_label.setTopBottomBorder()
+        description_label.setTopBottomBorder()
+        //case_title.setTopBorder()
+        //case_description.setTopBorder()
+        //case_title.setBorder()
+        //case_description.setBorder()
+        case_title.text = clinical_case!.title
+        case_description.text = clinical_case!.description
+        //case_title.customTextView(view_text:clinical_case!.title,view_color:UIColor.black, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
+        //case_description.customTextView(view_text:clinical_case!.description,view_color:UIColor.black, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
     }
     
     @IBAction func nextSegue(_ sender: Any) {
@@ -26,25 +36,33 @@ class EditCaseVC1: UIViewController, UITextViewDelegate {
         if (case_description.text.isEmpty) {
             error += "Write a description\n"
         }
-        if (error == "") {
-            let edit_case_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditCaseVC2") as? EditCaseVC2
-            let final_case = Case(id: clinical_case!.id, title: case_title.text!, description: case_description.text!, history: clinical_case!.history, examination: clinical_case!.examination, date: clinical_case!.date, speciality: clinical_case!.speciality, user: clinical_case!.user)
-            edit_case_vc!.clinical_case = final_case
-            navigationController?.pushViewController(edit_case_vc!, animated: false)
+        if clinical_case!.title != case_title.text || clinical_case!.description != case_description.text  {
+            needsUpdate = true
         }
-        if (error != "") {
-            showAlert(title: "Error in saving the research", message: error)
+        if (error == "") {
+            let edit_case_vc2 = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditCaseVC2") as? EditCaseVC2
+            let final_case = Case(id: clinical_case!.id, title: case_title.text!, description: case_description.text!, history: clinical_case!.history, examination: clinical_case!.examination, date: clinical_case!.date, speciality: clinical_case!.speciality, user: clinical_case!.user)
+            edit_case_vc2!.clinical_case = final_case
+            edit_case_vc2!.needsUpdate = needsUpdate
+            navigationController?.pushViewController(edit_case_vc2!, animated: false)
+        } else {
+            showAlert(title: "Error", message: error)
         }
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
-        return newText.count <= 80
+        return newText.count <= 100
     }
-    
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == UIColor.gray {
-            textView.customTextView(view_text:"",view_color:UIColor.black, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
-        }
+}
+
+extension UILabel {
+    func setTopBottomBorder() {
+        let lineViewTop = UIView(frame: CGRect(x: 0, y: -10, width: self.frame.width, height: 1.0))
+        let lineViewBottom = UIView(frame: CGRect(x: 0, y: self.frame.height + 10, width: self.frame.width, height: 1.0))
+        lineViewTop.backgroundColor = UIColor.lightGray
+        lineViewBottom.backgroundColor = UIColor.lightGray
+        self.addSubview(lineViewTop)
+        self.addSubview(lineViewBottom)
     }
 }

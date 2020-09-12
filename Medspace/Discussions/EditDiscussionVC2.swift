@@ -6,15 +6,13 @@ class EditDiscussionVC2: UIViewController, UITextViewDelegate {
 
     @IBOutlet weak var discussion_description: UITextView!
     var discussion: Discussion?
-    var ref: DatabaseReference!
     var needsUpdate: Bool?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setHeader(largeTitles: false)
         discussion_description.delegate = self
-        ref = Database.database().reference()
-    discussion_description.customTextView(view_text:discussion!.description,view_color:UIColor.black, view_font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body), view_scroll: true)
+        discussion_description.customTextView(view_text:discussion!.description,view_color:UIColor.black, view_font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body), view_scroll: true)
     }
     
     @IBAction func askPost(_ sender: Any) {
@@ -31,6 +29,7 @@ class EditDiscussionVC2: UIViewController, UITextViewDelegate {
             alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
                 action in
                 self.postDiscussion()
+                self.presentVC(segue: "MyDiscussionsVC")
             }))
             alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
             self.present(alert, animated: true, completion: nil)
@@ -40,10 +39,10 @@ class EditDiscussionVC2: UIViewController, UITextViewDelegate {
     }
     
     func postDiscussion() {
+        let ref = Database.database().reference()
         let path = "Discussions/\(discussion!.id)"
-        self.ref.child("\(path)/title").setValue(discussion!.title)
-        self.ref.child("\(path)/description").setValue(discussion_description.text!)
-        self.ref.child("\(path)/speciality").setValue(discussion!.speciality.name)
-        presentVC(segue: "MyDiscussionsVC")
+        ref.child("\(path)/title").setValue(discussion!.title)
+        ref.child("\(path)/description").setValue(discussion_description.text!)
+        ref.child("\(path)/speciality").setValue(discussion!.speciality.name)
     }
 }

@@ -7,13 +7,13 @@ class CreateCaseVC1: UIViewController, UITextViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.shadowImage = UIImage()
+        setHeader(largeTitles: false)
         setMenu()
         title_view.delegate = self
         description_view.delegate = self
         title_view.setBorder()
         description_view.setBorder()
-        title_view.customTextView(view_text:"Write a title...",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
+        title_view.customTextView(view_text:"Title",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
         description_view.customTextView(view_text:"Description",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
     }
     
@@ -30,12 +30,12 @@ class CreateCaseVC1: UIViewController, UITextViewDelegate {
             error += "Write a description\n"
         }
         if (error == "") {
-            let case_description_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "CreateCaseVC2") as? CreateCaseVC2
-            case_description_vc!.case_title = title_view.text
-            case_description_vc!.case_description = description_view.text
-            navigationController?.pushViewController(case_description_vc!, animated: false)
+            let create_case_vc2 = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "CreateCaseVC2") as? CreateCaseVC2
+            create_case_vc2!.case_title = title_view.text
+            create_case_vc2!.case_description = description_view.text
+            navigationController?.pushViewController(create_case_vc2!, animated: false)
         } else {
-            showAlert(title: "Error saving the clinical case", message: error)
+            showAlert(title: "Error", message: error)
         }
     }
     
@@ -43,5 +43,10 @@ class CreateCaseVC1: UIViewController, UITextViewDelegate {
         if textView.textColor == UIColor.gray {
             textView.customTextView(view_text:"",view_color:UIColor.black, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
         }
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
+        return newText.count <= 100
     }
 }

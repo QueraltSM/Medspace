@@ -16,7 +16,7 @@ class CreateCaseVC2: UIViewController, UITextViewDelegate, UIPickerViewDelegate,
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.shadowImage = UIImage()
+        setHeader(largeTitles: false)
         setMenu()
         examination_view.delegate = self
         history_view.delegate = self
@@ -73,21 +73,7 @@ class CreateCaseVC2: UIViewController, UITextViewDelegate, UIPickerViewDelegate,
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
-        return newText.count <= 80
-    }
-    
-    func postCase() {
-        let ref = Database.database().reference()
-        let user = Auth.auth().currentUser?.uid
-        let now = Date().description
-        let path = "Cases/\(now)::\(user!)"
-        ref.child("\(path)/title").setValue(case_title)
-        ref.child("\(path)/description").setValue(case_description)
-        ref.child("\(path)/history").setValue(history_view.text!)
-        ref.child("\(path)/examination").setValue(examination_view.text!)
-        ref.child("\(path)/speciality").setValue(speciality_textfield.text!)
-        ref.child("\(path)/user").setValue(user)
-        ref.child("\(path)/date").setValue(now)
+        return newText.count <= 300
     }
     
     @IBAction func askPost(_ sender: Any) {
@@ -98,7 +84,7 @@ class CreateCaseVC2: UIViewController, UITextViewDelegate, UIPickerViewDelegate,
         if (examination_view.textColor == UIColor.gray || examination_view.text.isEmpty) {
             error += "Write examination\n"
         }
-        if (speciality_textfield.textColor == UIColor.gray || speciality_textfield.text!.isEmpty) {
+        if (speciality_textfield.textColor == UIColor.gray) {
             error += "Choose a speciality"
         }
         if (error == "") {
@@ -106,13 +92,17 @@ class CreateCaseVC2: UIViewController, UITextViewDelegate, UIPickerViewDelegate,
             alert.title = "Do you want to post the clinical case?"
             alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
                 action in
-                self.postCase()
-                self.performSegue(withIdentifier: "CasesVC", sender: nil)
+                let user = Auth.auth().currentUser?.uid
+                let now = Date().description
+                let final_date = self.getFormattedDate(date: now.description)
+                let path = "Cases/\(now)::\(user!)"
+                self.postCase(path: path, title: self.case_title, description: self.case_description, history: self.history_view.text!, examination: self.examination_view.text!, speciality: self.speciality_textfield.text!, user: user!, date: final_date)
+                self.presentVC(segue: "MyCasesVC")
             }))
             alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
             self.present(alert, animated: true, completion: nil)
         } else {
-            showAlert(title: "Error saving the clinical case", message: error)
+            showAlert(title: "Error", message: error)
         }
     }
     

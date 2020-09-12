@@ -115,10 +115,11 @@ class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 250
+        return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        cases_timeline.deselectRow(at: indexPath, animated: false)
         let selected_case = cases[indexPath.row]
         let show_case_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowCaseVC") as? ShowCaseVC
         show_case_vc!.clinical_case = selected_case
@@ -139,9 +140,8 @@ class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
         cell?.data_date.text = entry.date
         cell?.data_title.text = entry.title
         cell?.data_speciality.text = entry.speciality.name
-        cell?.data_user.text = entry.user.name
-        cell?.data_speciality.backgroundColor = entry.speciality.color
-        cell?.data_view.layer.borderColor = entry.speciality.color?.cgColor
+        cell?.speciality_color = entry.speciality.color
+        cell?.data_user.text = "Posted by \(entry.user.name)"
         return cell!
     }
     

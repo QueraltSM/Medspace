@@ -10,20 +10,20 @@ class EditCaseVC2: UIViewController, UITextViewDelegate, UIPickerViewDelegate, U
     @IBOutlet weak var case_history: UITextView!
     var selectedSpeciality: String?
     var clinical_case: Case?
+    var needsUpdate: Bool?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.prefersLargeTitles = false
-        navigationController?.navigationBar.shadowImage = UIImage()
+        setHeader(largeTitles: false)
         case_examination.delegate = self
         case_history.delegate = self
         speciality_box.setBorder()
         case_examination.setBorder()
         case_history.setBorder()
         speciality_textfield.text = clinical_case!.speciality.name
-        speciality_textfield.textColor = UIColor.gray
-        case_examination.customTextView(view_text:clinical_case!.examination,view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
-        case_history.customTextView(view_text:clinical_case!.history,view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
+        speciality_textfield.textColor = UIColor.black
+        case_examination.customTextView(view_text:clinical_case!.examination,view_color:UIColor.black, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
+        case_history.customTextView(view_text:clinical_case!.history,view_color:UIColor.black, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
         createPickerView()
         dismissPickerView()
     }
@@ -41,11 +41,22 @@ class EditCaseVC2: UIViewController, UITextViewDelegate, UIPickerViewDelegate, U
         if case_examination.text.isEmpty {
             error += "Write a examination\n"
         }
+        if clinical_case!.history == case_history.text && clinical_case!.examination == case_examination.text &&
+            clinical_case!.speciality.name == speciality_textfield.text && !needsUpdate! {
+            error = "There is no data that needs to be updated"
+        }
         if error == "" {
-            postCase()
-            presentVC(segue: "MyCasesVC")
+            let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+            alert.title = "Do you want to update the case?"
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
+                action in
+                self.postCase()
+                self.presentVC(segue: "MyCasesVC")
+            }))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         } else {
-            showAlert(title: "Error saving the case", message: error)
+            showAlert(title: "Error", message: error)
         }
     }
     
@@ -57,8 +68,6 @@ class EditCaseVC2: UIViewController, UITextViewDelegate, UIPickerViewDelegate, U
         ref.child("\(path)/history").setValue(case_history.text!)
         ref.child("\(path)/examination").setValue(case_examination.text!)
         ref.child("\(path)/speciality").setValue(speciality_textfield.text!)
-        ref.child("\(path)/user").setValue(clinical_case!.user.id)
-        ref.child("\(path)/date").setValue(clinical_case!.date)
     }
     
     func createPickerView() {
@@ -95,9 +104,8 @@ class EditCaseVC2: UIViewController, UITextViewDelegate, UIPickerViewDelegate, U
         speciality_textfield.text = selectedSpeciality
     }
     
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == UIColor.gray {
-            textView.customTextView(view_text:"",view_color:UIColor.black, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
-        }
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
+        return newText.count <= 300
     }
 }

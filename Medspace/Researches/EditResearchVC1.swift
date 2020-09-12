@@ -17,7 +17,6 @@ class EditResearchVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        hideToolbar()
         setHeader(largeTitles: false)
         documentURL = research!.pdf
         setMenu()

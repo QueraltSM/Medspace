@@ -14,8 +14,7 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationBar.shadowImage = UIImage()
+        setHeader(largeTitles: true)
         setMenu()
         ref = Database.database().reference()
         cases_timeline.delegate = self
@@ -40,7 +39,7 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
         searchController.searchBar.delegate = self
         definesPresentationContext = true
         searchController = UISearchController(searchResultsController: nil)
-        searchController.searchBar.placeholder = "Search by title, doctor or speciality"
+        searchController.searchBar.placeholder = "Search by title or speciality"
         searchController.dimsBackgroundDuringPresentation = false
         searchController.searchBar.barTintColor = UIColor.white
         searchController.searchResultsUpdater = self
@@ -70,7 +69,7 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 330
+        return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -104,9 +103,11 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
     }
     
     func setToolbarDelete(hide: Bool) {
-        let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: self, action: nil)
+        let flexible1 = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: self, action: nil)
+        let selectAllButton: UIBarButtonItem = UIBarButtonItem(title: "Select All", style: .plain, target: self, action: #selector(didPressSelectAll))
         let deleteButton: UIBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(didPressDelete))
-        self.toolbarItems = [flexible, deleteButton]
+        let flexible2 = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: self, action: nil)
+        self.toolbarItems = [flexible1, selectAllButton, deleteButton, flexible2]
         self.navigationController?.toolbar.barTintColor = UIColor.white
         self.navigationController?.setToolbarHidden(hide, animated: false)
     }
@@ -123,24 +124,58 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
         cases_timeline.setEditing(editing, animated: true)
     }
     
-    @objc func didPressDelete() {
+    func deleteSelectedRows() {
         setToolbarDelete(hide: true)
-        let selectedRows = self.cases_timeline.indexPathsForSelectedRows
-        if selectedRows != nil {
-            for var selectionIndex in selectedRows! {
-                removeDataDB(path: "Cases/\(cases[selectionIndex.item].id)")
-                while selectionIndex.item >= cases.count {
-                    selectionIndex.item -= 1
-                }
-                tableView(cases_timeline, commit: .delete, forRowAt: selectionIndex)
+        if let selectedRows = cases_timeline.indexPathsForSelectedRows {
+            var items = [Case]()
+            for indexPath in selectedRows  {
+                items.append(cases[indexPath.row])
             }
+            for _ in items {
+                let index = cases.index(where: { (item) -> Bool in
+                    item.id == item.id
+                })
+                let path = "Cases/\(cases[index!].id)"
+                removeDataDB(path: path)
+                cases.remove(at: index!)
+            }
+            cases_timeline.beginUpdates()
+            cases_timeline.deleteRows(at: selectedRows, with: .automatic)
+            cases_timeline.endUpdates()
         }
         if (cases.count == 0) {
             turnEditState(enabled: false, title: "")
             cases_timeline.setEmptyView(title: "You have not post a case yet\n\n:(")
         } else {
             edit = false
-            turnEditState(enabled: true, title: "Select to delete")
+            turnEditState(enabled: true, title: "Edit")
+        }
+    }
+    
+    @objc func didPressDelete() {
+        if self.cases_timeline.indexPathsForSelectedRows == nil {
+            showAlert(title: "Error", message: "You have not selected any case")
+        } else {
+            let selected_cases = self.cases_timeline.indexPathsForSelectedRows!.count
+            let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+            var r = "case"
+            if selected_cases > 1 {
+                r += "s"
+            }
+            alert.title = "Are you sure you want to delete the \(selected_cases) selected \(r)?"
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
+                action in
+                self.deleteSelectedRows()
+            }))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    @objc func didPressSelectAll() {
+        let totalRows = cases_timeline.numberOfRows(inSection: 0)
+        for row in 0..<totalRows {
+            cases_timeline.selectRow(at: NSIndexPath(row: row, section: 0) as IndexPath, animated: false, scrollPosition: UITableView.ScrollPosition.none)
         }
     }
     
@@ -149,7 +184,8 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
         editButton.title = title
     }
     
-    func loopSnapshotChildren(ref: DatabaseReference, snapshot: DataSnapshot) {
+    func loopCases(ref: DatabaseReference, snapshot: DataSnapshot) {
+        self.startAnimation()
         for child in snapshot.children.allObjects as! [DataSnapshot] {
             let dict = child.value as? [String : AnyObject] ?? [:]
             let title = dict["title"]! as! String
@@ -158,26 +194,30 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
             let examination = dict["examination"]! as! String
             let speciality = dict["speciality"]! as! String
             let date = dict["date"]! as! String
-            let final_date = self.getFormattedDate(date: date)
             let userid = dict["user"]! as! String
-            ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
-                in
-                let dict = snapshot.value as? [String : AnyObject] ?? [:]
-                let username = dict["fullname"]! as! String
-                var color = UIColor.init()
-                for s in specialities {
-                    if s.name == speciality {
-                        color = s.color!
+            if (userid == Auth.auth().currentUser!.uid) {
+                ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
+                    in
+                    let dict = snapshot.value as? [String : AnyObject] ?? [:]
+                    let username = dict["fullname"]! as! String
+                    var color = UIColor.init()
+                    for s in specialities {
+                        if s.name == speciality {
+                            color = s.color!
+                        }
                     }
-                }
-                self.cases.append(Case(id: child.key, title: title, description: description, history: history, examination: examination, date: final_date, speciality: Speciality(name: speciality, color: color), user: User(id: userid, name: username)))
-                let sortedResearches = self.cases.sorted {
-                    $0.date > $1.date
-                }
-                self.cases = sortedResearches
+                    self.cases.append(Case(id: child.key, title: title, description: description, history: history, examination: examination, date: date, speciality: Speciality(name: speciality, color: color), user: User(id: userid, name: username)))
+                    let sortedResearches = self.cases.sorted {
+                        $0.date > $1.date
+                    }
+                    self.cases = sortedResearches
+                    self.turnEditState(enabled: true, title: "Edit")
+                    self.cases_timeline.reloadData()
+                    self.stopAnimation()
+                })
+            } else {
                 self.stopAnimation()
-                self.cases_timeline.reloadData()
-            })
+            }
         }
     }
     
@@ -188,9 +228,8 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
                 self.turnEditState(enabled: false, title: "")
             } else {
                 self.cases_timeline.restore()
-                self.turnEditState(enabled: true, title: "Select to delete")
+                self.loopCases(ref: self.ref, snapshot: snapshot)
             }
-            self.loopSnapshotChildren(ref: self.ref, snapshot: snapshot)
         })
     }
     
@@ -200,7 +239,7 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
             edit = true
             setToolbarDelete(hide: false)
         } else {
-            editButton.title = "Select to delete"
+            editButton.title = "Edit"
             edit = false
             setToolbarDelete(hide: true)
             cancelSelections()
@@ -210,8 +249,7 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
     func filterContent(for searchText: String) {
         casesMatched = cases.filter({ (n) -> Bool in
             let match = n.title.lowercased().range(of: searchText.lowercased()) != nil ||
-                n.speciality.name.lowercased().range(of: searchText.lowercased()) != nil ||
-                n.user.name.lowercased().range(of: searchText.lowercased()) != nil
+                n.speciality.name.lowercased().range(of: searchText.lowercased()) != nil
             return match
         })
     }
@@ -222,7 +260,8 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
         cell?.data_date.text = entry.date
         cell?.data_title.text = entry.title
         cell?.data_speciality.text = entry.speciality.name
-        cell?.data_speciality.backgroundColor = entry.speciality.color
+        cell?.speciality_color = entry.speciality.color
+        cell?.data_user.text = "Posted by \(entry.user.name)"
         return cell!
     }
     
