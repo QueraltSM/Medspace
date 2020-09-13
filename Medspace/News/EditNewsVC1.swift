@@ -2,8 +2,10 @@ import UIKit
 
 class EditNewsVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
 
+    @IBOutlet weak var scrollview: UIScrollView!
     @IBOutlet weak var image_header: UIImageView!
-    @IBOutlet weak var speciality_box: UIView!
+    @IBOutlet weak var title_label: UILabel!
+    @IBOutlet weak var speciality_label: UILabel!
     @IBOutlet weak var titleview: UITextView!
     @IBOutlet weak var speciality_textfield: UITextField!
     var image_header_invalid = false
@@ -14,15 +16,22 @@ class EditNewsVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate, U
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
-        setHeader(largeTitles: false)
+        setHeader(largeTitles: false, gray: true)
+        scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: speciality_textfield.bottomAnchor).isActive = true
+        scrollview.backgroundColor = UIColor.init(hexString: "#f2f2f2")
         titleview.delegate = self
         speciality_textfield.delegate = self
-        speciality_textfield.textColor = UIColor.gray
-        speciality_box.setBorder()
-        titleview.setBorder()
+        speciality_textfield.textColor = UIColor.black
         speciality_textfield.text = news!.speciality.name
-        titleview.customTextView(view_text:news!.title,view_color:UIColor.black, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
+        titleview.text = news!.title
+        titleview.textColor = UIColor.black
         image_header.image = news!.image
+        let disclosure = UITableViewCell()
+        disclosure.frame = speciality_textfield.bounds
+        disclosure.accessoryType = .disclosureIndicator
+        disclosure.isUserInteractionEnabled = false
+        disclosure.tintColor = UIColor.darkGray
+        speciality_textfield.addSubview(disclosure)
         createPickerView()
         dismissPickerView()
     }

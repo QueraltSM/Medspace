@@ -16,12 +16,12 @@ class ShowNewsVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
-        setHeader(largeTitles: false)
+        setHeader(largeTitles: false, gray: false)
         scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: news_description.bottomAnchor).isActive = true
         image_header.image = news!.image
         news_title.text = news!.title
         news_description.text = news!.description
-        news_date.text = news!.date
+        news_date.text = self.getFormattedDate(date: news!.date)
         speciality.text = news!.speciality.name.description
         speciality.backgroundColor = news!.speciality.color
         speciality.textColor = UIColor.black

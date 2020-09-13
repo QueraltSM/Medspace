@@ -15,15 +15,20 @@ class ShowCaseVC: UIViewController {
     @IBOutlet weak var user: UILabel!
     @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var deleteButton: UIBarButtonItem!
-    
+    @IBOutlet weak var description_label: UILabel!
+    @IBOutlet weak var history_label: UILabel!
+    @IBOutlet weak var examination_label: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
-        setHeader(largeTitles: false)
+        setHeader(largeTitles: false, gray: false)
         scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: examination.bottomAnchor).isActive = true
         case_title.text = clinical_case!.title
         case_description.text = clinical_case!.description
+        description_label.setLabelBorders()
+        history_label.setLabelBorders()
+        examination_label.setLabelBorders()
         history.text = clinical_case!.history
         examination.text = clinical_case!.examination
         date.text = clinical_case!.date
@@ -31,7 +36,7 @@ class ShowCaseVC: UIViewController {
         user.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline).italic()
         speciality.text = clinical_case!.speciality.name.description
         speciality.backgroundColor = clinical_case!.speciality.color
-        speciality.textColor = UIColor.white
+        speciality.textColor = UIColor.black
         speciality.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline)
         speciality.round(corners: .allCorners, cornerRadius: 10)
         speciality.textAlignment = .center
@@ -56,32 +61,18 @@ class ShowCaseVC: UIViewController {
             action in
             let path = "Cases/\(self.clinical_case!.id)"
             self.removeDataDB(path: path)
-            self.presentVC(segue: "CasesVC")
-        }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        self.present(alert, animated: true, completion: nil)
-    }
-    
-    
-    @IBAction func editCase(_ sender: Any) {
-        let edit_case_vc1 = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditCaseVC1") as? EditCaseVC1
-        edit_case_vc1!.clinical_case = self.clinical_case
-        navigationController?.pushViewController(edit_case_vc1!, animated: false)
-    }
-    
-    @objc func deteleCase(){
-        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        alert.title = "Are you sure you want delete it?"
-        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
-            action in
-            self.removeDataDB(path: "Cases/\(self.clinical_case!.id)")
             self.presentVC(segue: "MyCasesVC")
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
     
-    
+    @IBAction func editCase(_ sender: Any) {
+        let edit_case_vc1 = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditCaseVC1") as? EditCaseVC1
+        edit_case_vc1!.clinical_case = self.clinical_case
+        navigationController?.pushViewController(edit_case_vc1!, animated: false)
+    }
+
     @IBAction func showComments(_ sender: Any) {
         print("show comments")
     }

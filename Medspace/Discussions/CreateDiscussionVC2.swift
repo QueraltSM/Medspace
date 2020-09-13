@@ -11,7 +11,7 @@ class CreateDiscussionVC2: UIViewController, UITextViewDelegate, UITextFieldDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setHeader(largeTitles: false)
+        setHeader(largeTitles: false, gray: false)
         discussion_description.delegate = self
         discussion_description.customTextView(view_text:"Write a description of the discussion...",view_color:UIColor.gray, view_font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body), view_scroll: true)
     }
@@ -38,10 +38,9 @@ class CreateDiscussionVC2: UIViewController, UITextViewDelegate, UITextFieldDele
             alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
                 action in
                 let user = Auth.auth().currentUser?.uid
-                let now = Date()
-                let final_date = self.getFormattedDate(date: now.description)
+                let now = Date().description
                 let path = "Discussions/\(now)::\(user!)"
-                self.postDiscussion(path: path, title: self.title_discussion, description: self.discussion_description.text!, speciality: self.speciality, user: user!, date: final_date)
+                self.postDiscussion(path: path, title: self.title_discussion, description: self.discussion_description.text!, speciality: self.speciality, user: user!, date: now)
                 self.presentVC(segue: "MyDiscussionsVC")
             }))
             alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))

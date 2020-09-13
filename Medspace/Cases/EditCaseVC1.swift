@@ -12,12 +12,13 @@ class EditCaseVC1: UIViewController, UITextViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setHeader(largeTitles: false)
+        setHeader(largeTitles: false, gray: true)
+        scrollview.backgroundColor = UIColor.init(hexString: "#f2f2f2")
         case_title.delegate = self
         case_description.delegate = self
         scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: case_description.bottomAnchor).isActive = true
-        title_label.setTopBottomBorder()
-        description_label.setTopBottomBorder()
+        title_label.setLabelBorders()
+        description_label.setLabelBorders()
         //case_title.setTopBorder()
         //case_description.setTopBorder()
         //case_title.setBorder()
@@ -53,16 +54,5 @@ class EditCaseVC1: UIViewController, UITextViewDelegate {
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
         return newText.count <= 100
-    }
-}
-
-extension UILabel {
-    func setTopBottomBorder() {
-        let lineViewTop = UIView(frame: CGRect(x: 0, y: -10, width: self.frame.width, height: 1.0))
-        let lineViewBottom = UIView(frame: CGRect(x: 0, y: self.frame.height + 10, width: self.frame.width, height: 1.0))
-        lineViewTop.backgroundColor = UIColor.lightGray
-        lineViewBottom.backgroundColor = UIColor.lightGray
-        self.addSubview(lineViewTop)
-        self.addSubview(lineViewBottom)
     }
 }

@@ -9,7 +9,7 @@ class DocumentViewerVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         print("HOLIP=\(document!.absoluteString)")
-        setHeader(largeTitles: false)
+        setHeader(largeTitles: false, gray: false)
         viewer.backgroundColor = UIColor.clear
         viewer.load(URLRequest(url: document!))
     }

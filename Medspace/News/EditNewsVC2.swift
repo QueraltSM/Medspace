@@ -5,19 +5,18 @@ import FirebaseAuth
 
 class EditNewsVC2: UIViewController, UITextViewDelegate {
     
-    @IBOutlet weak var news_description: UITextView!
-    var ref: DatabaseReference!
+    
+    @IBOutlet weak var scrollview: UIScrollView!
+    @IBOutlet weak var description_news: UITextView!
     var news: News?
     var needsUpdate: Bool?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setHeader(largeTitles: false)
-        news_description.delegate = self
-        news_description.text = news!.description
-        news_description.textColor = UIColor.gray
-        ref = Database.database().reference()
-        news_description.customTextView(view_text:news!.description,view_color:UIColor.black, view_font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body), view_scroll: true)
+        setHeader(largeTitles: false, gray: false)
+        description_news.delegate = self
+        description_news.text = news!.description
+        description_news.textColor = UIColor.black
         setMenu()
     }
     
@@ -35,7 +34,7 @@ class EditNewsVC2: UIViewController, UITextViewDelegate {
                 self.showAlert(title: "Error", message: error.localizedDescription)
                 return
             } else {
-                self.postNewsDB(path: "News/\(self.news!.id)", title: self.news!.title, description: self.news_description.text!, speciality: self.news!.speciality.name, user: self.news!.user.id, date: self.news!.date)
+                self.postNewsDB(path: "News/\(self.news!.id)", title: self.news!.title, description: self.description_news.text!, speciality: self.news!.speciality.name, user: self.news!.user.id, date: self.news!.date)
                 self.presentVC(segue: "MyNewsVC")
             }
         }
@@ -43,10 +42,10 @@ class EditNewsVC2: UIViewController, UITextViewDelegate {
     
     @IBAction func askPost(_ sender: Any) {
         var error = ""
-        if news_description.text.isEmpty {
+        if description_news.text.isEmpty {
             error = "Write a description"
         }
-        if news!.description == news_description.text && !needsUpdate! {
+        if news!.description == description_news.text && !needsUpdate! {
             error = "There is no data that needs to be updated"
         }
         if error == "" {

@@ -11,7 +11,7 @@ class DataCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        data_speciality.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.headline)
+        data_speciality.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)
         data_speciality.round(corners: .allCorners, cornerRadius: 10)
         data_speciality.textColor = UIColor.black
         data_speciality.textAlignment = .center

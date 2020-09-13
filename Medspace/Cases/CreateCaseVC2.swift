@@ -16,7 +16,7 @@ class CreateCaseVC2: UIViewController, UITextViewDelegate, UIPickerViewDelegate,
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setHeader(largeTitles: false)
+        setHeader(largeTitles: false, gray: false)
         setMenu()
         examination_view.delegate = self
         history_view.delegate = self
@@ -94,9 +94,8 @@ class CreateCaseVC2: UIViewController, UITextViewDelegate, UIPickerViewDelegate,
                 action in
                 let user = Auth.auth().currentUser?.uid
                 let now = Date().description
-                let final_date = self.getFormattedDate(date: now.description)
                 let path = "Cases/\(now)::\(user!)"
-                self.postCase(path: path, title: self.case_title, description: self.case_description, history: self.history_view.text!, examination: self.examination_view.text!, speciality: self.speciality_textfield.text!, user: user!, date: final_date)
+                self.postCase(path: path, title: self.case_title, description: self.case_description, history: self.history_view.text!, examination: self.examination_view.text!, speciality: self.speciality_textfield.text!, user: user!, date: now)
                 self.presentVC(segue: "MyCasesVC")
             }))
             alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))

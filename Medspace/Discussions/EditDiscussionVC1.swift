@@ -13,7 +13,7 @@ class EditDiscussionVC1: UIViewController, UITextViewDelegate, UIPickerViewDeleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setHeader(largeTitles: false)
+        setHeader(largeTitles: false, gray: false)
         discussion_title.delegate = self
         speciality_box.setBorder()
         discussion_title.setBorder()

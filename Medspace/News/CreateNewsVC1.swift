@@ -2,38 +2,39 @@ import UIKit
 
 class CreateNewsVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
 
-    @IBOutlet weak var contentview: UIView!
+    @IBOutlet weak var scrollview: UIScrollView!
     @IBOutlet weak var image_header: UIImageView!
     @IBOutlet weak var titleview: UITextView!
     var image_header_invalid = true
     var selectedSpeciality: String?
     @IBOutlet weak var speciality_textfield: UITextField!
-    @IBOutlet weak var speciality_box: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
-        setHeader(largeTitles: false)
+        setHeader(largeTitles: false, gray: true)
+        scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: speciality_textfield.bottomAnchor).isActive = true
+        scrollview.backgroundColor = UIColor.init(hexString: "#f2f2f2")
         titleview.delegate = self
         speciality_textfield.delegate = self
-        speciality_box.setBorder()
-        titleview.setBorder()
-        titleview.customTextView(view_text:"Title",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
-        speciality_textfield.text = specialities[specialities.count / 2].name
+        titleview.textColor = UIColor.gray
+        titleview.text = "For example: Researchers develop highly scalable, accurate antibody test for covid-19"
         speciality_textfield.textColor = UIColor.gray
+        speciality_textfield.text = "Allergy and Inmunology"
+        let disclosure = UITableViewCell()
+        disclosure.frame = speciality_textfield.bounds
+        disclosure.accessoryType = .disclosureIndicator
+        disclosure.isUserInteractionEnabled = false
+        disclosure.tintColor = UIColor.darkGray
+        speciality_textfield.addSubview(disclosure)
         createPickerView()
         dismissPickerView()
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == UIColor.gray {
-            textView.customTextView(view_text:"",view_color:UIColor.black, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
-        }
-    }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        if textView.text.isEmpty {
-            textView.customTextView(view_text:"Title",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: false)
+            textView.text = ""
+            textView.textColor = UIColor.black
         }
     }
     
@@ -113,14 +114,13 @@ class CreateNewsVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate,
         if (speciality_textfield.textColor == UIColor.gray) {
             error += "Select a speciality"
         }
-        if (error == "" && titleview.textColor == UIColor.black && !titleview.text.isEmpty) {
-            let news_description_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "CreateNewsVC2") as? CreateNewsVC2
-            news_description_vc!.title_news = titleview.text
-            news_description_vc!.image_news = image_header.image
-            news_description_vc!.speciality = speciality_textfield.text!
-            navigationController?.pushViewController(news_description_vc!, animated: false)
-        }
-        if (error != "") {
+        if error == "" {
+            let create_news_vc2 = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "CreateNewsVC2") as? CreateNewsVC2
+            create_news_vc2!.title_news = titleview.text
+            create_news_vc2!.image_news = image_header.image
+            create_news_vc2!.speciality = speciality_textfield.text!
+            navigationController?.pushViewController(create_news_vc2!, animated: false)
+        } else {
             showAlert(title: "Error", message: error)
         }
     }

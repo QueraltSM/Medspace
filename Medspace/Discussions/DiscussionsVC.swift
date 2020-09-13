@@ -11,7 +11,7 @@ class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
-        setHeader(largeTitles: true)
+        setHeader(largeTitles: true, gray: false)
         discussions_timeline.delegate = self
         discussions_timeline.dataSource = self
         discussions_timeline.separatorColor = UIColor.clear
@@ -136,7 +136,7 @@ class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let entry = searchController.isActive ? discussionsMatched[indexPath.row] : discussions[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as? DataCell
-        cell?.data_date.text = entry.date
+        cell?.data_date.text = self.getFormattedDate(date: entry.date)
         cell?.data_title.text = entry.title
         cell?.data_speciality.text = entry.speciality.name
         cell?.speciality_color = entry.speciality.color

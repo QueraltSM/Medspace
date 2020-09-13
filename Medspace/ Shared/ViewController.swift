@@ -358,14 +358,15 @@ extension UIViewController {
         }
     }
     
-    func setHeader(largeTitles: Bool){
+    func setHeader(largeTitles: Bool, gray: Bool){
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.prefersLargeTitles = largeTitles
-        navigationController?.navigationBar.isTranslucent = false
-        UINavigationBar.appearance().barTintColor = UIColor.white
-        if largeTitles {
-            navigationController?.navigationItem.largeTitleDisplayMode = .always
+         navigationController?.navigationBar.isTranslucent = false
+        var color = UIColor.white
+        if gray {
+            color = UIColor.init(hexString: "#f2f2f2")
         }
+        navigationController?.navigationBar.backgroundColor = color
     }
     
     func setUserData(fullname: String, usertype: String, isUserLoggedIn: Bool) {
@@ -458,5 +459,16 @@ extension UIFont {
     
     func italic() -> UIFont {
         return withTraits(traits: .traitItalic)
+    }
+}
+
+extension UILabel {
+    func setLabelBorders() {
+        let lineViewTop = UIView(frame: CGRect(x: 0, y: -10, width: self.frame.width, height: 0.5))
+        let lineViewBottom = UIView(frame: CGRect(x: 0, y: self.frame.height + 10, width: self.frame.width, height: 0.5))
+        lineViewTop.backgroundColor = UIColor.lightGray
+        lineViewBottom.backgroundColor = UIColor.lightGray
+        self.addSubview(lineViewTop)
+        self.addSubview(lineViewBottom)
     }
 }

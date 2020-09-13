@@ -17,7 +17,7 @@ class EditResearchVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setHeader(largeTitles: false)
+        setHeader(largeTitles: false, gray: false)
         documentURL = research!.pdf
         setMenu()
         research_title.delegate = self

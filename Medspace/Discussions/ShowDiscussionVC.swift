@@ -17,7 +17,7 @@ class ShowDiscussionVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
-        setHeader(largeTitles: false)
+        setHeader(largeTitles: false, gray: false)
         scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: discussion_description.bottomAnchor).isActive = true
         discussion_title.text = discussion!.title
         discussion_description.text = discussion!.description

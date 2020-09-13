@@ -4,10 +4,11 @@ class CreateCaseVC1: UIViewController, UITextViewDelegate {
 
     @IBOutlet weak var title_view: UITextView!
     @IBOutlet weak var description_view: UITextView!
+    @IBOutlet weak var content: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setHeader(largeTitles: false)
+        setHeader(largeTitles: false, gray: true)
         setMenu()
         title_view.delegate = self
         description_view.delegate = self
@@ -15,6 +16,12 @@ class CreateCaseVC1: UIViewController, UITextViewDelegate {
         description_view.setBorder()
         title_view.customTextView(view_text:"Title",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
         description_view.customTextView(view_text:"Description",view_color:UIColor.gray, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
+        
+        content.backgroundColor = UIColor.init(hexString: "#f2f2f2")
+        navigationController?.navigationBar.backgroundColor = UIColor.init(hexString: "#f2f2f2")
+        navigationController?.navigationBar.tintColor = UIColor.init(hexString: "#f2f2f2")
+        navigationController?.navigationBar.barTintColor = UIColor.init(hexString: "#f2f2f2")
+        navigationController?.navigationBar.isTranslucent = true
     }
     
     @IBAction func didTapMenuButton(_ sender: Any) {

@@ -16,7 +16,7 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
-        setHeader(largeTitles: true)
+        setHeader(largeTitles: true, gray: false)
         ref = Database.database().reference()
         researches_timeline.delegate = self
         researches_timeline.dataSource = self
@@ -171,7 +171,7 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let entry = searchController.isActive ? researchesMatched[indexPath.row] : researches[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as? DataCell
-        cell?.data_date.text = entry.date
+        cell?.data_date.text = self.getFormattedDate(date: entry.date)
         cell?.data_title.text = entry.title
         cell?.data_speciality.text = entry.speciality.name
         cell?.speciality_color = entry.speciality.color

@@ -15,7 +15,7 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setHeader(largeTitles: true)
+        setHeader(largeTitles: true, gray: false)
         setMenu()
         ref = Database.database().reference()
         news_timeline.delegate = self
@@ -158,7 +158,7 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let entry = searchController.isActive ? newsMatched[indexPath.row] : news[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as? NewsCell
-        cell?.news_date.text = entry.date
+        cell?.news_date.text = self.getFormattedDate(date: entry.date)
         cell?.news_title.text = entry.title
         cell?.image_header.image = entry.image
         cell?.news_speciality.text = entry.speciality.name

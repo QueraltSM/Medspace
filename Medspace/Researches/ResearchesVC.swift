@@ -4,14 +4,14 @@ import FirebaseStorage
 
 class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchResultsUpdating {
     
+    @IBOutlet weak var researches_timeline: UITableView!
     var researches = [Research]()
     var researchesMatched = [Research]()
-    @IBOutlet weak var researches_timeline: UITableView!
     var searchController = UISearchController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setHeader(largeTitles: true)
+        setHeader(largeTitles: true, gray: false)
         setMenu()
         researches_timeline.delegate = self
         researches_timeline.dataSource = self
@@ -138,7 +138,7 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let entry = searchController.isActive ? researchesMatched[indexPath.row] : researches[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as? DataCell
-        cell?.data_date.text = entry.date
+        cell?.data_date.text = self.getFormattedDate(date: entry.date)
         cell?.data_title.text = entry.title
         cell?.data_speciality.text = entry.speciality.name
         cell?.speciality_color = entry.speciality.color

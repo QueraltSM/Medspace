@@ -14,7 +14,7 @@ class CreateResearchVC2: UIViewController, UITextViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setHeader(largeTitles: false)
+        setHeader(largeTitles: false, gray: false)
         research_description.delegate = self
         ref = Database.database().reference()
         research_description.customTextView(view_text:"Write a description of the research...",view_color:UIColor.gray, view_font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body), view_scroll: true)
@@ -50,13 +50,12 @@ class CreateResearchVC2: UIViewController, UITextViewDelegate {
     func postResearch() {
         self.startAnimation()
         let user = Auth.auth().currentUser?.uid
-        let now = Date()
-        let final_date = self.getFormattedDate(date: now.description)
+        let now = Date().description
         let path = "Researches/\(now)::\(user!)"
         Storage.storage().reference().child(path).putFile(from: self.document_research!, metadata: nil) { metadata, error in
             self.stopAnimation()
             if error == nil {
-                self.postResearch(path: path, title: self.title_research, description: self.research_description.text!, speciality: self.speciality, user: user!, date: final_date)
+                self.postResearch(path: path, title: self.title_research, description: self.research_description.text!, speciality: self.speciality, user: user!, date: now)
                 self.presentVC(segue: "MyResearchesVC")
             } else {
                 self.showAlert(title: "Error", message: error!.localizedDescription)

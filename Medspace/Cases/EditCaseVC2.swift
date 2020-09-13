@@ -14,7 +14,7 @@ class EditCaseVC2: UIViewController, UITextViewDelegate, UIPickerViewDelegate, U
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setHeader(largeTitles: false)
+        setHeader(largeTitles: false, gray: false)
         case_examination.delegate = self
         case_history.delegate = self
         speciality_box.setBorder()

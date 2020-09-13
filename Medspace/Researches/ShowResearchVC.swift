@@ -3,24 +3,25 @@ import FirebaseAuth
 
 class ShowResearchVC: UIViewController {
 
+   
     @IBOutlet weak var scrollview: UIScrollView!
     @IBOutlet weak var user: UILabel!
     @IBOutlet weak var deleteButton: UIBarButtonItem!
     @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var speciality: UILabel!
+    @IBOutlet weak var date: UILabel!
     @IBOutlet weak var research_title: UILabel!
-    @IBOutlet weak var research_date: UILabel!
     @IBOutlet weak var research_description: UILabel!
     var research: Research?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
-        setHeader(largeTitles: false)
+        setHeader(largeTitles: false, gray: false)
         scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: research_description.bottomAnchor).isActive = true
         research_title.text = research!.title
         research_description.text = research!.description
-        research_date.text = research!.date
+        date.text = research!.date
         user.text = "Posted by \(research!.user.name)"
         user.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline).italic()
         speciality.text = research!.speciality.name.description

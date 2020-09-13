@@ -16,7 +16,7 @@ class CreateResearchVC1: UIViewController, UITextViewDelegate, UIPickerViewDeleg
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
-        setHeader(largeTitles: false)
+        setHeader(largeTitles: false, gray: false)
         invalid_document = true
         titleview.delegate = self
         speciality_textfield.delegate = self

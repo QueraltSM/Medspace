@@ -12,7 +12,7 @@ class CreateDiscussionVC1: UIViewController, UITextViewDelegate, UIPickerViewDel
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
-        setHeader(largeTitles: false)
+        setHeader(largeTitles: false, gray: false)
         discussion_title.delegate = self
         discussion_title.setBorder()
         speciality_box.setBorder()

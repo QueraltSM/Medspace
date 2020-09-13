@@ -4,6 +4,7 @@ import FirebaseStorage
 
 class CreateNewsVC2: UIViewController, UITextViewDelegate {
     
+    @IBOutlet weak var scrollview: UIScrollView!
     @IBOutlet weak var description_news: UITextView!
     var title_news: String = ""
     var image_news: UIImage? = nil
@@ -11,23 +12,19 @@ class CreateNewsVC2: UIViewController, UITextViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setHeader(largeTitles: false)
+        setHeader(largeTitles: false, gray: true)
         description_news.delegate = self
-        description_news.customTextView(view_text:"Write the description of the news...",view_color:UIColor.gray, view_font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body), view_scroll: true)
+        scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: description_news.bottomAnchor).isActive = true
+        description_news.text = "An antibody test for the virus that causes COVID-19, developed by researchers at The University of Texas at Austin in collaboration with Houston Methodist and other institutions, is more accurate and can handle a much larger number of donor samples at lower overall cost than standard antibody tests currently in use. In the near term, the test can be used to accurately identify the best donors for convalescent plasma therapy and measure how well candidate vaccines and other therapies elicit an immune response..."
+        description_news.textColor = UIColor.gray
         setMenu()
+        scrollview.backgroundColor = UIColor.init(hexString: "#f2f2f2")
     }
-    
+
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == UIColor.gray {
-            textView.customTextView(view_text:"",view_color:UIColor.black, view_font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body), view_scroll: true)
-        } else if (textView.textColor == UIColor.red) {
-            textView.customTextView(view_text:"",view_color:UIColor.black, view_font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body), view_scroll: true)
-        }
-    }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        if textView.text.isEmpty {
-            textView.customTextView(view_text:"Write the description of the news...",view_color:UIColor.gray, view_font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body), view_scroll: true)
+            textView.text = ""
+            textView.textColor = UIColor.black
         }
     }
 
@@ -53,8 +50,7 @@ class CreateNewsVC2: UIViewController, UITextViewDelegate {
     func postNews() {
         self.startAnimation()
         let user = Auth.auth().currentUser?.uid
-        let now = Date()
-        let final_date = self.getFormattedDate(date: now.description)
+        let now = Date().description
         let path = "News/\(now)::\(user!)"
         guard let imageData: Data = image_news!.jpegData(compressionQuality: 0.1) else {
             return
@@ -65,7 +61,7 @@ class CreateNewsVC2: UIViewController, UITextViewDelegate {
         storageRef.putData(imageData, metadata: metaDataConfig){ (metaData, error) in
             self.stopAnimation()
             if error == nil {
-                self.postNewsDB(path: path, title: self.title_news, description: self.description_news.text!, speciality: self.speciality, user: user!, date: final_date)
+                self.postNewsDB(path: path, title: self.title_news, description: self.description_news.text!, speciality: self.speciality, user: user!, date: now)
                 self.presentVC(segue: "MyNewsVC")
             } else {
                 self.showAlert(title: "Error", message: error!.localizedDescription)
