@@ -30,8 +30,9 @@ class LoginVC: UIViewController {
                         let value = snapshot.value as? NSDictionary
                         let usertype = value?["type"] as? String ?? ""
                         let fullname = value?["fullname"] as? String ?? ""
-                        self.setUserData(fullname: fullname, usertype: usertype, isUserLoggedIn: true)
-                    })
+                        let username = value?["username"] as? String ?? ""
+                        self.setUserData(fullname: fullname, usertype: usertype, username: username, isUserLoggedIn: true)
+                })
             }
         }
     }
@@ -63,4 +64,9 @@ class LoginVC: UIViewController {
         alert.preferredAction = save
         self.present(alert, animated: true, completion: nil)
     }
+    
+    @IBAction func signUp(_ sender: Any) {
+        presentVC(segue: "SignupVC")
+    }
+    
 }

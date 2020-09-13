@@ -6,6 +6,7 @@ var admin_menu : AdminMenuVC!
 var doctor_menu: DoctorMenuVC!
 var usertype: String!
 var username: String!
+var fullname: String!
 let specialities = [
     Speciality(name: "Allergy & Inmunology", color: UIColor.init(hexString: "#daf0ff")), // blue
     Speciality(name: "Anesthesiology", color: UIColor.init(hexString: "#ff6961")), // red
@@ -285,7 +286,7 @@ extension UIViewController {
         let firebaseAuth = Auth.auth()
         do {
             try firebaseAuth.signOut()
-            setUserData(fullname: "", usertype: "", isUserLoggedIn: false)
+            setUserData(fullname: "", usertype: "", username: "", isUserLoggedIn: false)
         } catch let signOutError as NSError {
             showAlert(title: "Error signing out", message: signOutError.description)
         }
@@ -369,9 +370,10 @@ extension UIViewController {
         navigationController?.navigationBar.backgroundColor = color
     }
     
-    func setUserData(fullname: String, usertype: String, isUserLoggedIn: Bool) {
+    func setUserData(fullname: String, usertype: String, username: String, isUserLoggedIn: Bool) {
         UserDefaults.standard.set(usertype, forKey: "usertype")
         UserDefaults.standard.set(fullname, forKey: "fullname")
+        UserDefaults.standard.set(username, forKey: "username")
         UserDefaults.standard.set(isUserLoggedIn, forKey: "isUserLoggedIn")
         if isUserLoggedIn {
             self.presentVC(segue: "NewsVC")

@@ -15,6 +15,7 @@
 		6208308024E9C14200291825 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6208307F24E9C14200291825 /* Assets.xcassets */; };
 		6208308324E9C14200291825 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6208308124E9C14200291825 /* LaunchScreen.storyboard */; };
 		621535AC24EACF14007B18BA /* SignupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621535AB24EACF14007B18BA /* SignupVC.swift */; };
+		621C6D40250E3B38001A345D /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621C6D3F250E3B38001A345D /* ProfileVC.swift */; };
 		6223B29824FA5634000F6E83 /* ShowNewsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6223B29724FA5634000F6E83 /* ShowNewsVC.swift */; };
 		6225EC9A24F07F2600231774 /* Menu.png in Resources */ = {isa = PBXBuildFile; fileRef = 6225EC9924F07F2600231774 /* Menu.png */; };
 		622691C524F8519100BDCB36 /* NewsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622691C424F8519100BDCB36 /* NewsVC.swift */; };
@@ -81,6 +82,7 @@
 		6208308224E9C14200291825 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6208308424E9C14200291825 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		621535AB24EACF14007B18BA /* SignupVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupVC.swift; sourceTree = "<group>"; };
+		621C6D3F250E3B38001A345D /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
 		6223B29724FA5634000F6E83 /* ShowNewsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowNewsVC.swift; sourceTree = "<group>"; };
 		6225EC9924F07F2600231774 /* Menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Menu.png; sourceTree = "<group>"; };
 		622691C424F8519100BDCB36 /* NewsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsVC.swift; sourceTree = "<group>"; };
@@ -275,6 +277,7 @@
 				621535AB24EACF14007B18BA /* SignupVC.swift */,
 				62D8C7B324FE7C100031587E /* DataCell.swift */,
 				6229EEC72508123E00EA7CC1 /* Entities.swift */,
+				621C6D3F250E3B38001A345D /* ProfileVC.swift */,
 			);
 			path = " Shared";
 			sourceTree = "<group>";
@@ -489,6 +492,7 @@
 				62D5FAB62502BB2500772594 /* CreateCaseVC2.swift in Sources */,
 				6208307E24E9C13A00291825 /* Medspace.xcdatamodeld in Sources */,
 				6246D17E2501770A0067A382 /* EditResearchVC2.swift in Sources */,
+				621C6D40250E3B38001A345D /* ProfileVC.swift in Sources */,
 				62956400250BBC5C00F9E666 /* EditDiscussionVC2.swift in Sources */,
 				62D8C7AD24FE75830031587E /* ResearchesVC.swift in Sources */,
 				625DD09224F0218B007F6994 /* AdminMenuVC.swift in Sources */,
