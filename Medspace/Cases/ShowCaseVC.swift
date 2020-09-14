@@ -32,7 +32,7 @@ class ShowCaseVC: UIViewController {
         history.text = clinical_case!.history
         examination.text = clinical_case!.examination
         date.text = clinical_case!.date
-        user.text = "Posted by \(clinical_case!.user.name)"
+        user.text = "Posted by \(clinical_case!.user.username)"
         user.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline).italic()
         speciality.text = clinical_case!.speciality.name.description
         speciality.backgroundColor = clinical_case!.speciality.color

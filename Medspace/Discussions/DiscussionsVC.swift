@@ -39,14 +39,15 @@ class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
             ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
                 in
                 let dict = snapshot.value as? [String : AnyObject] ?? [:]
-                let username = dict["fullname"]! as! String
+                let username = dict["username"]! as! String
+                let fullname = dict["fullname"]! as! String
                 var color = UIColor.init()
                 for s in specialities {
                     if s.name == speciality {
                         color = s.color!
                     }
                 }
-                self.discussions.append(Discussion(id: child.key, title: title, description: description, date: date, speciality: Speciality(name: speciality, color: color), user: User(id: userid, name: username)))
+                self.discussions.append(Discussion(id: child.key, title: title, description: description, date: date, speciality: Speciality(name: speciality, color: color), user: User(id: userid, fullname: fullname, username: username)))
                 let sortedDiscussions = self.discussions.sorted {
                     $0.date > $1.date
                 }
@@ -94,7 +95,8 @@ class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         discussionsMatched = discussions.filter({ (n) -> Bool in
             let match = n.title.lowercased().range(of: searchText.lowercased()) != nil ||
                 n.speciality.name.lowercased().range(of: searchText.lowercased()) != nil ||
-                n.user.name.lowercased().range(of: searchText.lowercased()) != nil
+                n.user.username.lowercased().range(of: searchText.lowercased()) != nil ||
+                n.user.fullname.lowercased().range(of: searchText.lowercased()) != nil
             return match
         })
     }
@@ -140,7 +142,7 @@ class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         cell?.data_title.text = entry.title
         cell?.data_speciality.text = entry.speciality.name
         cell?.speciality_color = entry.speciality.color
-        cell?.data_user.text = "Posted by \(entry.user.name)"
+        cell?.data_user.text = "Posted by \(entry.user.username)"
         return cell!
     }
 }

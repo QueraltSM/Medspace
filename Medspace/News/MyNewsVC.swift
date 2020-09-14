@@ -102,14 +102,15 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
                     ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
                         in
                         let dict = snapshot.value as? [String : AnyObject] ?? [:]
-                        let username = dict["fullname"]! as! String
+                        let username = dict["username"]! as! String
+                        let fullname = dict["fullname"]! as! String
                         var color = UIColor.init()
                         for s in specialities {
                             if s.name == speciality {
                                 color = s.color!
                             }
                         }
-                        self.news.append(News(id: child.key, image: pic!, date: date, title: title, speciality: Speciality(name: speciality, color: color), description: description, user: User(id: userid, name: username)))
+                        self.news.append(News(id: child.key, image: pic!, date: date, title: title, speciality: Speciality(name: speciality, color: color), description: description, user: User(id: userid, fullname: fullname, username: username)))
                         let sortedNews = self.news.sorted {
                             $0.date > $1.date
                         }

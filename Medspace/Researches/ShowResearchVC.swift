@@ -3,9 +3,8 @@ import FirebaseAuth
 
 class ShowResearchVC: UIViewController {
 
-   
+    @IBOutlet weak var user: UIButton!
     @IBOutlet weak var scrollview: UIScrollView!
-    @IBOutlet weak var user: UILabel!
     @IBOutlet weak var deleteButton: UIBarButtonItem!
     @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var speciality: UILabel!
@@ -13,6 +12,7 @@ class ShowResearchVC: UIViewController {
     @IBOutlet weak var research_title: UILabel!
     @IBOutlet weak var research_description: UILabel!
     var research: Research?
+    var user_author: User?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,15 +22,15 @@ class ShowResearchVC: UIViewController {
         research_title.text = research!.title
         research_description.text = research!.description
         date.text = research!.date
-        user.text = "Posted by \(research!.user.name)"
-        user.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline).italic()
+        user.setTitle("Posted by \(research!.user.username)", for: .normal)
+        user.titleLabel!.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline).italic()
         speciality.text = research!.speciality.name.description
         speciality.backgroundColor = research!.speciality.color
         speciality.textColor = UIColor.black
         speciality.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline)
         speciality.round(corners: .allCorners, cornerRadius: 10)
         speciality.textAlignment = .center
-        if (research!.user.id == Auth.auth().currentUser!.uid) {
+        if (user_author == nil && research!.user.id == Auth.auth().currentUser!.uid) {
             configResearch(enabled: true)
         }
     }
@@ -72,5 +72,11 @@ class ShowResearchVC: UIViewController {
         let document_viewer_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "DocumentViewerVC") as? DocumentViewerVC
         document_viewer_vc!.document = research!.pdf
         navigationController?.pushViewController(document_viewer_vc!, animated: false)
+    }
+    
+    @IBAction func showUserProfile(_ sender: Any) {
+        let profile_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ProfileVC") as? ProfileVC
+        profile_vc!.user = research!.user
+        navigationController?.pushViewController(profile_vc!, animated: false)
     }
 }

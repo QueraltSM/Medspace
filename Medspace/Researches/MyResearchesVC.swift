@@ -16,12 +16,12 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
-        setHeader(largeTitles: true, gray: false)
         ref = Database.database().reference()
         researches_timeline.delegate = self
         researches_timeline.dataSource = self
         researches_timeline.separatorColor = UIColor.clear
         researches_timeline.rowHeight = UITableView.automaticDimension
+        setHeader(largeTitles: true, gray: false)
         getResearches()
         searchController.searchBar.delegate = self
         refreshControl.attributedTitle = NSAttributedString(string: "")
@@ -91,11 +91,12 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
             let date = dict["date"]! as! String
             let description = dict["description"]! as! String
             let userid = dict["user"]! as! String
-            if (userid == Auth.auth().currentUser!.uid) {
+            if userid == Auth.auth().currentUser!.uid {
                 ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
                     in
                     let dict = snapshot.value as? [String : AnyObject] ?? [:]
-                    let username = dict["fullname"]! as! String
+                    let username = dict["username"]! as! String
+                    let fullname = dict["fullname"]! as! String
                     var color = UIColor.init()
                     for s in specialities {
                         if s.name == speciality {
@@ -106,7 +107,7 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
                     storageRef.downloadURL { (url, error) in
                         self.stopAnimation()
                         if error == nil {
-                            self.researches.append(Research(id: child.key, pdf: url!, date: date, title: title, speciality: Speciality(name: speciality, color: color), description: description, user: User(id: userid, name: username)))
+                            self.researches.append(Research(id: child.key, pdf: url!, date: date, title: title, speciality: Speciality(name: speciality, color: color), description: description, user: User(id: userid, fullname: fullname, username: username)))
                             let sortedResearches = self.researches.sorted {
                                 $0.date > $1.date
                             }
@@ -175,7 +176,7 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         cell?.data_title.text = entry.title
         cell?.data_speciality.text = entry.speciality.name
         cell?.speciality_color = entry.speciality.color
-        cell?.data_user.text = "Posted by \(entry.user.name)"
+        cell?.data_user.text = ""
         return cell!
     }
     

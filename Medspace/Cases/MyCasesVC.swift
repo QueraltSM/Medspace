@@ -199,14 +199,15 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
                 ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
                     in
                     let dict = snapshot.value as? [String : AnyObject] ?? [:]
-                    let username = dict["fullname"]! as! String
+                    let username = dict["username"]! as! String
+                    let fullname = dict["fullname"]! as! String
                     var color = UIColor.init()
                     for s in specialities {
                         if s.name == speciality {
                             color = s.color!
                         }
                     }
-                    self.cases.append(Case(id: child.key, title: title, description: description, history: history, examination: examination, date: date, speciality: Speciality(name: speciality, color: color), user: User(id: userid, name: username)))
+                    self.cases.append(Case(id: child.key, title: title, description: description, history: history, examination: examination, date: date, speciality: Speciality(name: speciality, color: color), user: User(id: userid, fullname: fullname, username: username)))
                     let sortedResearches = self.cases.sorted {
                         $0.date > $1.date
                     }
@@ -261,7 +262,7 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
         cell?.data_title.text = entry.title
         cell?.data_speciality.text = entry.speciality.name
         cell?.speciality_color = entry.speciality.color
-        cell?.data_user.text = "Posted by \(entry.user.name)"
+        cell?.data_user.text = ""
         return cell!
     }
     

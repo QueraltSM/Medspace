@@ -25,7 +25,7 @@ class ShowDiscussionVC: UIViewController {
         speciality.text = discussion!.speciality.name.description
         speciality.backgroundColor = discussion!.speciality.color
         speciality.textColor = UIColor.black
-        user.text = "Posted by \(discussion!.user.name)"
+        user.text = "Posted by \(discussion!.user.username)"
         user.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline).italic()
         speciality.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline)
         speciality.round(corners: .allCorners, cornerRadius: 10)

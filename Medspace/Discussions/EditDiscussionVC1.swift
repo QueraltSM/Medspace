@@ -86,7 +86,7 @@ class EditDiscussionVC1: UIViewController, UITextViewDelegate, UIPickerViewDeleg
         if discussion!.title != discussion_title.text || discussion!.speciality.name != speciality_textfield.text {
             needsUpdate = true
         }
-        let final_discussion = Discussion(id: discussion!.id, title: discussion_title.text, description: discussion!.description, date: discussion!.date, speciality: Speciality(name: speciality_textfield!.text!, color:color), user: User(id: discussion!.user.id, name:discussion!.user.name))
+        let final_discussion = Discussion(id: discussion!.id, title: discussion_title.text, description: discussion!.description, date: discussion!.date, speciality: Speciality(name: speciality_textfield!.text!, color:color), user: User(id: discussion!.user.id, fullname:discussion!.user.fullname, username:discussion!.user.username))
         edit_discussion_vc2!.discussion = final_discussion
         edit_discussion_vc2?.needsUpdate = needsUpdate
         navigationController?.pushViewController(edit_discussion_vc2!, animated: false)

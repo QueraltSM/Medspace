@@ -3,7 +3,8 @@ import UIKit
 
 struct User {
     let id: String
-    let name: String
+    let fullname: String
+    let username: String
 }
 
 struct News {

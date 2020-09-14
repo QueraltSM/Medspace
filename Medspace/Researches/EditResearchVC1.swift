@@ -85,7 +85,7 @@ class EditResearchVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegat
         if file_is_updated || research!.title != research_title.text || research!.speciality.name != speciality_textfield.text {
             needsUpdate = true
         }
-        let final_research = Research(id: research!.id, pdf: documentURL, date: research!.date, title: research_title.text, speciality: Speciality(name: speciality_textfield!.text!, color:color), description: research!.description, user: User(id: research!.user.id, name:research!.user.name))
+        let final_research = Research(id: research!.id, pdf: documentURL, date: research!.date, title: research_title.text, speciality: Speciality(name: speciality_textfield!.text!, color:color), description: research!.description, user: User(id: research!.user.id, fullname: research!.user.fullname, username:research!.user.username))
         edit_research_vc2!.research = final_research
         edit_research_vc2?.file_is_updated = file_is_updated
         edit_research_vc2?.needsUpdate = needsUpdate

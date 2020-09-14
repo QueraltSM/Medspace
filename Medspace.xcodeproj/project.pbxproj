@@ -15,7 +15,7 @@
 		6208308024E9C14200291825 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6208307F24E9C14200291825 /* Assets.xcassets */; };
 		6208308324E9C14200291825 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6208308124E9C14200291825 /* LaunchScreen.storyboard */; };
 		621535AC24EACF14007B18BA /* SignupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621535AB24EACF14007B18BA /* SignupVC.swift */; };
-		621C6D40250E3B38001A345D /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621C6D3F250E3B38001A345D /* ProfileVC.swift */; };
+		621C6D40250E3B38001A345D /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621C6D3F250E3B38001A345D /* SettingsVC.swift */; };
 		6223B29824FA5634000F6E83 /* ShowNewsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6223B29724FA5634000F6E83 /* ShowNewsVC.swift */; };
 		6225EC9A24F07F2600231774 /* Menu.png in Resources */ = {isa = PBXBuildFile; fileRef = 6225EC9924F07F2600231774 /* Menu.png */; };
 		622691C524F8519100BDCB36 /* NewsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622691C424F8519100BDCB36 /* NewsVC.swift */; };
@@ -42,6 +42,8 @@
 		625DD09424F02199007F6994 /* DoctorMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625DD09324F02199007F6994 /* DoctorMenuVC.swift */; };
 		626EF45124F4319B00D8A59B /* CreateNewsVC2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626EF45024F4319B00D8A59B /* CreateNewsVC2.swift */; };
 		62956400250BBC5C00F9E666 /* EditDiscussionVC2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 629563FF250BBC5C00F9E666 /* EditDiscussionVC2.swift */; };
+		62AE62CD250FADDF008E2EBD /* Settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 62AE62CC250FADDD008E2EBD /* Settings.png */; };
+		62AE62CF250FAE3F008E2EBD /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AE62CE250FAE3F008E2EBD /* ProfileVC.swift */; };
 		62CEF60424F2756A00625E9C /* News.png in Resources */ = {isa = PBXBuildFile; fileRef = 62CEF60324F2756A00625E9C /* News.png */; };
 		62CEF61024F2792100625E9C /* MyPosts.png in Resources */ = {isa = PBXBuildFile; fileRef = 62CEF60F24F2792100625E9C /* MyPosts.png */; };
 		62D5FAB22502B1E800772594 /* CasesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D5FAB12502B1E800772594 /* CasesVC.swift */; };
@@ -82,7 +84,7 @@
 		6208308224E9C14200291825 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6208308424E9C14200291825 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		621535AB24EACF14007B18BA /* SignupVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupVC.swift; sourceTree = "<group>"; };
-		621C6D3F250E3B38001A345D /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
+		621C6D3F250E3B38001A345D /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
 		6223B29724FA5634000F6E83 /* ShowNewsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowNewsVC.swift; sourceTree = "<group>"; };
 		6225EC9924F07F2600231774 /* Menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Menu.png; sourceTree = "<group>"; };
 		622691C424F8519100BDCB36 /* NewsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsVC.swift; sourceTree = "<group>"; };
@@ -109,6 +111,8 @@
 		625DD09324F02199007F6994 /* DoctorMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorMenuVC.swift; sourceTree = "<group>"; };
 		626EF45024F4319B00D8A59B /* CreateNewsVC2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewsVC2.swift; sourceTree = "<group>"; };
 		629563FF250BBC5C00F9E666 /* EditDiscussionVC2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDiscussionVC2.swift; sourceTree = "<group>"; };
+		62AE62CC250FADDD008E2EBD /* Settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Settings.png; sourceTree = "<group>"; };
+		62AE62CE250FAE3F008E2EBD /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
 		62CEF60324F2756A00625E9C /* News.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = News.png; sourceTree = "<group>"; };
 		62CEF60F24F2792100625E9C /* MyPosts.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MyPosts.png; sourceTree = "<group>"; };
 		62D5FAB12502B1E800772594 /* CasesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CasesVC.swift; sourceTree = "<group>"; };
@@ -198,6 +202,7 @@
 			children = (
 				62FFEEF72508C0C3006A7BE8 /* Comments.png */,
 				6229EEC325080E9600EA7CC1 /* Cases.png */,
+				62AE62CC250FADDD008E2EBD /* Settings.png */,
 				6229EEC425080E9600EA7CC1 /* Discussions.png */,
 				6229EEC125080D8700EA7CC1 /* Researches.png */,
 				6229EEBB25080A0900EA7CC1 /* Logout.png */,
@@ -277,7 +282,8 @@
 				621535AB24EACF14007B18BA /* SignupVC.swift */,
 				62D8C7B324FE7C100031587E /* DataCell.swift */,
 				6229EEC72508123E00EA7CC1 /* Entities.swift */,
-				621C6D3F250E3B38001A345D /* ProfileVC.swift */,
+				621C6D3F250E3B38001A345D /* SettingsVC.swift */,
+				62AE62CE250FAE3F008E2EBD /* ProfileVC.swift */,
 			);
 			path = " Shared";
 			sourceTree = "<group>";
@@ -394,6 +400,7 @@
 				6208308324E9C14200291825 /* LaunchScreen.storyboard in Resources */,
 				62F119442507ACF2004A05AC /* Home.png in Resources */,
 				6246D9C424EA772A0057872E /* Logo.png in Resources */,
+				62AE62CD250FADDF008E2EBD /* Settings.png in Resources */,
 				62F1193A2507870B004A05AC /* GoogleService-Info.plist in Resources */,
 				6208308024E9C14200291825 /* Assets.xcassets in Resources */,
 				6208307B24E9C13A00291825 /* Main.storyboard in Resources */,
@@ -492,13 +499,14 @@
 				62D5FAB62502BB2500772594 /* CreateCaseVC2.swift in Sources */,
 				6208307E24E9C13A00291825 /* Medspace.xcdatamodeld in Sources */,
 				6246D17E2501770A0067A382 /* EditResearchVC2.swift in Sources */,
-				621C6D40250E3B38001A345D /* ProfileVC.swift in Sources */,
+				621C6D40250E3B38001A345D /* SettingsVC.swift in Sources */,
 				62956400250BBC5C00F9E666 /* EditDiscussionVC2.swift in Sources */,
 				62D8C7AD24FE75830031587E /* ResearchesVC.swift in Sources */,
 				625DD09224F0218B007F6994 /* AdminMenuVC.swift in Sources */,
 				62D5FAB42502B59100772594 /* CreateCaseVC1.swift in Sources */,
 				6246D9CA24EA7CD80057872E /* LoginVC.swift in Sources */,
 				6229EEC82508123E00EA7CC1 /* Entities.swift in Sources */,
+				62AE62CF250FAE3F008E2EBD /* ProfileVC.swift in Sources */,
 				625DD09424F02199007F6994 /* DoctorMenuVC.swift in Sources */,
 				62D9782D24FF9328002E4664 /* CreateResearchVC1.swift in Sources */,
 				6208307624E9C13A00291825 /* AppDelegate.swift in Sources */,

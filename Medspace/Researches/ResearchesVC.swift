@@ -1,6 +1,7 @@
 import UIKit
 import FirebaseDatabase
 import FirebaseStorage
+import FirebaseAuth
 
 class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchResultsUpdating {
     
@@ -8,10 +9,15 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     var researches = [Research]()
     var researchesMatched = [Research]()
     var searchController = UISearchController()
+    var user: User?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setHeader(largeTitles: true, gray: false)
+        if user != nil && user!.id != Auth.auth().currentUser!.uid {
+            self.title = "\(user!.username) researches"
+            setHeader(largeTitles: false, gray: false)
+        }
         setMenu()
         researches_timeline.delegate = self
         researches_timeline.dataSource = self
@@ -46,7 +52,8 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         researchesMatched = researches.filter({ (n) -> Bool in
             let match = n.title.lowercased().range(of: searchText.lowercased()) != nil ||
                 n.speciality.name.lowercased().range(of: searchText.lowercased()) != nil ||
-                n.user.name.lowercased().range(of: searchText.lowercased()) != nil
+                n.user.username.lowercased().range(of: searchText.lowercased()) != nil ||
+                n.user.fullname.lowercased().range(of: searchText.lowercased()) != nil
             return match
         })
     }
@@ -74,31 +81,34 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             let date = dict["date"]! as! String
             let description = dict["description"]! as! String
             let userid = dict["user"]! as! String
-            ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
-                in
-                let dict = snapshot.value as? [String : AnyObject] ?? [:]
-                let username = dict["fullname"]! as! String
-                var color = UIColor.init()
-                for s in specialities {
-                    if s.name == speciality {
-                        color = s.color!
-                    }
-                }
-                let storageRef = Storage.storage().reference().child("Researches/\(child.key)")
-                storageRef.downloadURL { (url, error) in
-                    self.stopAnimation()
-                    if error == nil {
-                        self.researches.append(Research(id: child.key, pdf: url!, date: date, title: title, speciality: Speciality(name: speciality, color: color), description: description, user: User(id: userid, name: username)))
-                        let sortedResearches = self.researches.sorted {
-                            $0.date > $1.date
+            if user != nil && user!.id == userid || user == nil {
+                ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
+                    in
+                    let dict = snapshot.value as? [String : AnyObject] ?? [:]
+                    let username = dict["username"]! as! String
+                    let fullname = dict["fullname"]! as! String
+                    var color = UIColor.init()
+                    for s in specialities {
+                        if s.name == speciality {
+                            color = s.color!
                         }
-                        self.researches = sortedResearches
-                        self.researches_timeline.reloadData()
-                    } else {
-                        self.showAlert(title: "Error", message: (error?.localizedDescription)!)
                     }
-                }
-            })
+                    let storageRef = Storage.storage().reference().child("Researches/\(child.key)")
+                    storageRef.downloadURL { (url, error) in
+                        self.stopAnimation()
+                        if error == nil {
+                            self.researches.append(Research(id: child.key, pdf: url!, date: date, title: title, speciality: Speciality(name: speciality, color: color), description: description, user: User(id: userid, fullname: fullname, username: username)))
+                            let sortedResearches = self.researches.sorted {
+                                $0.date > $1.date
+                            }
+                            self.researches = sortedResearches
+                            self.researches_timeline.reloadData()
+                        } else {
+                            self.showAlert(title: "Error", message: (error?.localizedDescription)!)
+                        }
+                    }
+                })
+            }
         }
     }
     
@@ -124,6 +134,9 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         let selected_research = researches[indexPath.row]
         let show_research_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowResearchVC") as? ShowResearchVC
         show_research_vc!.research = selected_research
+        if user != nil {
+            show_research_vc?.user_author = user
+        }
         navigationController?.pushViewController(show_research_vc!, animated: false)
     }
     
@@ -142,7 +155,7 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         cell?.data_title.text = entry.title
         cell?.data_speciality.text = entry.speciality.name
         cell?.speciality_color = entry.speciality.color
-        cell?.data_user.text = "Posted by \(entry.user.name)"
+        cell?.data_user.text = "Posted by \(entry.user.username)"
         return cell!
     }
     
