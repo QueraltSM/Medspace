@@ -14,7 +14,7 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     override func viewDidLoad() {
         super.viewDidLoad()
         setHeader(largeTitles: true, gray: false)
-        if user != nil && user!.id != Auth.auth().currentUser!.uid {
+        if user != nil && user!.id != uid {
             self.title = "\(user!.username) researches"
             setHeader(largeTitles: false, gray: false)
         }
@@ -155,7 +155,11 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         cell?.data_title.text = entry.title
         cell?.data_speciality.text = entry.speciality.name
         cell?.speciality_color = entry.speciality.color
-        cell?.data_user.text = "Posted by \(entry.user.username)"
+        var user_text = ""
+        if user == nil && entry.user.id != uid {
+            user_text = "Posted by \(entry.user.username)"
+        }
+        cell?.data_user.text = user_text
         return cell!
     }
     

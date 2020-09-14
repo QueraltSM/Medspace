@@ -28,7 +28,7 @@ class SettingsVC: UIViewController, UITextFieldDelegate {
         if usertype! == "Admin" {
             enableDeleteButton(isEnabled: false, borderColor: UIColor.lightGray, titleColor: UIColor.lightGray)
         }
-        ref.child("Users").child((Auth.auth().currentUser?.uid)!).observeSingleEvent(of: .value, with: { snapshot in
+        ref.child("Users/\(uid)").observeSingleEvent(of: .value, with: { snapshot in
             let value = snapshot.value as? NSDictionary
             self.account_name.text = value?["username"] as? String ?? ""
             self.full_name.text = value?["fullname"] as? String ?? ""
@@ -105,7 +105,7 @@ class SettingsVC: UIViewController, UITextFieldDelegate {
             while let rest = enumerator.nextObject() as? DataSnapshot {
                 let value = rest.value as? NSDictionary
                 let user = value?["user"] as? String ?? ""
-                if user == Auth.auth().currentUser!.uid {
+                if user == uid {
                     rest.ref.removeValue()
                 }
             }
@@ -113,9 +113,8 @@ class SettingsVC: UIViewController, UITextFieldDelegate {
     }
     
     func updateUserData() {
-        let uid = Auth.auth().currentUser!.uid
-        self.ref.child("Users/\(uid)/username").setValue(self.account_name.text)
-        self.ref.child("Users/\(uid)/fullname").setValue(self.full_name.text)
+        self.ref.child("Users/\(uid!)/username").setValue(self.account_name.text)
+        self.ref.child("Users/\(uid!)/fullname").setValue(self.full_name.text)
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
         alert.title = "Account has been updated!"
         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: {

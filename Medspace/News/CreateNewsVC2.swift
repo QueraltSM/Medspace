@@ -49,7 +49,7 @@ class CreateNewsVC2: UIViewController, UITextViewDelegate {
     
     func postNews() {
         self.startAnimation()
-        let user = Auth.auth().currentUser?.uid
+        let user = uid
         let now = Date().description
         let path = "News/\(now)::\(user!)"
         guard let imageData: Data = image_news!.jpegData(compressionQuality: 0.1) else {

@@ -91,7 +91,7 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
             let date = dict["date"]! as! String
             let description = dict["description"]! as! String
             let userid = dict["user"]! as! String
-            if userid == Auth.auth().currentUser!.uid {
+            if userid == uid {
                 ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
                     in
                     let dict = snapshot.value as? [String : AnyObject] ?? [:]
@@ -114,6 +114,7 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
                             self.researches = sortedResearches
                             self.researches_timeline.reloadData()
                             self.turnEditState(enabled: true, title: "Edit")
+                            self.researches_timeline.restore()
                         } else {
                             self.showAlert(title: "Error", message: error!.localizedDescription)
                         }
@@ -123,18 +124,15 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
                 self.stopAnimation()
             }
         }
+        if (self.researches.count == 0) {
+            self.researches_timeline.setEmptyView(title: "You have not post a research yet\n\n:(")
+            self.turnEditState(enabled: false, title: "")
+        }
     }
     
     func getResearches() {
         ref.child("Researches").observeSingleEvent(of: .value, with: { snapshot in
-            if (snapshot.children.allObjects.count == 0) {
-                self.researches_timeline.setEmptyView(title: "You have not post a research yet\n\n:(")
-                self.turnEditState(enabled: false, title: "")
-            } else {
-                self.researches_timeline.restore()
-                self.loopResearches(ref: self.ref, snapshot: snapshot)
-            }
-            
+            self.loopResearches(ref: self.ref, snapshot: snapshot)
         })
     }
     

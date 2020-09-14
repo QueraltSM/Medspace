@@ -92,7 +92,7 @@ class CreateCaseVC2: UIViewController, UITextViewDelegate, UIPickerViewDelegate,
             alert.title = "Do you want to post the clinical case?"
             alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
                 action in
-                let user = Auth.auth().currentUser?.uid
+                let user = uid
                 let now = Date().description
                 let path = "Cases/\(now)::\(user!)"
                 self.postCase(path: path, title: self.case_title, description: self.case_description, history: self.history_view.text!, examination: self.examination_view.text!, speciality: self.speciality_textfield.text!, user: user!, date: now)

@@ -39,7 +39,6 @@ class EditResearchVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegat
     }
     
     @IBAction func viewDocument(_ sender: Any) {
-        print("doc url = \(documentURL.absoluteString)")
         let document_viewer_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "DocumentViewerVC") as? DocumentViewerVC
         document_viewer_vc!.document = documentURL
         navigationController?.pushViewController(document_viewer_vc!, animated: false)

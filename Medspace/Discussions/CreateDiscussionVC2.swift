@@ -37,9 +37,9 @@ class CreateDiscussionVC2: UIViewController, UITextViewDelegate, UITextFieldDele
             alert.title = "Do you want to post the discussion?"
             alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
                 action in
-                let user = Auth.auth().currentUser?.uid
+                let user = uid
                 let now = Date().description
-                let path = "Discussions/\(now)::\(user!)"
+                let path = "Discussions/\(now)::\(uid!)"
                 self.postDiscussion(path: path, title: self.title_discussion, description: self.discussion_description.text!, speciality: self.speciality, user: user!, date: now)
                 self.presentVC(segue: "MyDiscussionsVC")
             }))

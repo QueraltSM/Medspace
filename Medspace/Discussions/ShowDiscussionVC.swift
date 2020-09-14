@@ -12,25 +12,27 @@ class ShowDiscussionVC: UIViewController {
     @IBOutlet weak var speciality: UILabel!
     @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var deleteButton: UIBarButtonItem!
-    @IBOutlet weak var user: UILabel!
+    @IBOutlet weak var user: UIButton!
+    
+    var user_author: User?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
         setHeader(largeTitles: false, gray: false)
         scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: discussion_description.bottomAnchor).isActive = true
+        user.setTitle("Posted by \(discussion!.user.username)", for: .normal)
+        user.titleLabel!.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline).italic()
         discussion_title.text = discussion!.title
         discussion_description.text = discussion!.description
         date.text = discussion!.date
         speciality.text = discussion!.speciality.name.description
         speciality.backgroundColor = discussion!.speciality.color
         speciality.textColor = UIColor.black
-        user.text = "Posted by \(discussion!.user.username)"
-        user.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline).italic()
         speciality.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline)
         speciality.round(corners: .allCorners, cornerRadius: 10)
         speciality.textAlignment = .center
-        if (discussion!.user.id == Auth.auth().currentUser!.uid) {
+        if (user_author == nil && discussion!.user.id == uid) {
             configDiscussion(enabled: true)
         }
     }
@@ -75,8 +77,11 @@ class ShowDiscussionVC: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    
     @IBAction func showComments(_ sender: Any) {
         print("show comments")
+    }
+    
+    @IBAction func showUserProfile(_ sender: Any) {
+        self.presentUserProfileVC(user: discussion!.user)
     }
 }

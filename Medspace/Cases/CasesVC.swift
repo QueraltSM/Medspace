@@ -1,6 +1,7 @@
 import UIKit
 import FirebaseDatabase
 import FirebaseStorage
+import FirebaseAuth
 
 class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchResultsUpdating {
 
@@ -8,10 +9,15 @@ class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     var casesMatched = [Case]()
     var searchController = UISearchController()
     @IBOutlet weak var cases_timeline: UITableView!
+    var user: User?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setHeader(largeTitles: true, gray: false)
+        if user != nil && user!.id != uid {
+            self.title = "\(user!.username) cases"
+            setHeader(largeTitles: false, gray: false)
+        }
         setMenu()
         cases_timeline.delegate = self
         cases_timeline.dataSource = self
@@ -78,25 +84,27 @@ class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
             let date = dict["date"]! as! String
             let final_date = self.getFormattedDate(date: date)
             let userid = dict["user"]! as! String
-            ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
-                in
-                let dict = snapshot.value as? [String : AnyObject] ?? [:]
-                let username = dict["username"]! as! String
-                let fullname = dict["fullname"]! as! String
-                var color = UIColor.init()
-                for s in specialities {
-                    if s.name == speciality {
-                        color = s.color!
+            if user != nil && user!.id == userid || user == nil {
+                ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
+                    in
+                    let dict = snapshot.value as? [String : AnyObject] ?? [:]
+                    let username = dict["username"]! as! String
+                    let fullname = dict["fullname"]! as! String
+                    var color = UIColor.init()
+                    for s in specialities {
+                        if s.name == speciality {
+                            color = s.color!
+                        }
                     }
-                }
-                self.cases.append(Case(id: child.key, title: title, description: description, history: history, examination: examination, date: final_date, speciality: Speciality(name: speciality, color: color), user: User(id: userid, fullname: fullname, username: username)))
-                let sortedCases = self.cases.sorted {
-                    $0.date > $1.date
-                }
-                self.cases = sortedCases
-                self.cases_timeline.reloadData()
-                self.stopAnimation()
-            })
+                    self.cases.append(Case(id: child.key, title: title, description: description, history: history, examination: examination, date: final_date, speciality: Speciality(name: speciality, color: color), user: User(id: userid, fullname: fullname, username: username)))
+                    let sortedCases = self.cases.sorted {
+                        $0.date > $1.date
+                    }
+                    self.cases = sortedCases
+                    self.cases_timeline.reloadData()
+                    self.stopAnimation()
+                })
+            }
         }
     }
     
@@ -125,6 +133,9 @@ class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
         let selected_case = cases[indexPath.row]
         let show_case_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowCaseVC") as? ShowCaseVC
         show_case_vc!.clinical_case = selected_case
+        if user != nil {
+            show_case_vc?.user_author = user
+        }
         navigationController?.pushViewController(show_case_vc!, animated: false)
     }
     
@@ -143,7 +154,11 @@ class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
         cell?.data_title.text = entry.title
         cell?.data_speciality.text = entry.speciality.name
         cell?.speciality_color = entry.speciality.color
-        cell?.data_user.text = "Posted by \(entry.user.username)"
+        var user_text = ""
+        if user == nil && entry.user.id != uid {
+            user_text = "Posted by \(entry.user.username)"
+        }
+        cell?.data_user.text = user_text
         return cell!
     }
     

@@ -12,17 +12,20 @@ class ShowCaseVC: UIViewController {
     @IBOutlet weak var speciality: UILabel!
     @IBOutlet weak var case_description: UILabel!
     @IBOutlet weak var case_title: UILabel!
-    @IBOutlet weak var user: UILabel!
     @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var deleteButton: UIBarButtonItem!
     @IBOutlet weak var description_label: UILabel!
     @IBOutlet weak var history_label: UILabel!
     @IBOutlet weak var examination_label: UILabel!
+    @IBOutlet weak var user: UIButton!
+    var user_author: User?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
         setHeader(largeTitles: false, gray: false)
+        user.setTitle("Posted by \(clinical_case!.user.username)", for: .normal)
+        user.titleLabel!.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline).italic()
         scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: examination.bottomAnchor).isActive = true
         case_title.text = clinical_case!.title
         case_description.text = clinical_case!.description
@@ -32,15 +35,13 @@ class ShowCaseVC: UIViewController {
         history.text = clinical_case!.history
         examination.text = clinical_case!.examination
         date.text = clinical_case!.date
-        user.text = "Posted by \(clinical_case!.user.username)"
-        user.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline).italic()
         speciality.text = clinical_case!.speciality.name.description
         speciality.backgroundColor = clinical_case!.speciality.color
         speciality.textColor = UIColor.black
         speciality.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline)
         speciality.round(corners: .allCorners, cornerRadius: 10)
         speciality.textAlignment = .center
-        if (clinical_case?.user.id == Auth.auth().currentUser?.uid) {
+        if (user_author == nil && clinical_case?.user.id == uid) {
             configCase(enabled: true)
         }
     }
@@ -75,5 +76,9 @@ class ShowCaseVC: UIViewController {
 
     @IBAction func showComments(_ sender: Any) {
         print("show comments")
+    }
+    
+    @IBAction func showUserProfile(_ sender: Any) {
+        self.presentUserProfileVC(user: clinical_case!.user)
     }
 }

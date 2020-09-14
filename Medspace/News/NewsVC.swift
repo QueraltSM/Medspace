@@ -1,6 +1,7 @@
 import UIKit
 import FirebaseDatabase
 import FirebaseStorage
+import FirebaseAuth
 
 class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchResultsUpdating {
     
@@ -13,6 +14,7 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISe
     override func viewDidLoad() {
         super.viewDidLoad()
         setHeader(largeTitles: true, gray: false)
+        uid = Auth.auth().currentUser!.uid
         usertype = UserDefaults.standard.string(forKey: "usertype")
         fullname = UserDefaults.standard.string(forKey: "fullname")
         username = UserDefaults.standard.string(forKey: "username")

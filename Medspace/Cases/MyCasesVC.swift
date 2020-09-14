@@ -195,7 +195,7 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
             let speciality = dict["speciality"]! as! String
             let date = dict["date"]! as! String
             let userid = dict["user"]! as! String
-            if (userid == Auth.auth().currentUser!.uid) {
+            if (userid == uid) {
                 ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
                     in
                     let dict = snapshot.value as? [String : AnyObject] ?? [:]
@@ -214,23 +214,22 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
                     self.cases = sortedResearches
                     self.turnEditState(enabled: true, title: "Edit")
                     self.cases_timeline.reloadData()
+                    self.cases_timeline.restore()
                     self.stopAnimation()
                 })
             } else {
                 self.stopAnimation()
             }
         }
+        if (self.cases.count == 0) {
+            self.cases_timeline.setEmptyView(title: "You have not post a case yet\n\n:(")
+            self.turnEditState(enabled: false, title: "")
+        }
     }
     
     func getCases() {
         ref.child("Cases").observeSingleEvent(of: .value, with: { snapshot in
-            if (snapshot.children.allObjects.count == 0) {
-                self.cases_timeline.setEmptyView(title: "You have not post a case yet\n\n:(")
-                self.turnEditState(enabled: false, title: "")
-            } else {
-                self.cases_timeline.restore()
-                self.loopCases(ref: self.ref, snapshot: snapshot)
-            }
+            self.loopCases(ref: self.ref, snapshot: snapshot)
         })
     }
     

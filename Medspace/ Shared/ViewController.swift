@@ -4,6 +4,7 @@ import FirebaseAuth
 
 var admin_menu : AdminMenuVC!
 var doctor_menu: DoctorMenuVC!
+var uid: String!
 var usertype: String!
 var username: String!
 var fullname: String!
@@ -380,6 +381,12 @@ extension UIViewController {
         } else {
             self.presentVC(segue: "LoginVC")
         }
+    }
+    
+    func presentUserProfileVC(user: User) {
+        let profile_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ProfileVC") as? ProfileVC
+        profile_vc!.user = user
+        navigationController?.pushViewController(profile_vc!, animated: false)
     }
 }
 

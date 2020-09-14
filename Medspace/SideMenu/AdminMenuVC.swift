@@ -15,8 +15,8 @@ class AdminMenuVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
             CollapsableViewModel(label: "Clinical cases", image: UIImage(named: "Cases.png"), segue:"CasesVC"),
             CollapsableViewModel(label: "Discussions", image: UIImage(named: "Discussions.png"), segue:"DiscussionsVC"),
             CollapsableViewModel(label: "Researches", image: UIImage(named: "Researches.png"), segue:"ResearchesVC")]),
-        CollapsableViewModel(label: "Account settings", image: UIImage(named: "Settings.png"), segue:"SettingsVC"),
         CollapsableViewModel(label: "Profile", image: UIImage(named: "Account.png"), segue:"ProfileVC"),
+        CollapsableViewModel(label: "Account settings", image: UIImage(named: "Settings.png"), segue:"SettingsVC"),
         CollapsableViewModel(label: "Logout", image: UIImage(named: "Logout.png"))]
     var displayedRows: [CollapsableViewModel] = []
     

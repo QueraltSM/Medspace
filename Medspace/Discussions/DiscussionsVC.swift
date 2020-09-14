@@ -1,5 +1,6 @@
 import UIKit
 import FirebaseDatabase
+import FirebaseAuth
 
 class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchResultsUpdating {
     
@@ -7,11 +8,16 @@ class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     var searchController = UISearchController()
     var discussions = [Discussion]()
     var discussionsMatched = [Discussion]()
+    var user: User?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
         setHeader(largeTitles: true, gray: false)
+        if user != nil && user!.id != uid {
+            self.title = "\(user!.username) discussions"
+            setHeader(largeTitles: false, gray: false)
+        }
         discussions_timeline.delegate = self
         discussions_timeline.dataSource = self
         discussions_timeline.separatorColor = UIColor.clear
@@ -36,25 +42,27 @@ class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
             let speciality = dict["speciality"]! as! String
             let date = dict["date"]! as! String
             let userid = dict["user"]! as! String
-            ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
-                in
-                let dict = snapshot.value as? [String : AnyObject] ?? [:]
-                let username = dict["username"]! as! String
-                let fullname = dict["fullname"]! as! String
-                var color = UIColor.init()
-                for s in specialities {
-                    if s.name == speciality {
-                        color = s.color!
+            if user != nil && user!.id == userid || user == nil {
+                ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
+                    in
+                    let dict = snapshot.value as? [String : AnyObject] ?? [:]
+                    let username = dict["username"]! as! String
+                    let fullname = dict["fullname"]! as! String
+                    var color = UIColor.init()
+                    for s in specialities {
+                        if s.name == speciality {
+                            color = s.color!
+                        }
                     }
-                }
-                self.discussions.append(Discussion(id: child.key, title: title, description: description, date: date, speciality: Speciality(name: speciality, color: color), user: User(id: userid, fullname: fullname, username: username)))
-                let sortedDiscussions = self.discussions.sorted {
-                    $0.date > $1.date
-                }
-                self.discussions = sortedDiscussions
-                self.discussions_timeline.reloadData()
-                self.stopAnimation()
-            })
+                    self.discussions.append(Discussion(id: child.key, title: title, description: description, date: date, speciality: Speciality(name: speciality, color: color), user: User(id: userid, fullname: fullname, username: username)))
+                    let sortedDiscussions = self.discussions.sorted {
+                        $0.date > $1.date
+                    }
+                    self.discussions = sortedDiscussions
+                    self.discussions_timeline.reloadData()
+                    self.stopAnimation()
+                })
+            }
         }
     }
     
@@ -124,6 +132,9 @@ class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         let selected_discussion = discussions[indexPath.row]
         let show_discussion_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowDiscussionVC") as? ShowDiscussionVC
         show_discussion_vc!.discussion = selected_discussion
+        if user != nil {
+            show_discussion_vc?.user_author = user
+        }
         navigationController?.pushViewController(show_discussion_vc!, animated: false)
     }
     
@@ -142,7 +153,11 @@ class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         cell?.data_title.text = entry.title
         cell?.data_speciality.text = entry.speciality.name
         cell?.speciality_color = entry.speciality.color
-        cell?.data_user.text = "Posted by \(entry.user.username)"
+        var user_text = ""
+        if user == nil && entry.user.id != uid {
+            user_text = "Posted by \(entry.user.username)"
+        }
+        cell?.data_user.text = user_text
         return cell!
     }
 }

@@ -49,7 +49,7 @@ class CreateResearchVC2: UIViewController, UITextViewDelegate {
     
     func postResearch() {
         self.startAnimation()
-        let user = Auth.auth().currentUser?.uid
+        let user = uid
         let now = Date().description
         let path = "Researches/\(now)::\(user!)"
         Storage.storage().reference().child(path).putFile(from: self.document_research!, metadata: nil) { metadata, error in

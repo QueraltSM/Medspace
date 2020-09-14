@@ -31,7 +31,8 @@ class LoginVC: UIViewController {
                         let usertype = value?["type"] as? String ?? ""
                         let fullname = value?["fullname"] as? String ?? ""
                         let username = value?["username"] as? String ?? ""
-                        self.setUserData(fullname: fullname, usertype: usertype, username: username, isUserLoggedIn: true)
+                        let uid = snapshot.key
+                    self.setUserData(fullname: fullname, usertype: usertype, username: username, isUserLoggedIn: true)
                 })
             }
         }

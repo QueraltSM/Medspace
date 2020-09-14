@@ -30,14 +30,9 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     func getDiscussions() {
+        self.discussions_timeline.setEmptyView(title: "You have not post a discussion yet\n\n:(")
         ref.child("Discussions").observeSingleEvent(of: .value, with: { snapshot in
-            if (snapshot.children.allObjects.count == 0) {
-                self.turnEditState(enabled: false, title: "")
-                self.discussions_timeline.setEmptyView(title: "You have not post a discussion yet\n\n:(")
-            } else {
-                self.discussions_timeline.restore()
-                self.loopDiscussions(ref: self.ref, snapshot: snapshot)
-            }
+            self.loopDiscussions(ref: self.ref, snapshot: snapshot)
         })
     }
     
@@ -50,7 +45,7 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
             let speciality = dict["speciality"]! as! String
             let date = dict["date"]! as! String
             let userid = dict["user"]! as! String
-            if (userid == Auth.auth().currentUser!.uid) {
+            if (userid == uid) {
                 ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
                     in
                     let dict = snapshot.value as? [String : AnyObject] ?? [:]
@@ -69,10 +64,15 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                     self.discussions = sortedDiscussions
                     self.discussions_timeline.reloadData()
                     self.turnEditState(enabled: true, title: "Edit")
+                    self.discussions_timeline.restore()
                     self.stopAnimation()
                 })
             } else {
                 self.stopAnimation()
+            }
+            if (self.discussions.count == 0) {
+                self.discussions_timeline.setEmptyView(title: "You have not post a discussion yet\n\n:(")
+                self.turnEditState(enabled: false, title: "")
             }
         }
     }

@@ -98,7 +98,7 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
                 let description = dict["description"]! as! String
                 let pic = UIImage(data: data!)
                 let userid = dict["user"]! as! String
-                if (userid == Auth.auth().currentUser!.uid) {
+                if (userid == uid) {
                     ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
                         in
                         let dict = snapshot.value as? [String : AnyObject] ?? [:]
@@ -118,23 +118,22 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
                         self.news_timeline.reloadData()
                         self.stopAnimation()
                         self.turnEditState(enabled: true, title: "Edit")
+                        self.news_timeline.restore()
                     })
                 } else {
                     self.stopAnimation()
                 }
             }
         }
+        if (self.news.count == 0) {
+            self.news_timeline.setEmptyView(title: "You have not post a news yet\n\n:(")
+            self.turnEditState(enabled: false, title: "")
+        }
     }
     
     func getNews() {
         ref.child("News").observeSingleEvent(of: .value, with: { snapshot in
-            if (snapshot.children.allObjects.count == 0) {
-                self.news_timeline.setEmptyView(title: "You have not post a news yet\n\n:(")
-                self.turnEditState(enabled: false, title: "")
-            } else {
-                self.news_timeline.restore()
-                self.loopNews(ref: self.ref, snapshot: snapshot)
-            }
+            self.loopNews(ref: self.ref, snapshot: snapshot)
         })
     }
     

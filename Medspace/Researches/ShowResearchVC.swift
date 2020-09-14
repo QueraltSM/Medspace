@@ -30,7 +30,7 @@ class ShowResearchVC: UIViewController {
         speciality.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline)
         speciality.round(corners: .allCorners, cornerRadius: 10)
         speciality.textAlignment = .center
-        if (user_author == nil && research!.user.id == Auth.auth().currentUser!.uid) {
+        if (user_author == nil && research!.user.id == uid) {
             configResearch(enabled: true)
         }
     }
@@ -75,8 +75,6 @@ class ShowResearchVC: UIViewController {
     }
     
     @IBAction func showUserProfile(_ sender: Any) {
-        let profile_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ProfileVC") as? ProfileVC
-        profile_vc!.user = research!.user
-        navigationController?.pushViewController(profile_vc!, animated: false)
+        self.presentUserProfileVC(user: research!.user)
     }
 }

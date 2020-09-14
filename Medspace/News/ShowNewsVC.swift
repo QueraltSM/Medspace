@@ -28,7 +28,7 @@ class ShowNewsVC: UIViewController {
         speciality.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline)
         speciality.round(corners: .allCorners, cornerRadius: 10)
         speciality.textAlignment = .center
-        if (news?.user.id == Auth.auth().currentUser?.uid) {
+        if (news?.user.id == uid) {
             configNews(enabled: true)
         }
     }
