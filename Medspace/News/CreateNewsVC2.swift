@@ -15,10 +15,10 @@ class CreateNewsVC2: UIViewController, UITextViewDelegate {
         setHeader(largeTitles: false, gray: true)
         description_news.delegate = self
         scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: description_news.bottomAnchor).isActive = true
+        scrollview.backgroundColor = UIColor.init(hexString: "#f2f2f2")
         description_news.text = "An antibody test for the virus that causes COVID-19, developed by researchers at The University of Texas at Austin in collaboration with Houston Methodist and other institutions, is more accurate and can handle a much larger number of donor samples at lower overall cost than standard antibody tests currently in use. In the near term, the test can be used to accurately identify the best donors for convalescent plasma therapy and measure how well candidate vaccines and other therapies elicit an immune response..."
         description_news.textColor = UIColor.gray
         setMenu()
-        scrollview.backgroundColor = UIColor.init(hexString: "#f2f2f2")
     }
 
     func textViewDidBeginEditing(_ textView: UITextView) {

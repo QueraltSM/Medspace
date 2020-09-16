@@ -28,7 +28,7 @@ class SettingsVC: UIViewController, UITextFieldDelegate {
         if usertype! == "Admin" {
             enableDeleteButton(isEnabled: false, borderColor: UIColor.lightGray, titleColor: UIColor.lightGray)
         }
-        ref.child("Users/\(uid)").observeSingleEvent(of: .value, with: { snapshot in
+        ref.child("Users/\(uid!)").observeSingleEvent(of: .value, with: { snapshot in
             let value = snapshot.value as? NSDictionary
             self.account_name.text = value?["username"] as? String ?? ""
             self.full_name.text = value?["fullname"] as? String ?? ""
@@ -142,23 +142,30 @@ class SettingsVC: UIViewController, UITextFieldDelegate {
         if full_name.textColor == UIColor.black && !full_name.text!.isEmpty && full_name.text == fullname {
             error += "Full name has not been changed"
         }
-        Database.database().reference().child("Users").observeSingleEvent(of: .value, with: { snapshot in
-            let enumerator = snapshot.children
-            var taken = false
-            while let rest = enumerator.nextObject() as? DataSnapshot {
-                let value = rest.value as? NSDictionary
-                let user = value!["username"] as? String ?? ""
-                if user == self.account_name.text! {
-                    taken = true
-                    self.showAlert(title: "Error", message: "Username is already taken")
+        if account_name.textColor == UIColor.gray && full_name.textColor == UIColor.gray  {
+            error += "You have not updated the fields"
+        }
+        if error == "" {
+            Database.database().reference().child("Users").observeSingleEvent(of: .value, with: { snapshot in
+                let enumerator = snapshot.children
+                var taken = false
+                while let rest = enumerator.nextObject() as? DataSnapshot {
+                    let value = rest.value as? NSDictionary
+                    let user = value!["username"] as? String ?? ""
+                    if user.lowercased() == self.account_name.text!.lowercased() {
+                        taken = true
+                        self.showAlert(title: "Error", message: "Username is already taken")
+                    }
                 }
-            }
-            if error == "" && !self.account_name.text!.isEmpty && !taken {
-                self.updateUserData()
-            } else {
-                self.showAlert(title: "Error", message: error)
-            }
-        })
+                if !self.account_name.text!.isEmpty && !taken {
+                    self.updateUserData()
+                } else {
+                    self.showAlert(title: "Error", message: error)
+                }
+            })
+        } else {
+            self.showAlert(title: "Error", message: error)
+        }
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {

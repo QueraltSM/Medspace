@@ -363,11 +363,13 @@ extension UIViewController {
     func setHeader(largeTitles: Bool, gray: Bool){
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.prefersLargeTitles = largeTitles
-         navigationController?.navigationBar.isTranslucent = false
+        navigationController?.navigationBar.isTranslucent = false
+        navigationController?.navigationBar.tintColor = UIColor.black
         var color = UIColor.white
         if gray {
             color = UIColor.init(hexString: "#f2f2f2")
         }
+        navigationController?.navigationBar.barTintColor = color
         navigationController?.navigationBar.backgroundColor = color
     }
     
@@ -376,11 +378,11 @@ extension UIViewController {
         UserDefaults.standard.set(fullname, forKey: "fullname")
         UserDefaults.standard.set(username, forKey: "username")
         UserDefaults.standard.set(isUserLoggedIn, forKey: "isUserLoggedIn")
+        var segue = "LoginVC"
         if isUserLoggedIn {
-            self.presentVC(segue: "NewsVC")
-        } else {
-            self.presentVC(segue: "LoginVC")
+            segue = "NewsVC"
         }
+        self.presentVC(segue: segue)
     }
     
     func presentUserProfileVC(user: User) {

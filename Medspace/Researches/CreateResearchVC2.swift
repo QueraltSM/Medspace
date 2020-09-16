@@ -11,29 +11,30 @@ class CreateResearchVC2: UIViewController, UITextViewDelegate {
     var speciality: String = ""
     @IBOutlet weak var research_description: UITextView!
     var ref: DatabaseReference!
+    @IBOutlet weak var scrollview: UIScrollView!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setHeader(largeTitles: false, gray: false)
+        scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: research_description.bottomAnchor).isActive = true
+        scrollview.backgroundColor = UIColor.init(hexString: "#f2f2f2")
         research_description.delegate = self
         ref = Database.database().reference()
-        research_description.customTextView(view_text:"Write a description of the research...",view_color:UIColor.gray, view_font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body), view_scroll: true)
+        research_description.text = "In less than half a century, allergy, originally perceived as a rare disease, has become a major public health threat, today affecting the lives of more than 60 million people in Europe, and probably close to one billion worldwide, thereby heavily impacting the budgets of public health systems. More disturbingly, its prevalence and impact are on the rise, a development that has been associated with environmental and lifestyle changes accompanying the continuous process of urbanization and globalization. Therefore, there is an urgent need to prioritize and concert research efforts in the field of allergy, in order to achieve sustainable results on prevention, diagnosis and treatment of this most prevalent chronic disease of the 21st century."
+        research_description.textColor = UIColor.gray
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == UIColor.gray {
-            textView.customTextView(view_text:"",view_color:UIColor.black, view_font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body), view_scroll: true)
+            textView.textColor = UIColor.black
+            textView.text = ""
         }
     }
     
-    func textViewDidEndEditing(_ textView: UITextView) {
-        if textView.text.isEmpty {
-            textView.customTextView(view_text:"Write a description of the research...",view_color:UIColor.gray, view_font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body), view_scroll: true)
-        }
-    }
     
     @IBAction func askPost(_ sender: Any) {
-        if (research_description.textColor == UIColor.gray || research_description.text.isEmpty) {
+        if research_description.textColor == UIColor.gray || research_description.text.isEmpty {
             showAlert(title: "Error", message: "Write a description")
         } else {
             let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)

@@ -59,6 +59,10 @@ class CreateNewsVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate,
     }
     
     @objc func action() {
+        if selectedSpeciality == nil {
+            selectedSpeciality = specialities[specialities.count / 2].name
+            speciality_textfield.text = specialities[specialities.count / 2].name
+        }
         speciality_textfield.textColor = UIColor.black
         view.endEditing(true)
     }
@@ -105,13 +109,13 @@ class CreateNewsVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate,
     
     @IBAction func savePost(_ sender: Any) {
         var error = ""
-        if (image_header_invalid) {
+        if image_header_invalid {
             error += "Choose a valid image\n"
         }
-        if (titleview.textColor == UIColor.gray || titleview.text.isEmpty) {
+        if titleview.textColor == UIColor.gray || titleview.text.isEmpty {
             error += "Write a title\n"
         }
-        if (speciality_textfield.textColor == UIColor.gray) {
+        if speciality_textfield.textColor == UIColor.gray {
             error += "Select a speciality"
         }
         if error == "" {

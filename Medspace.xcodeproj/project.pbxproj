@@ -37,7 +37,7 @@
 		6246D9CA24EA7CD80057872E /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6246D9C924EA7CD80057872E /* LoginVC.swift */; };
 		625D738D2506304F00104DBB /* DiscussionsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625D738C2506304F00104DBB /* DiscussionsVC.swift */; };
 		625D738F2506305A00104DBB /* MyDiscussionsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625D738E2506305A00104DBB /* MyDiscussionsVC.swift */; };
-		625D7391250636FF00104DBB /* CreateDiscussionVC1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625D7390250636FF00104DBB /* CreateDiscussionVC1.swift */; };
+		625D7391250636FF00104DBB /* CreateDiscussionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625D7390250636FF00104DBB /* CreateDiscussionVC.swift */; };
 		625DD09224F0218B007F6994 /* AdminMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625DD09124F0218B007F6994 /* AdminMenuVC.swift */; };
 		625DD09424F02199007F6994 /* DoctorMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625DD09324F02199007F6994 /* DoctorMenuVC.swift */; };
 		626EF45124F4319B00D8A59B /* CreateNewsVC2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626EF45024F4319B00D8A59B /* CreateNewsVC2.swift */; };
@@ -54,7 +54,6 @@
 		62D9782D24FF9328002E4664 /* CreateResearchVC1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D9782C24FF9328002E4664 /* CreateResearchVC1.swift */; };
 		62DF80CB24F04B6E00E758E9 /* CollapsibleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DF80CA24F04B6E00E758E9 /* CollapsibleTableViewCell.swift */; };
 		62E3D3B32503E3D900BB9CE8 /* ShowCaseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E3D3B22503E3D900BB9CE8 /* ShowCaseVC.swift */; };
-		62EBD0AD250B6B7000ACB281 /* CreateDiscussionVC2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62EBD0AC250B6B7000ACB281 /* CreateDiscussionVC2.swift */; };
 		62EC96762500254600E0B56E /* ShowResearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62EC96752500254600E0B56E /* ShowResearchVC.swift */; };
 		62EC967825002E7000E0B56E /* DocumentViewerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62EC967725002E7000E0B56E /* DocumentViewerVC.swift */; };
 		62F1193A2507870B004A05AC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 62F119392507870B004A05AC /* GoogleService-Info.plist */; };
@@ -106,7 +105,7 @@
 		6246D9C924EA7CD80057872E /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		625D738C2506304F00104DBB /* DiscussionsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionsVC.swift; sourceTree = "<group>"; };
 		625D738E2506305A00104DBB /* MyDiscussionsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDiscussionsVC.swift; sourceTree = "<group>"; };
-		625D7390250636FF00104DBB /* CreateDiscussionVC1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDiscussionVC1.swift; sourceTree = "<group>"; };
+		625D7390250636FF00104DBB /* CreateDiscussionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDiscussionVC.swift; sourceTree = "<group>"; };
 		625DD09124F0218B007F6994 /* AdminMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminMenuVC.swift; sourceTree = "<group>"; };
 		625DD09324F02199007F6994 /* DoctorMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorMenuVC.swift; sourceTree = "<group>"; };
 		626EF45024F4319B00D8A59B /* CreateNewsVC2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewsVC2.swift; sourceTree = "<group>"; };
@@ -123,7 +122,6 @@
 		62D9782C24FF9328002E4664 /* CreateResearchVC1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateResearchVC1.swift; sourceTree = "<group>"; };
 		62DF80CA24F04B6E00E758E9 /* CollapsibleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollapsibleTableViewCell.swift; sourceTree = "<group>"; };
 		62E3D3B22503E3D900BB9CE8 /* ShowCaseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowCaseVC.swift; sourceTree = "<group>"; };
-		62EBD0AC250B6B7000ACB281 /* CreateDiscussionVC2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDiscussionVC2.swift; sourceTree = "<group>"; };
 		62EC96752500254600E0B56E /* ShowResearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowResearchVC.swift; sourceTree = "<group>"; };
 		62EC967725002E7000E0B56E /* DocumentViewerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentViewerVC.swift; sourceTree = "<group>"; };
 		62F119392507870B004A05AC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -226,10 +224,9 @@
 			children = (
 				625D738C2506304F00104DBB /* DiscussionsVC.swift */,
 				625D738E2506305A00104DBB /* MyDiscussionsVC.swift */,
-				625D7390250636FF00104DBB /* CreateDiscussionVC1.swift */,
+				625D7390250636FF00104DBB /* CreateDiscussionVC.swift */,
 				62F9F874250651AF0015E30C /* ShowDiscussionVC.swift */,
 				62F9F8762506530C0015E30C /* EditDiscussionVC1.swift */,
-				62EBD0AC250B6B7000ACB281 /* CreateDiscussionVC2.swift */,
 				629563FF250BBC5C00F9E666 /* EditDiscussionVC2.swift */,
 			);
 			path = Discussions;
@@ -490,7 +487,6 @@
 				621535AC24EACF14007B18BA /* SignupVC.swift in Sources */,
 				6227CCE72503827600EB676B /* EditCaseVC2.swift in Sources */,
 				622691C524F8519100BDCB36 /* NewsVC.swift in Sources */,
-				62EBD0AD250B6B7000ACB281 /* CreateDiscussionVC2.swift in Sources */,
 				62D5FAB22502B1E800772594 /* CasesVC.swift in Sources */,
 				62DF80CB24F04B6E00E758E9 /* CollapsibleTableViewCell.swift in Sources */,
 				62EC967825002E7000E0B56E /* DocumentViewerVC.swift in Sources */,
@@ -511,7 +507,7 @@
 				62D9782D24FF9328002E4664 /* CreateResearchVC1.swift in Sources */,
 				6208307624E9C13A00291825 /* AppDelegate.swift in Sources */,
 				626EF45124F4319B00D8A59B /* CreateNewsVC2.swift in Sources */,
-				625D7391250636FF00104DBB /* CreateDiscussionVC1.swift in Sources */,
+				625D7391250636FF00104DBB /* CreateDiscussionVC.swift in Sources */,
 				62FB08B52500E01E0064C988 /* MyNewsVC.swift in Sources */,
 				62F9F875250651AF0015E30C /* ShowDiscussionVC.swift in Sources */,
 				62D8C7B424FE7C100031587E /* DataCell.swift in Sources */,

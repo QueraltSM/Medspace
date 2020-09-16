@@ -57,6 +57,10 @@ class EditNewsVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate, U
     }
     
     @objc func action() {
+        if selectedSpeciality == nil {
+            selectedSpeciality = specialities[specialities.count / 2].name
+            speciality_textfield.text = specialities[specialities.count / 2].name
+        }
         speciality_textfield.textColor = UIColor.black
         view.endEditing(true)
     }
