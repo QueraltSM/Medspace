@@ -1,5 +1,4 @@
 import UIKit
-import FirebaseDatabase
 import FirebaseAuth
 
 class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {

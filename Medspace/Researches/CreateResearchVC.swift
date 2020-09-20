@@ -1,31 +1,36 @@
 import UIKit
 import MobileCoreServices
+import FirebaseStorage
+import FirebaseDatabase
+import FirebaseAuth
 
-class CreateResearchVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, UIDocumentPickerDelegate,UINavigationControllerDelegate  {
+class CreateResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, UIDocumentPickerDelegate,UINavigationControllerDelegate  {
     
     @IBOutlet weak var scrollview: UIScrollView!
     @IBOutlet weak var titleview: UITextView!
     @IBOutlet weak var speciality_textfield: UITextField!
     var selectedSpeciality: String?
-    @IBOutlet weak var documentButton: UIButton!
-    @IBOutlet weak var document_box: UIView!
     var documentURL: URL!
     @IBOutlet weak var document_name: UILabel!
+    @IBOutlet weak var research_description: UITextView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
         setHeader(largeTitles: false, gray: true)
         documentURL = nil
-        scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: document_box.bottomAnchor).isActive = true
+        scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: document_name.bottomAnchor).isActive = true
         scrollview.backgroundColor = UIColor.init(hexString: "#f2f2f2")
         titleview.delegate = self
+        research_description.delegate = self
         speciality_textfield.delegate = self
-        document_box.setBorder()
         titleview.textColor = UIColor.gray
         titleview.text = "Research needs in allergy: an EAACI position paper, in collaboration with EFA"
         speciality_textfield.text = "Allergy and Inmunology"
         speciality_textfield.textColor = UIColor.gray
+        research_description.text = "In less than half a century, allergy, originally perceived as a rare disease, has become a major public health threat, today affecting the lives of more than 60 million people in Europe, and probably close to one billion worldwide, thereby heavily impacting the budgets of public health systems."
+        research_description.textColor = UIColor.gray
+        document_name.textColor = UIColor.gray
         let disclosure = UITableViewCell()
         disclosure.frame = speciality_textfield.bounds
         disclosure.accessoryType = .disclosureIndicator
@@ -34,21 +39,15 @@ class CreateResearchVC1: UIViewController, UITextViewDelegate, UIPickerViewDeleg
         speciality_textfield.addSubview(disclosure)
         createPickerView()
         dismissPickerView()
-        documentButton.titleLabel?.textAlignment = .center
-        if (documentURL != nil) {
-            documentButton.setTitle("Edit", for: .normal)
-        } else {
-            documentButton.setTitle("Add", for: .normal)
-        }
     }
     
     public func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         guard let myURL = urls.first else {
             return
         }
-        documentButton.titleLabel?.text = "Edit"
         documentURL = myURL
         document_name.text = myURL.lastPathComponent
+        document_name.textColor = UIColor.black
     }
     
     public func documentMenu(documentPicker: UIDocumentPickerViewController) {
@@ -75,23 +74,53 @@ class CreateResearchVC1: UIViewController, UITextViewDelegate, UIPickerViewDeleg
     
     @IBAction func savePost(_ sender: Any) {
         var error = ""
+        if speciality_textfield.textColor == UIColor.gray {
+            error += "Select a speciality\n"
+        }
         if titleview.textColor == UIColor.gray || titleview.text.isEmpty {
             error += "Write a title\n"
         }
-        if speciality_textfield.textColor == UIColor.gray {
-            error += "Select a speciality\n"
+        if research_description.textColor == UIColor.gray || research_description.text.isEmpty {
+            error += "Write a description\n"
         }
         if documentURL == nil {
             error += "Upload a document\n"
         }
         if error == "" {
-            let create_research_vc2 = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "CreateResearchVC2") as? CreateResearchVC2
-            create_research_vc2!.title_research = titleview.text
-            create_research_vc2!.document_research = documentURL
-            create_research_vc2!.speciality = speciality_textfield.text!
-            navigationController?.pushViewController(create_research_vc2!, animated: false)
+            askPost();
         } else {
             showAlert(title: "Error", message: error)
+        }
+    }
+    
+    func askPost() {
+        if research_description.textColor == UIColor.gray || research_description.text.isEmpty {
+            showAlert(title: "Error", message: "Write a description")
+        } else {
+            let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+            alert.title = "Do you want to post \(documentURL!.lastPathComponent)?"
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
+                action in
+                self.postResearch()
+            }))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    func postResearch() {
+        self.startAnimation()
+        let user = uid
+        let now = Date().description
+        let path = "Researches/\(now)::\(user!)"
+        Storage.storage().reference().child(path).putFile(from: self.documentURL!, metadata: nil) { metadata, error in
+            self.stopAnimation()
+            if error == nil {
+                self.postResearch(path: path, title: self.titleview.text!, description: self.research_description.text!, speciality: self.speciality_textfield.text!, user: user!, date: now)
+                self.presentVC(segue: "MyResearchesVC")
+            } else {
+                self.showAlert(title: "Error", message: error!.localizedDescription)
+            }
         }
     }
     
