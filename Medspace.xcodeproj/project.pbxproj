@@ -47,8 +47,7 @@
 		62CEF60424F2756A00625E9C /* News.png in Resources */ = {isa = PBXBuildFile; fileRef = 62CEF60324F2756A00625E9C /* News.png */; };
 		62CEF61024F2792100625E9C /* MyPosts.png in Resources */ = {isa = PBXBuildFile; fileRef = 62CEF60F24F2792100625E9C /* MyPosts.png */; };
 		62D5FAB22502B1E800772594 /* CasesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D5FAB12502B1E800772594 /* CasesVC.swift */; };
-		62D5FAB42502B59100772594 /* CreateCaseVC1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D5FAB32502B59100772594 /* CreateCaseVC1.swift */; };
-		62D5FAB62502BB2500772594 /* CreateCaseVC2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D5FAB52502BB2500772594 /* CreateCaseVC2.swift */; };
+		62D5FAB42502B59100772594 /* CreateCaseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D5FAB32502B59100772594 /* CreateCaseVC.swift */; };
 		62D8C7AD24FE75830031587E /* ResearchesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D8C7AC24FE75830031587E /* ResearchesVC.swift */; };
 		62D8C7B424FE7C100031587E /* DataCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D8C7B324FE7C100031587E /* DataCell.swift */; };
 		62D9782D24FF9328002E4664 /* CreateResearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D9782C24FF9328002E4664 /* CreateResearchVC.swift */; };
@@ -114,8 +113,7 @@
 		62CEF60324F2756A00625E9C /* News.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = News.png; sourceTree = "<group>"; };
 		62CEF60F24F2792100625E9C /* MyPosts.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MyPosts.png; sourceTree = "<group>"; };
 		62D5FAB12502B1E800772594 /* CasesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CasesVC.swift; sourceTree = "<group>"; };
-		62D5FAB32502B59100772594 /* CreateCaseVC1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCaseVC1.swift; sourceTree = "<group>"; };
-		62D5FAB52502BB2500772594 /* CreateCaseVC2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCaseVC2.swift; sourceTree = "<group>"; };
+		62D5FAB32502B59100772594 /* CreateCaseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCaseVC.swift; sourceTree = "<group>"; };
 		62D8C7AC24FE75830031587E /* ResearchesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResearchesVC.swift; sourceTree = "<group>"; };
 		62D8C7B324FE7C100031587E /* DataCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataCell.swift; sourceTree = "<group>"; };
 		62D9782C24FF9328002E4664 /* CreateResearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateResearchVC.swift; sourceTree = "<group>"; };
@@ -244,8 +242,7 @@
 			isa = PBXGroup;
 			children = (
 				62D5FAB12502B1E800772594 /* CasesVC.swift */,
-				62D5FAB32502B59100772594 /* CreateCaseVC1.swift */,
-				62D5FAB52502BB2500772594 /* CreateCaseVC2.swift */,
+				62D5FAB32502B59100772594 /* CreateCaseVC.swift */,
 				6227CCE225037A0600EB676B /* MyCasesVC.swift */,
 				6227CCE42503826900EB676B /* EditCaseVC1.swift */,
 				6227CCE62503827600EB676B /* EditCaseVC2.swift */,
@@ -488,14 +485,13 @@
 				62EC967825002E7000E0B56E /* DocumentViewerVC.swift in Sources */,
 				6246D17A250171A70067A382 /* MyResearchesVC.swift in Sources */,
 				62F1650D24F3B380007A931F /* CreateNewsVC1.swift in Sources */,
-				62D5FAB62502BB2500772594 /* CreateCaseVC2.swift in Sources */,
 				6208307E24E9C13A00291825 /* Medspace.xcdatamodeld in Sources */,
 				6246D17E2501770A0067A382 /* EditResearchVC2.swift in Sources */,
 				621C6D40250E3B38001A345D /* SettingsVC.swift in Sources */,
 				62956400250BBC5C00F9E666 /* EditDiscussionVC2.swift in Sources */,
 				62D8C7AD24FE75830031587E /* ResearchesVC.swift in Sources */,
 				625DD09224F0218B007F6994 /* AdminMenuVC.swift in Sources */,
-				62D5FAB42502B59100772594 /* CreateCaseVC1.swift in Sources */,
+				62D5FAB42502B59100772594 /* CreateCaseVC.swift in Sources */,
 				6246D9CA24EA7CD80057872E /* LoginVC.swift in Sources */,
 				6229EEC82508123E00EA7CC1 /* Entities.swift in Sources */,
 				62AE62CF250FAE3F008E2EBD /* ProfileVC.swift in Sources */,
