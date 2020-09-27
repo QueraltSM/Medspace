@@ -47,7 +47,7 @@ class ShowDiscussionVC: UIViewController {
     }
     
     @IBAction func editDiscussion(_ sender: Any) {
-        let edit_discussion_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditDiscussionVC1") as? EditDiscussionVC1
+        let edit_discussion_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditDiscussionVC") as? EditDiscussionVC
         edit_discussion_vc!.discussion = self.discussion
         navigationController?.pushViewController(edit_discussion_vc!, animated: false)
     }

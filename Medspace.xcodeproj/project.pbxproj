@@ -41,7 +41,6 @@
 		625DD09224F0218B007F6994 /* AdminMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625DD09124F0218B007F6994 /* AdminMenuVC.swift */; };
 		625DD09424F02199007F6994 /* DoctorMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625DD09324F02199007F6994 /* DoctorMenuVC.swift */; };
 		626EF45124F4319B00D8A59B /* CreateNewsVC2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626EF45024F4319B00D8A59B /* CreateNewsVC2.swift */; };
-		62956400250BBC5C00F9E666 /* EditDiscussionVC2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 629563FF250BBC5C00F9E666 /* EditDiscussionVC2.swift */; };
 		62AE62CD250FADDF008E2EBD /* Settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 62AE62CC250FADDD008E2EBD /* Settings.png */; };
 		62AE62CF250FAE3F008E2EBD /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AE62CE250FAE3F008E2EBD /* ProfileVC.swift */; };
 		62CEF60424F2756A00625E9C /* News.png in Resources */ = {isa = PBXBuildFile; fileRef = 62CEF60324F2756A00625E9C /* News.png */; };
@@ -64,7 +63,7 @@
 		62F6122225011C7100892188 /* EditNewsVC1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F6122125011C7100892188 /* EditNewsVC1.swift */; };
 		62F612262501236A00892188 /* EditNewsVC2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F612252501236A00892188 /* EditNewsVC2.swift */; };
 		62F9F875250651AF0015E30C /* ShowDiscussionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F9F874250651AF0015E30C /* ShowDiscussionVC.swift */; };
-		62F9F8772506530C0015E30C /* EditDiscussionVC1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F9F8762506530C0015E30C /* EditDiscussionVC1.swift */; };
+		62F9F8772506530C0015E30C /* EditDiscussionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F9F8762506530C0015E30C /* EditDiscussionVC.swift */; };
 		62FA30E824FABD4C00BB0C45 /* Medspace-News.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FA30E424FABD4B00BB0C45 /* Medspace-News.png */; };
 		62FB08B52500E01E0064C988 /* MyNewsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FB08B42500E01E0064C988 /* MyNewsVC.swift */; };
 		62FFEEF82508C0C4006A7BE8 /* Comments.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FFEEF72508C0C3006A7BE8 /* Comments.png */; };
@@ -107,7 +106,6 @@
 		625DD09124F0218B007F6994 /* AdminMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminMenuVC.swift; sourceTree = "<group>"; };
 		625DD09324F02199007F6994 /* DoctorMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorMenuVC.swift; sourceTree = "<group>"; };
 		626EF45024F4319B00D8A59B /* CreateNewsVC2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewsVC2.swift; sourceTree = "<group>"; };
-		629563FF250BBC5C00F9E666 /* EditDiscussionVC2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDiscussionVC2.swift; sourceTree = "<group>"; };
 		62AE62CC250FADDD008E2EBD /* Settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Settings.png; sourceTree = "<group>"; };
 		62AE62CE250FAE3F008E2EBD /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
 		62CEF60324F2756A00625E9C /* News.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = News.png; sourceTree = "<group>"; };
@@ -131,7 +129,7 @@
 		62F6122125011C7100892188 /* EditNewsVC1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNewsVC1.swift; sourceTree = "<group>"; };
 		62F612252501236A00892188 /* EditNewsVC2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNewsVC2.swift; sourceTree = "<group>"; };
 		62F9F874250651AF0015E30C /* ShowDiscussionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowDiscussionVC.swift; sourceTree = "<group>"; };
-		62F9F8762506530C0015E30C /* EditDiscussionVC1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDiscussionVC1.swift; sourceTree = "<group>"; };
+		62F9F8762506530C0015E30C /* EditDiscussionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDiscussionVC.swift; sourceTree = "<group>"; };
 		62FA30E424FABD4B00BB0C45 /* Medspace-News.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Medspace-News.png"; sourceTree = "<group>"; };
 		62FB08B42500E01E0064C988 /* MyNewsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNewsVC.swift; sourceTree = "<group>"; };
 		62FFEEF72508C0C3006A7BE8 /* Comments.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Comments.png; sourceTree = "<group>"; };
@@ -222,8 +220,7 @@
 				625D738E2506305A00104DBB /* MyDiscussionsVC.swift */,
 				625D7390250636FF00104DBB /* CreateDiscussionVC.swift */,
 				62F9F874250651AF0015E30C /* ShowDiscussionVC.swift */,
-				62F9F8762506530C0015E30C /* EditDiscussionVC1.swift */,
-				629563FF250BBC5C00F9E666 /* EditDiscussionVC2.swift */,
+				62F9F8762506530C0015E30C /* EditDiscussionVC.swift */,
 			);
 			path = Discussions;
 			sourceTree = "<group>";
@@ -476,7 +473,7 @@
 				6246D17C250176F00067A382 /* EditResearchVC1.swift in Sources */,
 				6227CCE52503826900EB676B /* EditCaseVC1.swift in Sources */,
 				62F612262501236A00892188 /* EditNewsVC2.swift in Sources */,
-				62F9F8772506530C0015E30C /* EditDiscussionVC1.swift in Sources */,
+				62F9F8772506530C0015E30C /* EditDiscussionVC.swift in Sources */,
 				621535AC24EACF14007B18BA /* SignupVC.swift in Sources */,
 				6227CCE72503827600EB676B /* EditCaseVC2.swift in Sources */,
 				622691C524F8519100BDCB36 /* NewsVC.swift in Sources */,
@@ -488,7 +485,6 @@
 				6208307E24E9C13A00291825 /* Medspace.xcdatamodeld in Sources */,
 				6246D17E2501770A0067A382 /* EditResearchVC2.swift in Sources */,
 				621C6D40250E3B38001A345D /* SettingsVC.swift in Sources */,
-				62956400250BBC5C00F9E666 /* EditDiscussionVC2.swift in Sources */,
 				62D8C7AD24FE75830031587E /* ResearchesVC.swift in Sources */,
 				625DD09224F0218B007F6994 /* AdminMenuVC.swift in Sources */,
 				62D5FAB42502B59100772594 /* CreateCaseVC.swift in Sources */,

@@ -4,7 +4,6 @@ import FirebaseAuth
 class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
 
     @IBOutlet weak var discussion_title: UITextView!
-    @IBOutlet weak var speciality_box: UIView!
     @IBOutlet weak var speciality_textfield: UITextField!
     var selectedSpeciality: String?
     @IBOutlet weak var scrollview: UIScrollView!

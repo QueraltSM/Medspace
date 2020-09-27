@@ -2,24 +2,35 @@ import UIKit
 import FirebaseDatabase
 import FirebaseAuth
 
-class EditDiscussionVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
+class EditDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
 
-    @IBOutlet weak var discussion_title: UITextView!
+    @IBOutlet weak var scrollview: UIScrollView!
     @IBOutlet weak var speciality_textfield: UITextField!
-    @IBOutlet weak var speciality_box: UIView!
+    @IBOutlet weak var discussion_title: UITextView!
+    @IBOutlet weak var discussion_description: UITextView!
     var selectedSpeciality: String?
     var discussion: Discussion?
     var needsUpdate: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setHeader(largeTitles: false, gray: false)
+        setHeader(largeTitles: false, gray: true)
         discussion_title.delegate = self
-        speciality_box.setBorder()
-        discussion_title.setBorder()
+        discussion_description.delegate = self
+        discussion_title.text = discussion!.title
+        discussion_title.textColor = UIColor.black
+        discussion_description.text = discussion!.description
+        discussion_description.textColor = UIColor.black
         speciality_textfield.text = discussion!.speciality.name
         speciality_textfield.textColor = UIColor.black
-        discussion_title.customTextView(view_text:discussion!.title,view_color:UIColor.black, view_font: UIFont.boldSystemFont(ofSize: 20.0), view_scroll: true)
+        let disclosure = UITableViewCell()
+        disclosure.frame = speciality_textfield.bounds
+        disclosure.accessoryType = .disclosureIndicator
+        disclosure.isUserInteractionEnabled = false
+        disclosure.tintColor = UIColor.darkGray
+        speciality_textfield.addSubview(disclosure)
+        scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: discussion_description.bottomAnchor).isActive = true
+        scrollview.backgroundColor = UIColor.init(hexString: "#f2f2f2")
         createPickerView()
         dismissPickerView()
     }
@@ -72,28 +83,32 @@ class EditDiscussionVC1: UIViewController, UITextViewDelegate, UIPickerViewDeleg
         if discussion_title.text.isEmpty {
             error += "Write a title\n"
         }
-        if (error == "") {
-            showEditDiscussionVC2()
+        if discussion_description.text.isEmpty {
+            error += "Write a description\n"
+        }
+        if (speciality_textfield.text == discussion!.speciality.name && discussion_title.text == discussion!.title && discussion_description.text == discussion!.description) {
+            error = "You have not updated the details of the discussion"
+        }
+        if error == "" {
+            askPost()
         } else {
-            showAlert(title: "Error saving the discussion", message: error)
+            showAlert(title: "Error", message: error)
         }
     }
     
-    func showEditDiscussionVC2(){
-        let edit_discussion_vc2 = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditDiscussionVC2") as? EditDiscussionVC2
-        var color = UIColor.init()
-        for s in specialities {
-            if s.name == speciality_textfield.text {
-                color = s.color!
-            }
-        }
-        if discussion!.title != discussion_title.text || discussion!.speciality.name != speciality_textfield.text {
-            needsUpdate = true
-        }
-        let final_discussion = Discussion(id: discussion!.id, title: discussion_title.text, description: discussion!.description, date: discussion!.date, speciality: Speciality(name: speciality_textfield!.text!, color:color), user: User(id: discussion!.user.id, fullname:discussion!.user.fullname, username:discussion!.user.username))
-        edit_discussion_vc2!.discussion = final_discussion
-        edit_discussion_vc2?.needsUpdate = needsUpdate
-        navigationController?.pushViewController(edit_discussion_vc2!, animated: false)
+    func askPost(){
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+        alert.title = "Do you want to update the discussion?"
+        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
+            action in
+            let user = uid
+            let now = self.discussion!.date
+            let path = "Discussions/\(now)::\(uid!)"
+            self.postDiscussion(path: path, title: self.discussion_title.text!, description: self.discussion_description.text!, speciality:self.speciality_textfield.text!, user: user!, date: now)
+            self.presentVC(segue: "MyDiscussionsVC")
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
