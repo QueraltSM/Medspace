@@ -69,9 +69,9 @@ class ShowCaseVC: UIViewController {
     }
     
     @IBAction func editCase(_ sender: Any) {
-        let edit_case_vc1 = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditCaseVC1") as? EditCaseVC1
-        edit_case_vc1!.clinical_case = self.clinical_case
-        navigationController?.pushViewController(edit_case_vc1!, animated: false)
+        let edit_case_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditCaseVC") as? EditCaseVC
+        edit_case_vc!.clinical_case = self.clinical_case
+        navigationController?.pushViewController(edit_case_vc!, animated: false)
     }
 
     @IBAction func showComments(_ sender: Any) {
