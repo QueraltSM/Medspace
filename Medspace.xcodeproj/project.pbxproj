@@ -28,8 +28,7 @@
 		6229EEC625080E9700EA7CC1 /* Discussions.png in Resources */ = {isa = PBXBuildFile; fileRef = 6229EEC425080E9600EA7CC1 /* Discussions.png */; };
 		6229EEC82508123E00EA7CC1 /* Entities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6229EEC72508123E00EA7CC1 /* Entities.swift */; };
 		6246D17A250171A70067A382 /* MyResearchesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6246D179250171A70067A382 /* MyResearchesVC.swift */; };
-		6246D17C250176F00067A382 /* EditResearchVC1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6246D17B250176F00067A382 /* EditResearchVC1.swift */; };
-		6246D17E2501770A0067A382 /* EditResearchVC2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6246D17D2501770A0067A382 /* EditResearchVC2.swift */; };
+		6246D17C250176F00067A382 /* EditResearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6246D17B250176F00067A382 /* EditResearchVC.swift */; };
 		6246D9C424EA772A0057872E /* Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 6246D9C324EA772A0057872E /* Logo.png */; };
 		6246D9C624EA78800057872E /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6246D9C524EA787F0057872E /* Icon.png */; };
 		6246D9C824EA7A260057872E /* Icon_no_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 6246D9C724EA7A260057872E /* Icon_no_back.png */; };
@@ -92,8 +91,7 @@
 		6229EEC425080E9600EA7CC1 /* Discussions.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Discussions.png; sourceTree = "<group>"; };
 		6229EEC72508123E00EA7CC1 /* Entities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entities.swift; sourceTree = "<group>"; };
 		6246D179250171A70067A382 /* MyResearchesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyResearchesVC.swift; sourceTree = "<group>"; };
-		6246D17B250176F00067A382 /* EditResearchVC1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditResearchVC1.swift; sourceTree = "<group>"; };
-		6246D17D2501770A0067A382 /* EditResearchVC2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditResearchVC2.swift; sourceTree = "<group>"; };
+		6246D17B250176F00067A382 /* EditResearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditResearchVC.swift; sourceTree = "<group>"; };
 		6246D9C324EA772A0057872E /* Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Logo.png; sourceTree = "<group>"; };
 		6246D9C524EA787F0057872E /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		6246D9C724EA7A260057872E /* Icon_no_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon_no_back.png; sourceTree = "<group>"; };
@@ -253,8 +251,7 @@
 				62EC96752500254600E0B56E /* ShowResearchVC.swift */,
 				62EC967725002E7000E0B56E /* DocumentViewerVC.swift */,
 				6246D179250171A70067A382 /* MyResearchesVC.swift */,
-				6246D17B250176F00067A382 /* EditResearchVC1.swift */,
-				6246D17D2501770A0067A382 /* EditResearchVC2.swift */,
+				6246D17B250176F00067A382 /* EditResearchVC.swift */,
 			);
 			path = Researches;
 			sourceTree = "<group>";
@@ -467,7 +464,7 @@
 				6223B29824FA5634000F6E83 /* ShowNewsVC.swift in Sources */,
 				6208307824E9C13A00291825 /* ViewController.swift in Sources */,
 				6227CCE325037A0600EB676B /* MyCasesVC.swift in Sources */,
-				6246D17C250176F00067A382 /* EditResearchVC1.swift in Sources */,
+				6246D17C250176F00067A382 /* EditResearchVC.swift in Sources */,
 				6227CCE52503826900EB676B /* EditCaseVC.swift in Sources */,
 				62F612262501236A00892188 /* EditNewsVC2.swift in Sources */,
 				62F9F8772506530C0015E30C /* EditDiscussionVC.swift in Sources */,
@@ -479,7 +476,6 @@
 				6246D17A250171A70067A382 /* MyResearchesVC.swift in Sources */,
 				62F1650D24F3B380007A931F /* CreateNewsVC1.swift in Sources */,
 				6208307E24E9C13A00291825 /* Medspace.xcdatamodeld in Sources */,
-				6246D17E2501770A0067A382 /* EditResearchVC2.swift in Sources */,
 				621C6D40250E3B38001A345D /* SettingsVC.swift in Sources */,
 				62D8C7AD24FE75830031587E /* ResearchesVC.swift in Sources */,
 				625DD09224F0218B007F6994 /* AdminMenuVC.swift in Sources */,

@@ -45,7 +45,7 @@ class ShowResearchVC: UIViewController {
     }
     
     @IBAction func editResearch(_ sender: Any) {
-        let edit_research_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditResearchVC1") as? EditResearchVC1
+        let edit_research_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditResearchVC") as? EditResearchVC
         edit_research_vc!.research = self.research
         navigationController?.pushViewController(edit_research_vc!, animated: false)
     }

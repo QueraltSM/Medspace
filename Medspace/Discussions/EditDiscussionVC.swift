@@ -10,7 +10,6 @@ class EditDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
     @IBOutlet weak var discussion_description: UITextView!
     var selectedSpeciality: String?
     var discussion: Discussion?
-    var needsUpdate: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
