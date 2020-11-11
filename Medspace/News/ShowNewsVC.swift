@@ -16,7 +16,6 @@ class ShowNewsVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
-        setHeader(largeTitles: false, gray: false)
         scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: news_description.bottomAnchor).isActive = true
         image_header.image = news!.image
         news_title.text = news!.title
@@ -43,7 +42,7 @@ class ShowNewsVC: UIViewController {
     }
     
     @IBAction func editNews(_ sender: Any) {
-        let edit_news_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditNewsVC1") as? EditNewsVC1
+        let edit_news_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditNewsVC") as? EditNewsVC
         edit_news_vc!.news = self.news
         navigationController?.pushViewController(edit_news_vc!, animated: false)
     }

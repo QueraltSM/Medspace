@@ -13,10 +13,8 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setHeader(largeTitles: true, gray: false)
         if user != nil && user!.id != uid {
             self.title = "\(user!.username) researches"
-            setHeader(largeTitles: false, gray: false)
         }
         setMenu()
         researches_timeline.delegate = self

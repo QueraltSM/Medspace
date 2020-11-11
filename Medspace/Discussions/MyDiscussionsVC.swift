@@ -14,7 +14,6 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setHeader(largeTitles: true, gray: false)
         setMenu()
         ref = Database.database().reference()
         discussions_timeline.delegate = self
@@ -73,6 +72,7 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
             if (self.discussions.count == 0) {
                 self.discussions_timeline.setEmptyView(title: "You have not post a discussion yet\n\n:(")
                 self.turnEditState(enabled: false, title: "")
+                self.stopAnimation()
             }
         }
     }
@@ -204,7 +204,7 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                 items.append(discussions[indexPath.row])
             }
             for _ in items {
-                let index = discussions.index(where: { (item) -> Bool in
+                let index = discussions.firstIndex(where: { (item) -> Bool in
                     item.id == item.id
                 })
                 let path = "Discussions/\(discussions[index!].id)"

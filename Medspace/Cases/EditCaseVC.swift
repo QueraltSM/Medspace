@@ -14,7 +14,6 @@ class EditCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setHeader(largeTitles: false, gray: true)
         case_title.delegate = self
         case_description.delegate = self
         case_title.text = clinical_case!.title
@@ -34,7 +33,7 @@ class EditCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
         disclosure.tintColor = UIColor.darkGray
         speciality_textfield.addSubview(disclosure)
         scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: case_examination.bottomAnchor).isActive = true
-        scrollview.backgroundColor = UIColor.init(hexString: "#f2f2f2")
+        scrollview.backgroundColor = UIColor.white
         createPickerView()
         dismissPickerView()
     }
@@ -99,7 +98,7 @@ class EditCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
         }
         if clinical_case!.title == case_title.text && clinical_case!.description == case_description.text &&
             clinical_case!.history == case_history.text && clinical_case!.examination == case_examination.text {
-            error = "You have not updated the details of the clinical case"
+            error = "You have not modified the previous data"
         }
         if (error == "") {
             askPost()

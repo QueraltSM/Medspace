@@ -10,10 +10,10 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISe
     var searchController = UISearchController()
     var news = [News]()
     var newsMatched = [News]()
+    var searchBarIsHidden: Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setHeader(largeTitles: true, gray: false)
         uid = Auth.auth().currentUser!.uid
         usertype = UserDefaults.standard.string(forKey: "usertype")
         fullname = UserDefaults.standard.string(forKey: "fullname")
@@ -41,7 +41,14 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISe
     }
     
     @IBAction func didTapSearchButton(_ sender: Any) {
-        setSearchBar()
+        if searchBarIsHidden {
+            setSearchBar()
+            searchBarIsHidden = false
+        } else {
+            searchController.isActive = false
+            news_timeline.tableHeaderView = nil
+            searchBarIsHidden = true
+        }
     }
     
     func setSearchBar() {
@@ -49,7 +56,6 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISe
         definesPresentationContext = true
         searchController = UISearchController(searchResultsController: nil)
         searchController.searchBar.placeholder = "Search by title or speciality"
-        searchController.dimsBackgroundDuringPresentation = false
         searchController.searchBar.barTintColor = UIColor.white
         searchController.searchResultsUpdater = self
         news_timeline.tableHeaderView = searchController.searchBar

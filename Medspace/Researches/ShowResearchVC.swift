@@ -17,7 +17,6 @@ class ShowResearchVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
-        setHeader(largeTitles: false, gray: false)
         scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: research_description.bottomAnchor).isActive = true
         research_title.text = research!.title
         research_description.text = research!.description
@@ -58,7 +57,8 @@ class ShowResearchVC: UIViewController {
             let path = "Researches/\(self.research!.id)"
             self.removeDataDB(path: path)
             self.removeDataStorage(path: path)
-            self.presentVC(segue: "MyResearchesVC")
+            let vc: UIViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MyResearchesVC") as! MyResearchesVC
+            self.present(vc, animated: false, completion: nil)
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)
@@ -72,9 +72,5 @@ class ShowResearchVC: UIViewController {
         let document_viewer_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "DocumentViewerVC") as? DocumentViewerVC
         document_viewer_vc!.document = research!.pdf
         navigationController?.pushViewController(document_viewer_vc!, animated: false)
-    }
-    
-    @IBAction func showUserProfile(_ sender: Any) {
-        self.presentUserProfileVC(user: research!.user)
     }
 }

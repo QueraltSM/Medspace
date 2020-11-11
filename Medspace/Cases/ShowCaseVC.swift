@@ -23,7 +23,6 @@ class ShowCaseVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
-        setHeader(largeTitles: false, gray: false)
         user.setTitle("Posted by \(clinical_case!.user.username)", for: .normal)
         user.titleLabel!.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline).italic()
         scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: examination.bottomAnchor).isActive = true
@@ -76,9 +75,5 @@ class ShowCaseVC: UIViewController {
 
     @IBAction func showComments(_ sender: Any) {
         print("show comments")
-    }
-    
-    @IBAction func showUserProfile(_ sender: Any) {
-        self.presentUserProfileVC(user: clinical_case!.user)
     }
 }

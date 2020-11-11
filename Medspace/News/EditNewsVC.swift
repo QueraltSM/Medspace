@@ -1,6 +1,6 @@
 import UIKit
 
-class EditNewsVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
+class EditNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
 
     @IBOutlet weak var scrollview: UIScrollView!
     @IBOutlet weak var image_header: UIImageView!
@@ -16,9 +16,8 @@ class EditNewsVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate, U
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
-        setHeader(largeTitles: false, gray: true)
         scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: speciality_textfield.bottomAnchor).isActive = true
-        scrollview.backgroundColor = UIColor.init(hexString: "#f2f2f2")
+        scrollview.backgroundColor = UIColor.white
         titleview.delegate = self
         speciality_textfield.delegate = self
         speciality_textfield.textColor = UIColor.black
@@ -139,7 +138,7 @@ class EditNewsVC1: UIViewController, UITextViewDelegate, UIPickerViewDelegate, U
     
 }
 
-extension EditNewsVC1: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension EditNewsVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             image_header.contentMode = .scaleToFill

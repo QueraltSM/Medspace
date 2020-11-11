@@ -17,10 +17,9 @@ class CreateResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
-        setHeader(largeTitles: false, gray: true)
         documentURL = nil
         scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: document_name.bottomAnchor).isActive = true
-        scrollview.backgroundColor = UIColor.init(hexString: "#f2f2f2")
+        scrollview.backgroundColor = UIColor.white
         titleview.delegate = self
         research_description.delegate = self
         speciality_textfield.delegate = self
@@ -117,7 +116,8 @@ class CreateResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
             self.stopAnimation()
             if error == nil {
                 self.postResearch(path: path, title: self.titleview.text!, description: self.research_description.text!, speciality: self.speciality_textfield.text!, user: user!, date: now)
-                self.presentVC(segue: "MyResearchesVC")
+                let vc: UIViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MyResearchesVC") as! MyResearchesVC
+                self.present(vc, animated: false, completion: nil)
             } else {
                 self.showAlert(title: "Error", message: error!.localizedDescription)
             }

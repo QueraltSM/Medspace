@@ -13,7 +13,6 @@ class EditNewsVC2: UIViewController, UITextViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setHeader(largeTitles: false, gray: false)
         description_news.delegate = self
         description_news.text = news!.description
         description_news.textColor = UIColor.black
@@ -34,7 +33,7 @@ class EditNewsVC2: UIViewController, UITextViewDelegate {
                 self.showAlert(title: "Error", message: error.localizedDescription)
                 return
             } else {
-                self.postNewsDB(path: "News/\(self.news!.id)", title: self.news!.title, description: self.description_news.text!, speciality: self.news!.speciality.name, user: self.news!.user.id, date: self.news!.date)
+                self.postNews(path: "News/\(self.news!.id)", title: self.news!.title, description: self.description_news.text!, speciality: self.news!.speciality.name, user: self.news!.user.id, date: self.news!.date)
                 self.presentVC(segue: "MyNewsVC")
             }
         }

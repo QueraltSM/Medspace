@@ -14,7 +14,6 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setHeader(largeTitles: true, gray: false)
         setMenu()
         ref = Database.database().reference()
         cases_timeline.delegate = self
@@ -132,7 +131,7 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
                 items.append(cases[indexPath.row])
             }
             for _ in items {
-                let index = cases.index(where: { (item) -> Bool in
+                let index = cases.firstIndex(where: { (item) -> Bool in
                     item.id == item.id
                 })
                 let path = "Cases/\(cases[index!].id)"
@@ -224,6 +223,7 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
         if (self.cases.count == 0) {
             self.cases_timeline.setEmptyView(title: "You have not post a case yet\n\n:(")
             self.turnEditState(enabled: false, title: "")
+            self.stopAnimation()
         }
     }
     

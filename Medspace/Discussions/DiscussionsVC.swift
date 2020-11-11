@@ -13,10 +13,8 @@ class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
-        setHeader(largeTitles: true, gray: false)
         if user != nil && user!.id != uid {
             self.title = "\(user!.username) discussions"
-            setHeader(largeTitles: false, gray: false)
         }
         discussions_timeline.delegate = self
         discussions_timeline.dataSource = self

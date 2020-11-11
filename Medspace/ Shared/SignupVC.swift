@@ -4,21 +4,24 @@ import FirebaseAuth
 
 class SignupVC: UIViewController {
 
-    @IBOutlet weak var fullname: IuFloatingTextFiledPlaceHolder!
-    @IBOutlet weak var email: IuFloatingTextFiledPlaceHolder!
-    @IBOutlet weak var password: IuFloatingTextFiledPlaceHolder!
-    @IBOutlet weak var repeat_password: IuFloatingTextFiledPlaceHolder!
-    @IBOutlet weak var username: IuFloatingTextFiledPlaceHolder!
+    @IBOutlet weak var repeat_password: UITextField!
     @IBOutlet weak var signup_button: UIButton!
-    var ref: DatabaseReference!
+    @IBOutlet weak var password: UITextField!
+    @IBOutlet weak var email: UITextField!
+    @IBOutlet weak var fullname: UITextField!
+    @IBOutlet weak var username: UITextField!
+    var db: DatabaseReference!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setHeader(largeTitles: false, gray: false)
-        ref = Database.database().reference()
         signup_button.layer.borderColor = UIColor.black.cgColor
         signup_button.layer.borderWidth = 1
         signup_button.layer.cornerRadius = signup_button.frame.size.height / 2.0
+        repeat_password.setUnderline(color: UIColor.black)
+        email.setUnderline(color: UIColor.black)
+        password.setUnderline(color: UIColor.black)
+        fullname.setUnderline(color: UIColor.black)
+        username.setUnderline(color: UIColor.black)
     }
     
     func passwordMatched() -> Bool {
@@ -62,9 +65,9 @@ class SignupVC: UIViewController {
                 self.showAlert(title: "Error", message: error!.localizedDescription)
             } else {
                 let uid = authResult!.uid
-                self.ref.child("Users/\(uid)/username").setValue(self.username.text)
-                self.ref.child("Users/\(uid)/fullname").setValue(self.fullname.text)
-                self.ref.child("Users/\(uid)/type").setValue("Doctor")
+                self.db = Database.database().reference().child("Users/\(uid)")
+                self.db.setValue(["username": self.username.text!, "fullname":self.fullname.text!, "type": "Doctor"])
+                self.showAlert(title: "Success!", message: "Your account has been created")
                 self.setUserData(fullname: self.fullname.text!, usertype: "Doctor", username: self.username.text!, isUserLoggedIn: true)
             }
         }
@@ -75,27 +78,39 @@ class SignupVC: UIViewController {
         if username.text!.isEmpty {
             username.setUnderline(color: UIColor.red)
             result = true
+        } else {
+            username.setUnderline(color: UIColor.black)
         }
         if username.text!.contains(" ") {
             username.setUnderline(color: UIColor.red)
             result = true
             self.showAlert(title: "Error", message: "Username can not contain spaces")
+        } else {
+            username.setUnderline(color: UIColor.black)
         }
         if fullname.text!.isEmpty {
             fullname.setUnderline(color: UIColor.red)
             result = true
+        } else {
+            fullname.setUnderline(color: UIColor.black)
         }
         if email.text!.isEmpty {
             email.setUnderline(color: UIColor.red)
             result = true
+        } else {
+            email.setUnderline(color: UIColor.black)
         }
         if password.text!.isEmpty {
             password.setUnderline(color: UIColor.red)
             result = true
+        } else {
+            password.setUnderline(color: UIColor.black)
         }
         if repeat_password.text!.isEmpty {
             repeat_password.setUnderline(color: UIColor.red)
             result = true
+        } else {
+            repeat_password.setUnderline(color: UIColor.black)
         }
         return result
     }

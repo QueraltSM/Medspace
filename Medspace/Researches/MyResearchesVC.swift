@@ -21,7 +21,6 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         researches_timeline.dataSource = self
         researches_timeline.separatorColor = UIColor.clear
         researches_timeline.rowHeight = UITableView.automaticDimension
-        setHeader(largeTitles: true, gray: false)
         getResearches()
         searchController.searchBar.delegate = self
         refreshControl.attributedTitle = NSAttributedString(string: "")
@@ -127,6 +126,7 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         if (self.researches.count == 0) {
             self.researches_timeline.setEmptyView(title: "You have not post a research yet\n\n:(")
             self.turnEditState(enabled: false, title: "")
+            self.stopAnimation()
         }
     }
     
@@ -220,7 +220,7 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
                 items.append(researches[indexPath.row])
             }
             for _ in items {
-                let index = researches.index(where: { (item) -> Bool in
+                let index = researches.firstIndex(where: { (item) -> Bool in
                     item.id == item.id
                 })
                 let path = "Researches/\(researches[index!].id)"

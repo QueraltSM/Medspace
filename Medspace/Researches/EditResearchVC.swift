@@ -19,7 +19,6 @@ class EditResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setHeader(largeTitles: false, gray: true)
         research_title.delegate = self
         research_description.delegate = self
         research_title.text = research!.title
@@ -35,7 +34,7 @@ class EditResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate
         disclosure.tintColor = UIColor.darkGray
         speciality_textfield.addSubview(disclosure)
         scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: research_document.bottomAnchor).isActive = true
-        scrollview.backgroundColor = UIColor.init(hexString: "#f2f2f2")
+        scrollview.backgroundColor = UIColor.white
         research_document.text = "Press + to upload new document"
         createPickerView()
         dismissPickerView()
@@ -137,7 +136,7 @@ class EditResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate
             error += "Upload a document\n"
         }
         if (speciality_textfield.text == research!.speciality.name && research_title.text == research!.title && research_description.text == research!.description && research!.pdf.lastPathComponent == documentURL.lastPathComponent) {
-            error = "You have not updated the details of the research"
+            error = "You have not modified the previous data"
         }
         if error == "" {
             askPost()

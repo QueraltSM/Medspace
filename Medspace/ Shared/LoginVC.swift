@@ -7,34 +7,82 @@ var container: UIView = UIView()
 
 class LoginVC: UIViewController {
     
-    @IBOutlet weak var email: IuFloatingTextFiledPlaceHolder!
-    @IBOutlet weak var password: IuFloatingTextFiledPlaceHolder!
+    @IBOutlet weak var email: UITextField!
+    @IBOutlet weak var password: UITextField!
     @IBOutlet weak var login_button: UIButton!
+    @IBOutlet weak var forgot_button: UIButton!
+    var db: DatabaseReference!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        db = Database.database().reference().child("Users")
         self.navigationController?.isNavigationBarHidden = true
         login_button.layer.borderColor = UIColor.black.cgColor
         login_button.layer.borderWidth = 1
         login_button.layer.cornerRadius = login_button.frame.size.height / 2.0
+        email.setUnderline(color: UIColor.black)
+        password.setUnderline(color: UIColor.black)
     }
     
-    @IBAction func login(_ sender: Any) {
+    func loginDB() {
         Auth.auth().signIn(withEmail: email.text!, password: password.text!) { (result, error) in
-            if let error = error, let _ = AuthErrorCode(rawValue: error._code) {
+            if let error = error as NSError? {
+              switch AuthErrorCode(rawValue: error.code) {
+              case .operationNotAllowed:
+                self.email.setUnderline(color: UIColor.red)
+                self.password.setUnderline(color: UIColor.red)
+                self.showAlert(title: "Error", message: "Email and password accounts are not enabled")
+                break
+              case .userDisabled:
+                self.email.setUnderline(color: UIColor.red)
+                self.password.setUnderline(color: UIColor.red)
+                self.showAlert(title: "Error", message: "Account has been disabled")
+                break
+              case .wrongPassword:
+                self.email.setUnderline(color: UIColor.black)
+                self.password.setUnderline(color: UIColor.red)
+                self.showAlert(title: "Error", message: "Password is invalid")
+                break
+              case .invalidEmail:
+                self.email.setUnderline(color: UIColor.red)
+                self.password.setUnderline(color: UIColor.black)
+                self.showAlert(title: "Error", message: "Email address is malformed")
+                break
+              default:
                 self.email.setUnderline(color: UIColor.red)
                 self.password.setUnderline(color: UIColor.red)
                 self.showAlert(title: "Error", message: error.localizedDescription)
+              }
             } else {
-                Database.database().reference().child("Users").child((Auth.auth().currentUser?.uid)!).observeSingleEvent(of: .value, with: { snapshot in
+                self.email.setUnderline(color: UIColor.black)
+                self.password.setUnderline(color: UIColor.black)
+                self.db.child((Auth.auth().currentUser?.uid)!).observeSingleEvent(of: .value, with: { snapshot in
                         let value = snapshot.value as? NSDictionary
                         let usertype = value?["type"] as? String ?? ""
                         let fullname = value?["fullname"] as? String ?? ""
                         let username = value?["username"] as? String ?? ""
-                        let uid = snapshot.key
+                        let usermail = value?["email"] as? String ?? ""
                     self.setUserData(fullname: fullname, usertype: usertype, username: username, isUserLoggedIn: true)
                 })
             }
+        }
+    }
+    
+    @IBAction func login(_ sender: Any) {
+        if (email.text!.isEmpty) {
+            self.email.setUnderline(color: UIColor.red)
+        } else {
+            self.email.setUnderline(color: UIColor.black)
+        }
+        if (password.text!.isEmpty) {
+            self.password.setUnderline(color: UIColor.red)
+        } else {
+            self.password.setUnderline(color: UIColor.black)
+        }
+        if (!email.text!.isEmpty && !password.text!.isEmpty) {
+            self.email.setUnderline(color: UIColor.black)
+            self.password.setUnderline(color: UIColor.black)
+            loginDB()
         }
     }
     
@@ -69,5 +117,4 @@ class LoginVC: UIViewController {
     @IBAction func signUp(_ sender: Any) {
         presentVC(segue: "SignupVC")
     }
-    
 }

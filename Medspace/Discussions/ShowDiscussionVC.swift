@@ -19,7 +19,6 @@ class ShowDiscussionVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
-        setHeader(largeTitles: false, gray: false)
         scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: discussion_description.bottomAnchor).isActive = true
         user.setTitle("Posted by \(discussion!.user.username)", for: .normal)
         user.titleLabel!.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline).italic()
@@ -79,9 +78,5 @@ class ShowDiscussionVC: UIViewController {
     
     @IBAction func showComments(_ sender: Any) {
         print("show comments")
-    }
-    
-    @IBAction func showUserProfile(_ sender: Any) {
-        self.presentUserProfileVC(user: discussion!.user)
     }
 }

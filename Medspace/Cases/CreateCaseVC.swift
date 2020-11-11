@@ -13,7 +13,6 @@ class CreateCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
-        setHeader(largeTitles: false, gray: true)
         titleview.delegate = self
         description_view.delegate = self
         history.delegate = self
@@ -35,7 +34,7 @@ class CreateCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         disclosure.tintColor = UIColor.darkGray
         speciality.addSubview(disclosure)
         scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: examination.bottomAnchor).isActive = true
-        scrollview.backgroundColor = UIColor.init(hexString: "#f2f2f2")
+        scrollview.backgroundColor = UIColor.white
         createPickerView()
         dismissPickerView()
     }

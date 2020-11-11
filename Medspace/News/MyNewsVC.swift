@@ -15,7 +15,6 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setHeader(largeTitles: true, gray: false)
         setMenu()
         ref = Database.database().reference()
         news_timeline.delegate = self
@@ -125,15 +124,16 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
                 }
             }
         }
-        if (self.news.count == 0) {
-            self.news_timeline.setEmptyView(title: "You have not post a news yet\n\n:(")
-            self.turnEditState(enabled: false, title: "")
-        }
     }
     
     func getNews() {
         ref.child("News").observeSingleEvent(of: .value, with: { snapshot in
-            self.loopNews(ref: self.ref, snapshot: snapshot)
+            if (snapshot.children.allObjects.count == 0) {
+                self.news_timeline.setEmptyView(title: "You have not post a news yet\n\n:(")
+            } else {
+                self.news_timeline.restore()
+                self.loopNews(ref: self.ref, snapshot: snapshot)
+            }
         })
     }
     
@@ -221,7 +221,7 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
                 items.append(news[indexPath.row])
             }
             for _ in items {
-                let index = news.index(where: { (item) -> Bool in
+                let index = news.firstIndex(where: { (item) -> Bool in
                     item.id == item.id
                 })
                 let path = "News/\(news[index!].id)"

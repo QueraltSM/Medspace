@@ -13,10 +13,8 @@ class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setHeader(largeTitles: true, gray: false)
         if user != nil && user!.id != uid {
             self.title = "\(user!.username) cases"
-            setHeader(largeTitles: false, gray: false)
         }
         setMenu()
         cases_timeline.delegate = self

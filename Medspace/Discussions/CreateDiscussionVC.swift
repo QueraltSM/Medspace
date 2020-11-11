@@ -12,7 +12,6 @@ class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDele
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
-        setHeader(largeTitles: false, gray: true)
         discussion_title.delegate = self
         discussion_description.delegate = self
         discussion_title.text = "Anaphylaxis: Emergency treatment"
@@ -28,7 +27,7 @@ class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDele
         disclosure.tintColor = UIColor.darkGray
         speciality_textfield.addSubview(disclosure)
         scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: discussion_description.bottomAnchor).isActive = true
-        scrollview.backgroundColor = UIColor.init(hexString: "#f2f2f2")
+        scrollview.backgroundColor = UIColor.white
         createPickerView()
         dismissPickerView()
     }

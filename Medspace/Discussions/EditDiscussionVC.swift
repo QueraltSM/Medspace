@@ -13,7 +13,6 @@ class EditDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setHeader(largeTitles: false, gray: true)
         discussion_title.delegate = self
         discussion_description.delegate = self
         discussion_title.text = discussion!.title
@@ -29,7 +28,7 @@ class EditDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
         disclosure.tintColor = UIColor.darkGray
         speciality_textfield.addSubview(disclosure)
         scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: discussion_description.bottomAnchor).isActive = true
-        scrollview.backgroundColor = UIColor.init(hexString: "#f2f2f2")
+        scrollview.backgroundColor = UIColor.white
         createPickerView()
         dismissPickerView()
     }
@@ -86,7 +85,7 @@ class EditDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
             error += "Write a description\n"
         }
         if (speciality_textfield.text == discussion!.speciality.name && discussion_title.text == discussion!.title && discussion_description.text == discussion!.description) {
-            error = "You have not updated the details of the discussion"
+            error = "You have not modified the previous data"
         }
         if error == "" {
             askPost()
