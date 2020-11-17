@@ -1,0 +1,126 @@
+import UIKit
+import FirebaseDatabase
+import FirebaseStorage
+import FirebaseAuth
+
+class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
+
+    var news: News?
+    var clinical_case: Case?
+    var discussion: Discussion?
+    var research: Research?
+    var path: String?
+    var comments = [Comment]()
+    var commentPath: String!
+    @IBOutlet weak var comments_timeline: UITableView!
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        comments_timeline.delegate = self
+        comments_timeline.dataSource = self
+        comments_timeline.separatorColor = UIColor.clear
+        comments_timeline.rowHeight = UITableView.automaticDimension
+        if news != nil {
+            getComments(path: "Comments/News/\(news!.id)")
+        } else if clinical_case != nil {
+            getComments(path: "Comments/Cases/\(clinical_case!.id)")
+        } else if discussion != nil {
+            getComments(path: "Comments/Discussions/\(discussion!.id)")
+        } else if research != nil {
+            getComments(path: "Comments/Researches/\(research!.id)")
+        } else {
+            getComments(path: path!)
+        }
+    }
+    
+    func loopComments(path: String, ref: DatabaseReference, snapshot: DataSnapshot) {
+        self.startAnimation()
+        for child in snapshot.children.allObjects as! [DataSnapshot] {
+            let dict = child.value as? [String : AnyObject] ?? [:]
+            let message = dict["message"]! as! String
+            let date = dict["date"]! as! String
+            let userid = dict["user"]! as! String
+            ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
+                in
+                let dict = snapshot.value as? [String : AnyObject] ?? [:]
+                let username = dict["username"]! as! String
+                let fullname = dict["fullname"]! as! String
+                self.comments.append(Comment(id: child.key, date: date, message: message, user: User(id: userid, fullname: fullname, username: username)))
+                self.comments_timeline.reloadData()
+                self.stopAnimation()
+            })
+        }
+    }
+    
+    func getComments(path: String) {
+        self.commentPath = path
+        let ref = Database.database().reference()
+        ref.child(path).observeSingleEvent(of: .value, with: { snapshot in
+            if (snapshot.children.allObjects.count == 0) {
+                self.comments_timeline.setEmptyView(title: "No comment has been posted yet\n\n:(")
+            } else {
+                self.comments_timeline.restore()
+                self.loopComments(path: path, ref: ref, snapshot: snapshot)
+            }
+        })
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.comments.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = comments_timeline.dequeueReusableCell(withIdentifier: "cell")
+        cell!.textLabel?.text = comments[indexPath.row].message
+        let date = getFormattedDate(date: comments[indexPath.row].date)
+        var subtitle = comments[indexPath.row].user.username + " at " + date
+        if comments[indexPath.row].user.id == Auth.auth().currentUser!.uid {
+            subtitle = "Me at " + date
+        }
+        cell!.detailTextLabel?.text = subtitle
+        cell!.detailTextLabel?.textColor = UIColor.gray
+        return cell!
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        if (comments[indexPath.row].user.id == Auth.auth().currentUser!.uid) {
+            let editAction = UITableViewRowAction(style: .default, title: "Edit", handler: { (action, indexPath) in
+                let comments_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditCommentVC") as? EditCommentVC
+                comments_vc!.commentPath = self.commentPath
+                comments_vc!.comment = self.comments[indexPath.row]
+                self.navigationController?.pushViewController(comments_vc!, animated: false)
+            })
+            editAction.backgroundColor = UIColor.blue
+            let deleteAction = UITableViewRowAction(style: .default, title: "Delete", handler: { (action, indexPath) in
+                let comment = self.comments[indexPath.row]
+                self.askDelete(comment: comment, pos: indexPath.row)
+            })
+            deleteAction.backgroundColor = UIColor.red
+            return [editAction, deleteAction]
+        }
+        return nil
+    }
+    
+    
+    func askDelete(comment: Comment, pos: Int) {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+        alert.title = "Are you sure you want delete it?"
+        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
+            action in
+            self.removeDataDB(path: "\(self.commentPath!)/\(comment.id)")
+            self.comments.remove(at: pos)
+            self.comments_timeline.reloadData()
+            if self.comments.count == 0 {
+                self.comments_timeline.setEmptyView(title: "No comment has been posted yet\n\n:(")
+            }
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    @IBAction func addComment(_ sender: Any) {
+        let comments_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "CreateCommentVC") as? CreateCommentVC
+        comments_vc!.commentPath = commentPath
+        navigationController?.pushViewController(comments_vc!, animated: false)
+    }
+}

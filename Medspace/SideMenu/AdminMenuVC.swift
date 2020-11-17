@@ -4,7 +4,6 @@ import FirebaseAuth
 
 class AdminMenuVC: UIViewController, UITableViewDelegate, UITableViewDataSource  {
     
-    @IBOutlet weak var fullname: UILabel!
     @IBOutlet weak var menu_table: UITableView!
     
     let data = [
@@ -26,7 +25,6 @@ class AdminMenuVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
         self.menu_table.dataSource = self
         menu_table.separatorStyle = .none
         self.view.backgroundColor = UIColor.clear
-        self.fullname.text = username
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

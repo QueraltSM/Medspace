@@ -52,7 +52,7 @@ class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDele
     
     func askPost(){
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        alert.title = "Do you want to post the discussion?"
+        alert.title = "Do you want to finally share this?"
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
             action in
             let user = uid

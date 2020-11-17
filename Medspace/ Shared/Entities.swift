@@ -47,6 +47,13 @@ struct Research {
     let user: User
 }
 
+struct Comment {
+    let id: String
+    let date: String
+    let message: String
+    let user: User
+}
+
 struct Speciality {
     let name: String
     let color: UIColor?

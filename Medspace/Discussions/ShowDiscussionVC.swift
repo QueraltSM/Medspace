@@ -77,6 +77,8 @@ class ShowDiscussionVC: UIViewController {
     }
     
     @IBAction func showComments(_ sender: Any) {
-        print("show comments")
+        let comments_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "CommentsVC") as? CommentsVC
+        comments_vc!.discussion = discussion
+        navigationController?.pushViewController(comments_vc!, animated: false)
     }
 }

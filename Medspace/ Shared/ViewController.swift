@@ -224,6 +224,13 @@ extension UIViewController {
         ref.child("\(path)/date").setValue(date)
     }
     
+    func postComment(path: String, message: String, user: String, date: String) {
+        let ref = Database.database().reference()
+        ref.child("\(path)/message").setValue(message)
+        ref.child("\(path)/user").setValue(user)
+        ref.child("\(path)/date").setValue(date)
+    }
+    
     func removeDataDB(path: String) {
         Database.database().reference().child(path).removeValue { error, _ in
             if error != nil {

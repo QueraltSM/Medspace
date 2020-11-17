@@ -156,7 +156,7 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
     
     func askPost() {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        alert.title = "Do you want to post the news?"
+        alert.title = "Do you want to finally share this?"
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
             action in
             self.saveNews()

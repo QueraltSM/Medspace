@@ -65,7 +65,9 @@ class ShowResearchVC: UIViewController {
     }
     
     @IBAction func showComments(_ sender: Any) {
-        print("all comments")
+        let comments_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "CommentsVC") as? CommentsVC
+        comments_vc!.research = research
+        navigationController?.pushViewController(comments_vc!, animated: false)
     }
     
     @IBAction func showDocument(_ sender: Any) {
