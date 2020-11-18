@@ -46,6 +46,10 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                 let username = dict["username"]! as! String
                 let fullname = dict["fullname"]! as! String
                 self.comments.append(Comment(id: child.key, date: date, message: message, user: User(id: userid, fullname: fullname, username: username)))
+                let sortedComments = self.comments.sorted {
+                    $0.date > $1.date
+                }
+                self.comments = sortedComments
                 self.comments_timeline.reloadData()
                 self.stopAnimation()
             })
@@ -86,6 +90,10 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         if (comments[indexPath.row].user.id == Auth.auth().currentUser!.uid) {
             let editAction = UITableViewRowAction(style: .default, title: "Edit", handler: { (action, indexPath) in
                 let comments_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditCommentVC") as? EditCommentVC
+                comments_vc!.news = self.news
+                comments_vc!.clinical_case = self.clinical_case
+                comments_vc!.discussion = self.discussion
+                comments_vc!.research = self.research
                 comments_vc!.commentPath = self.commentPath
                 comments_vc!.comment = self.comments[indexPath.row]
                 self.navigationController?.pushViewController(comments_vc!, animated: false)
@@ -122,5 +130,26 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         let comments_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "CreateCommentVC") as? CreateCommentVC
         comments_vc!.commentPath = commentPath
         navigationController?.pushViewController(comments_vc!, animated: false)
+    }
+    
+    
+    @IBAction func backSegue(_ sender: Any) {
+        if news != nil {
+            let segue_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowNewsVC") as? ShowNewsVC
+            segue_vc!.news = news
+            navigationController?.pushViewController(segue_vc!, animated: false)
+        } else if clinical_case != nil {
+            let segue_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowCaseVC") as? ShowCaseVC
+            segue_vc!.clinical_case = clinical_case
+            navigationController?.pushViewController(segue_vc!, animated: false)
+        } else if discussion != nil {
+            let segue_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowDiscussionVC") as? ShowDiscussionVC
+            segue_vc!.discussion = discussion
+            navigationController?.pushViewController(segue_vc!, animated: false)
+        } else if research != nil {
+            let segue_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowResearchVC") as? ShowResearchVC
+            segue_vc!.research = research
+            navigationController?.pushViewController(segue_vc!, animated: false)
+        }
     }
 }

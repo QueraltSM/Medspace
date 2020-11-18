@@ -6,6 +6,10 @@ class EditCommentVC: UIViewController {
     var commentPath: String!
     @IBOutlet weak var message: UITextView!
     @IBOutlet weak var scrollview: UIScrollView!
+    var news: News?
+    var clinical_case: Case?
+    var discussion: Discussion?
+    var research: Research?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,5 +44,16 @@ class EditCommentVC: UIViewController {
         } else {
             showAlert(title: "Error", message: error)
         }
+    }
+    
+    @IBAction func backSegue(_ sender: Any) {
+        let comments_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "CommentsVC") as? CommentsVC
+        comments_vc!.commentPath = self.commentPath
+        comments_vc!.news = self.news
+        comments_vc!.clinical_case = self.clinical_case
+        comments_vc!.discussion = self.discussion
+        comments_vc!.research = self.research
+        comments_vc!.path = self.commentPath
+        self.navigationController?.pushViewController(comments_vc!, animated: false)
     }
 }
