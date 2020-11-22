@@ -2,6 +2,10 @@ import UIKit
 
 class CreateCommentVC: UIViewController, UITextViewDelegate {
 
+    var news: News?
+    var clinical_case: Case?
+    var discussion: Discussion?
+    var research: Research?
     @IBOutlet weak var message: UITextView!
     @IBOutlet weak var scrollview: UIScrollView!
     var commentPath: String?
@@ -23,9 +27,7 @@ class CreateCommentVC: UIViewController, UITextViewDelegate {
             let now = Date().description
             let path = "\(self.commentPath!)/\(now)::\(uid!)"
             self.postComment(path: path, message: self.message.text!, user: user!, date: now)
-            let comments_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "CommentsVC") as? CommentsVC
-            comments_vc!.path = self.commentPath
-            self.navigationController?.pushViewController(comments_vc!, animated: false)
+            self.goBack()
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)
@@ -49,5 +51,19 @@ class CreateCommentVC: UIViewController, UITextViewDelegate {
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
         return newText.count <= 200
+    }
+    
+    func goBack() {
+        let segue_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "CommentsVC") as? CommentsVC
+        if news != nil {
+            segue_vc!.news = news
+        } else if clinical_case != nil {
+            segue_vc!.clinical_case = clinical_case
+        } else if discussion != nil {
+            segue_vc!.discussion = discussion
+        } else if research != nil {
+            segue_vc!.research = research
+        }
+        navigationController?.pushViewController(segue_vc!, animated: false)
     }
 }

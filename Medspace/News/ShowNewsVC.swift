@@ -15,7 +15,6 @@ class ShowNewsVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setMenu()
         scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: news_description.bottomAnchor).isActive = true
         image_header.image = news!.image
         news_title.text = news!.title
@@ -27,12 +26,11 @@ class ShowNewsVC: UIViewController {
         speciality.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline)
         speciality.round(corners: .allCorners, cornerRadius: 10)
         speciality.textAlignment = .center
-        if (news?.user.id == uid) {
-            configNews(enabled: true)
-        }
+        configNews(enabled: news!.user.id == uid)
     }
 
     func configNews(enabled: Bool) {
+        print("Enabled=> \(enabled)")
         editButton.isEnabled = enabled
         deleteButton.isEnabled = enabled
         if enabled {
@@ -54,6 +52,7 @@ class ShowNewsVC: UIViewController {
             action in
             let path = "News/\(self.news!.id)"
             self.removeDataDB(path: path)
+            self.removeDataDB(path: "Comments/\(path)")
             self.removeDataStorage(path: path)
             self.presentVC(segue: "MyNewsVC")
         }))
@@ -61,7 +60,15 @@ class ShowNewsVC: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
+    
     @IBAction func viewComments(_ sender: Any) {
-        print("view comments")
+        let comments_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "CommentsVC") as? CommentsVC
+        comments_vc!.news = news
+        navigationController?.pushViewController(comments_vc!, animated: false)
+    }
+    
+    @IBAction func goBack(_ sender: Any) {
+        let back_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "NewsVC") as? NewsVC
+        navigationController?.pushViewController(back_vc!, animated: false)
     }
 }

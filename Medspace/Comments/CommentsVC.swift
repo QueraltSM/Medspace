@@ -109,7 +109,6 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         return nil
     }
     
-    
     func askDelete(comment: Comment, pos: Int) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
         alert.title = "Are you sure you want delete it?"
@@ -129,6 +128,10 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBAction func addComment(_ sender: Any) {
         let comments_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "CreateCommentVC") as? CreateCommentVC
         comments_vc!.commentPath = commentPath
+        comments_vc!.news = news
+        comments_vc!.clinical_case = clinical_case
+        comments_vc!.discussion = discussion
+        comments_vc!.research = research
         navigationController?.pushViewController(comments_vc!, animated: false)
     }
     

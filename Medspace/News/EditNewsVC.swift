@@ -1,4 +1,7 @@
 import UIKit
+import FirebaseDatabase
+import FirebaseStorage
+import FirebaseAuth
 
 class EditNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
 
@@ -12,16 +15,17 @@ class EditNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
     var selectedSpeciality: String?
     var news: News?
     var needsUpdate: Bool = false
+    @IBOutlet weak var descriptionview: UITextView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setMenu()
-        scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: speciality_textfield.bottomAnchor).isActive = true
+        scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: descriptionview.bottomAnchor).isActive = true
         scrollview.backgroundColor = UIColor.white
         titleview.delegate = self
         speciality_textfield.delegate = self
         speciality_textfield.textColor = UIColor.black
         speciality_textfield.text = news!.speciality.name
+        descriptionview.text = news!.description
         titleview.text = news!.title
         titleview.textColor = UIColor.black
         image_header.image = news!.image
@@ -68,9 +72,14 @@ class EditNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
         let picker = UIImagePickerController()
         picker.delegate = self
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        if let popoverController = alert.popoverPresentationController {
+            popoverController.sourceView = self.view
+            popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.maxY, width: 0, height: 0)
+        }
         alert.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: {
             action in
             picker.sourceType = .photoLibrary
+            picker.modalPresentationStyle = .currentContext
             self.present(picker, animated: true, completion: nil)
         }))
         if (!image_header_invalid) {
@@ -99,7 +108,27 @@ class EditNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
         speciality_textfield.text = selectedSpeciality
     }
     
-    @IBAction func showDescription(_ sender: Any) {
+    func shareNews() {
+        self.startAnimation()
+        guard let imageData: Data = news?.image.jpegData(compressionQuality: 0.1) else {
+            return
+        }
+        let metaDataConfig = StorageMetadata()
+        metaDataConfig.contentType = "image/jpg"
+        let storageRef = Storage.storage().reference(withPath: "News/\(news!.id)")
+        storageRef.putData(imageData, metadata: metaDataConfig){ (metaData, error) in
+            self.stopAnimation()
+            if let error = error {
+                self.showAlert(title: "Error", message: error.localizedDescription)
+                return
+            } else {
+                self.postNews(path: "News/\(self.news!.id)", title: self.titleview.text, description: self.descriptionview.text!, speciality: self.speciality_textfield.text!, user: self.news!.user.id, date: self.news!.date)
+                self.presentVC(segue: "MyNewsVC")
+            }
+        }
+    }
+    
+    @IBAction func saveNews(_ sender: Any) {
         var error = ""
         if (image_header_invalid) {
             error += "Choose a valid image\n"
@@ -107,35 +136,30 @@ class EditNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
         if (titleview.text.isEmpty) {
             error += "Write a title\n"
         }
-        if (error == "" && !titleview.text.isEmpty) {
-            showEditNewsVC2()
+        if (descriptionview.text.isEmpty) {
+            error += "Write a description\n"
+        }
+        if (titleview.text == news!.title && descriptionview.text == news!.description) {
+            error = "You have not modified the previous data"
+        }
+        if (error == "") {
+            let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+            alert.title = "Do you want to update the news?"
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
+                action in
+                self.shareNews()
+            }))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         } else {
             showAlert(title: "Error", message: error)
         }
-    }
-    
-    func showEditNewsVC2(){
-        let edit_news_vc2 = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditNewsVC2") as? EditNewsVC2
-        var color = UIColor.init()
-        for s in specialities {
-            if s.name == speciality_textfield.text! {
-                color = s.color!
-            }
-        }
-        if (news!.image != image_header.image || news!.title != titleview.text || news!.speciality.name != speciality_textfield.text) {
-            needsUpdate = true
-        }
-        let final_news = News(id: news!.id, image: image_header.image!, date: news!.date, title: titleview.text!, speciality: Speciality(name: speciality_textfield.text!, color: color), description: news!.description, user: news!.user)
-        edit_news_vc2!.news = final_news
-        edit_news_vc2!.needsUpdate = needsUpdate
-        navigationController?.pushViewController(edit_news_vc2!, animated: false)
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
         return newText.count <= 100
     }
-    
 }
 
 extension EditNewsVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {

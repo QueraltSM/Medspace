@@ -30,6 +30,8 @@ class CreateResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
         research_description.text = "In less than half a century, allergy, originally perceived as a rare disease, has become a major public health threat, today affecting the lives of more than 60 million people in Europe, and probably close to one billion worldwide, thereby heavily impacting the budgets of public health systems."
         research_description.textColor = UIColor.gray
         document_name.textColor = UIColor.gray
+        scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: research_description.bottomAnchor).isActive = true
+        scrollview.backgroundColor = UIColor.white
         let disclosure = UITableViewCell()
         disclosure.frame = speciality_textfield.bounds
         disclosure.accessoryType = .disclosureIndicator

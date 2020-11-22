@@ -17,11 +17,14 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: speciality_textfield.bottomAnchor).isActive = true
         scrollview.backgroundColor = UIColor.white
         titleview.delegate = self
+        news_description.delegate = self
         speciality_textfield.delegate = self
         titleview.textColor = UIColor.gray
         news_description.textColor = UIColor.gray
         titleview.text = "For example: Researchers develop highly scalable, accurate antibody test for covid-19"
         news_description.text = "The UT Austin research team, led by Jason Lavinder, a research associate in the Cockrell School of Engineering, and Greg Ippolito, assistant professor in the College of Natural Sciences and Dell Medical School, developed the new antibody test for SARS-CoV-2 and provided the viral antigens for this study via their UT Austin colleague and collaborator, associate professor Jason McLellan. Other UT Austin team members are Dalton Towers and Jimmy Gollihar. The work was published this week in The Journal of Clinical Investigation"
+        scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: news_description.bottomAnchor).isActive = true
+        scrollview.backgroundColor = UIColor.white
         speciality_textfield.textColor = UIColor.gray
         speciality_textfield.text = "Allergy and Inmunology"
         let disclosure = UITableViewCell()
@@ -88,9 +91,14 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         let picker = UIImagePickerController()
         picker.delegate = self
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        if let popoverController = alert.popoverPresentationController {
+            popoverController.sourceView = self.view
+            popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.maxY, width: 0, height: 0)
+        }
         alert.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: {
             action in
             picker.sourceType = .photoLibrary
+            picker.modalPresentationStyle = .currentContext
             self.present(picker, animated: true, completion: nil)
         }))
         if (!image_header_invalid) {
@@ -141,14 +149,14 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         }
         let metaDataConfig = StorageMetadata()
         metaDataConfig.contentType = "image/jpg"
-        let storageRef = Storage.storage().reference(withPath: "News/\(path)")
+        let storageRef = Storage.storage().reference(withPath: path)
         storageRef.putData(imageData, metadata: metaDataConfig){ (metaData, error) in
             self.stopAnimation()
             if let error = error {
                 self.showAlert(title: "Error", message: error.localizedDescription)
                 return
             } else {
-                self.postNews(path: "News/\(path)", title: self.titleview.text!, description: self.news_description.text!, speciality: self.speciality_textfield.text!, user: user!, date: now)
+                self.postNews(path: path, title: self.titleview.text!, description: self.news_description.text!, speciality: self.speciality_textfield.text!, user: user!, date: now)
                 self.presentVC(segue: "MyNewsVC")
             }
         }
