@@ -19,7 +19,11 @@ class ShowDiscussionVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
-        scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: discussion_description.bottomAnchor).isActive = true
+        if #available(iOS 11.0, *) {
+            scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: discussion_description.bottomAnchor).isActive = true
+        } else {
+            // Fallback on earlier versions
+        }
         user.setTitle("Posted by \(discussion!.user.username)", for: .normal)
         user.titleLabel!.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline).italic()
         discussion_title.text = discussion!.title
@@ -53,7 +57,7 @@ class ShowDiscussionVC: UIViewController {
     
     @IBAction func deleteDiscussion(_ sender: Any) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        alert.title = "Are you sure you want delete it?"
+        alert.title = "Are you sure you want delete this?"
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
             action in
             let path = "Discussions/\(self.discussion!.id)"
@@ -66,7 +70,7 @@ class ShowDiscussionVC: UIViewController {
     
     @objc func deteleDiscussion(){
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        alert.title = "Are you sure you want delete it?"
+        alert.title = "Are you sure you want delete this?"
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
             action in
             self.removeDataDB(path: "Discussions/\(self.discussion!.id)")

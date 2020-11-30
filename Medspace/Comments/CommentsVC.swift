@@ -61,7 +61,7 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         let ref = Database.database().reference()
         ref.child(path).observeSingleEvent(of: .value, with: { snapshot in
             if (snapshot.children.allObjects.count == 0) {
-                self.comments_timeline.setEmptyView(title: "No comment has been posted yet\n\n:(")
+                self.comments_timeline.setEmptyView(title: "No comment has been posted yet")
             } else {
                 self.comments_timeline.restore()
                 self.loopComments(path: path, ref: ref, snapshot: snapshot)
@@ -111,14 +111,14 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     func askDelete(comment: Comment, pos: Int) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        alert.title = "Are you sure you want delete it?"
+        alert.title = "Are you sure you want delete this?"
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
             action in
             self.removeDataDB(path: "\(self.commentPath!)/\(comment.id)")
             self.comments.remove(at: pos)
             self.comments_timeline.reloadData()
             if self.comments.count == 0 {
-                self.comments_timeline.setEmptyView(title: "No comment has been posted yet\n\n:(")
+                self.comments_timeline.setEmptyView(title: "No comment has been posted yet")
             }
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))

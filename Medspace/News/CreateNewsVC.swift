@@ -14,7 +14,11 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
-        scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: speciality_textfield.bottomAnchor).isActive = true
+        if #available(iOS 11.0, *) {
+            scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: news_description.bottomAnchor).isActive = true
+        } else {
+            scrollview.bottomAnchor.constraint(equalTo: news_description.bottomAnchor).isActive = true
+        }
         scrollview.backgroundColor = UIColor.white
         titleview.delegate = self
         news_description.delegate = self
@@ -22,8 +26,7 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         titleview.textColor = UIColor.gray
         news_description.textColor = UIColor.gray
         titleview.text = "For example: Researchers develop highly scalable, accurate antibody test for covid-19"
-        news_description.text = "The UT Austin research team, led by Jason Lavinder, a research associate in the Cockrell School of Engineering, and Greg Ippolito, assistant professor in the College of Natural Sciences and Dell Medical School, developed the new antibody test for SARS-CoV-2 and provided the viral antigens for this study via their UT Austin colleague and collaborator, associate professor Jason McLellan. Other UT Austin team members are Dalton Towers and Jimmy Gollihar. The work was published this week in The Journal of Clinical Investigation"
-        scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: news_description.bottomAnchor).isActive = true
+        news_description.text = "The UT Austin research team, led by Jason Lavinder, a research associate in the Cockrell School of Engineering, and Greg Ippolito, assistant professor in the College of Natural Sciences and Dell Medical School, developed the new antibody test for SARS-CoV-2 and provided the viral antigens for this study via their UT Austin colleague and collaborator, associate professor Jason McLellan."
         scrollview.backgroundColor = UIColor.white
         speciality_textfield.textColor = UIColor.gray
         speciality_textfield.text = "Allergy and Inmunology"
@@ -124,7 +127,7 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
             error += "Choose a valid image\n"
         }
         if speciality_textfield.textColor == UIColor.gray {
-            error += "Select a speciality"
+            error += "Select a speciality\n"
         }
         if titleview.textColor == UIColor.gray || titleview.text.isEmpty {
             error += "Write a title\n"
@@ -164,7 +167,7 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
     
     func askPost() {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        alert.title = "Do you want to finally share this?"
+        alert.title = "Do you want to share this?"
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
             action in
             self.saveNews()
@@ -184,6 +187,8 @@ extension CreateNewsVC: UIImagePickerControllerDelegate, UINavigationControllerD
             image_header.contentMode = .scaleToFill
             image_header.image = pickedImage
             image_header_invalid = false
+            image_header.isHidden = false
+            image_header.heightAnchor.constraint(equalToConstant: CGFloat(241)).isActive = true
         }
         dismiss(animated: false, completion: nil)
     }

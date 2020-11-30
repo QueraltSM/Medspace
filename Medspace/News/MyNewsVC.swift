@@ -12,6 +12,7 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
     @IBOutlet weak var editButton: UIBarButtonItem!
     var edit = false
     var ref: DatabaseReference!
+    var searchBarIsHidden: Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,7 +36,14 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
     }
     
     @IBAction func didTapSearchButton(_ sender: Any) {
-         setSearchBar()
+        if searchBarIsHidden {
+            setSearchBar()
+            searchBarIsHidden = false
+        } else {
+            searchController.isActive = false
+            news_timeline.tableHeaderView = nil
+            searchBarIsHidden = true
+        }
     }
     
     @IBAction func didTapMenuButton(_ sender: Any) {
@@ -116,7 +124,7 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
                         self.news = sortedNews
                         self.news_timeline.reloadData()
                         self.stopAnimation()
-                        self.turnEditState(enabled: true, title: "Edit")
+                        self.turnEditState(enabled: true, title: "Select")
                         self.news_timeline.restore()
                     })
                 } else {
@@ -129,7 +137,7 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
     func getNews() {
         ref.child("News").observeSingleEvent(of: .value, with: { snapshot in
             if (snapshot.children.allObjects.count == 0) {
-                self.news_timeline.setEmptyView(title: "You have not post a news yet\n\n:(")
+                self.news_timeline.setEmptyView(title: "You have not post a news yet")
             } else {
                 self.news_timeline.restore()
                 self.loopNews(ref: self.ref, snapshot: snapshot)
@@ -180,7 +188,7 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
     
     func setToolbarDelete(hide: Bool) {
         let flexible1 = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: self, action: nil)
-        let selectAllButton: UIBarButtonItem = UIBarButtonItem(title: "Select All", style: .plain, target: self, action: #selector(didPressSelectAll))
+        let selectAllButton: UIBarButtonItem = UIBarButtonItem(title: "All", style: .plain, target: self, action: #selector(didPressSelectAll))
         let deleteButton: UIBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(didPressDelete))
         let flexible2 = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: self, action: nil)
         self.toolbarItems = [flexible1, selectAllButton, deleteButton, flexible2]
@@ -194,7 +202,7 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
             edit = true
             setToolbarDelete(hide: false)
         } else {
-            editButton.title = "Edit"
+            editButton.title = "Select"
             edit = false
             setToolbarDelete(hide: true)
             cancelSelections()
@@ -235,10 +243,10 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
         }
         if (news.count == 0) {
             turnEditState(enabled: false, title: "")
-            news_timeline.setEmptyView(title: "You have not post a news yet\n\n:(")
+            news_timeline.setEmptyView(title: "You have not post a news yet")
         } else {
             edit = false
-            turnEditState(enabled: true, title: "Edit")
+            turnEditState(enabled: true, title: "Select")
         }
     }
     

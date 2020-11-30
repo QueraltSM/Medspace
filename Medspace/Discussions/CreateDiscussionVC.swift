@@ -26,7 +26,11 @@ class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDele
         disclosure.isUserInteractionEnabled = false
         disclosure.tintColor = UIColor.darkGray
         speciality_textfield.addSubview(disclosure)
-        scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: discussion_description.bottomAnchor).isActive = true
+        if #available(iOS 11.0, *) {
+            scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: discussion_description.bottomAnchor).isActive = true
+        } else {
+            scrollview.bottomAnchor.constraint(equalTo: discussion_description.bottomAnchor).isActive = true
+        }
         scrollview.backgroundColor = UIColor.white
         createPickerView()
         dismissPickerView()
@@ -52,7 +56,7 @@ class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDele
     
     func askPost(){
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        alert.title = "Do you want to finally share this?"
+        alert.title = "Do you want to share this?"
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
             action in
             let user = uid

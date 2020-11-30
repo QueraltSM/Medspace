@@ -18,7 +18,11 @@ class CreateResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
         super.viewDidLoad()
         setMenu()
         documentURL = nil
-        scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: document_name.bottomAnchor).isActive = true
+        if #available(iOS 11.0, *) {
+            scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: document_name.bottomAnchor).isActive = true
+        } else {
+            scrollview.bottomAnchor.constraint(equalTo: document_name.bottomAnchor).isActive = true
+        }
         scrollview.backgroundColor = UIColor.white
         titleview.delegate = self
         research_description.delegate = self
@@ -30,7 +34,6 @@ class CreateResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
         research_description.text = "In less than half a century, allergy, originally perceived as a rare disease, has become a major public health threat, today affecting the lives of more than 60 million people in Europe, and probably close to one billion worldwide, thereby heavily impacting the budgets of public health systems."
         research_description.textColor = UIColor.gray
         document_name.textColor = UIColor.gray
-        scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: research_description.bottomAnchor).isActive = true
         scrollview.backgroundColor = UIColor.white
         let disclosure = UITableViewCell()
         disclosure.frame = speciality_textfield.bounds
@@ -60,7 +63,9 @@ class CreateResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
     @IBAction func selectDocument(_ sender: Any) {
         let documentpicker = UIDocumentPickerViewController(documentTypes: [String(kUTTypePDF)], in: .import)
         documentpicker.delegate = self
-        documentpicker.allowsMultipleSelection = false
+        if #available(iOS 11.0, *) {
+            documentpicker.allowsMultipleSelection = false
+        }
         present(documentpicker, animated: true, completion: nil)
     }
     
@@ -75,6 +80,9 @@ class CreateResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
     
     @IBAction func savePost(_ sender: Any) {
         var error = ""
+        if documentURL == nil {
+            error += "Upload a document\n"
+        }
         if speciality_textfield.textColor == UIColor.gray {
             error += "Select a speciality\n"
         }
@@ -84,9 +92,6 @@ class CreateResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
         if research_description.textColor == UIColor.gray || research_description.text.isEmpty {
             error += "Write a description\n"
         }
-        if documentURL == nil {
-            error += "Upload a document\n"
-        }
         if error == "" {
             askPost();
         } else {
@@ -95,18 +100,14 @@ class CreateResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
     }
     
     func askPost() {
-        if research_description.textColor == UIColor.gray || research_description.text.isEmpty {
-            showAlert(title: "Error", message: "Write a description")
-        } else {
-            let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-            alert.title = "Do you want to post \(documentURL!.lastPathComponent)?"
-            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
-                action in
-                self.postResearch()
-            }))
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-        }
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+        alert.title = "Do you want to post \(documentURL!.lastPathComponent)?"
+        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
+            action in
+            self.postResearch()
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     func postResearch() {

@@ -128,7 +128,7 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISe
         let ref = Database.database().reference()
         ref.child("News").observeSingleEvent(of: .value, with: { snapshot in
             if (snapshot.children.allObjects.count == 0) {
-                self.news_timeline.setEmptyView(title: "No news has been posted yet\n\n:(")
+                self.news_timeline.setEmptyView(title: "No news has been posted yet")
             } else {
                 self.news_timeline.restore()
                 self.loopNews(ref: ref, snapshot: snapshot)

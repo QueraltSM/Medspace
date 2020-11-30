@@ -2,7 +2,7 @@ import UIKit
 import FirebaseDatabase
 import FirebaseAuth
 
-class EditProfileVC: UIViewController  {
+class EditProfileVC: UIViewController, UITextFieldDelegate  {
 
     @IBOutlet weak var fullnametxt: UITextField!
     @IBOutlet weak var usernametxt: UITextField!
@@ -12,8 +12,19 @@ class EditProfileVC: UIViewController  {
     override func viewDidLoad() {
         super.viewDidLoad()
         usernametxt.text = username
+        usernametxt.delegate = self
+        usernametxt.textColor = UIColor.gray
         fullnametxt.text = fullname
+        fullnametxt.delegate = self
+        fullnametxt.textColor = UIColor.gray
         ref = Database.database().reference()
+    }
+    
+    func textFieldDidBeginEditing(_ textView: UITextField) {
+        if textView.textColor == UIColor.gray {
+            textView.text = ""
+            textView.textColor = UIColor.black
+        }
     }
     
     func updateUser() {
@@ -48,6 +59,11 @@ class EditProfileVC: UIViewController  {
         })
     }
     
+    @IBAction func goSettings(_ sender: Any) {
+        let settingsVC = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "SettingsVC") as? SettingsVC
+        navigationController?.pushViewController(settingsVC!, animated: false)
+    }
+    
     @IBAction func saveChanges(_ sender: Any) {
         var error = ""
         if usernametxt.text! == username && fullnametxt.text! == fullname {
@@ -69,9 +85,5 @@ class EditProfileVC: UIViewController  {
         } else {
             showAlert(title:"Error", message: error)
         }
-    }
-    
-    @IBAction func didTapMenu(_ sender: Any) {
-        swipeMenu()
     }
 }

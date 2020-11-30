@@ -114,7 +114,7 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         let ref = Database.database().reference()
         ref.child("Researches").observeSingleEvent(of: .value, with: { snapshot in
             if (snapshot.children.allObjects.count == 0) {
-                self.researches_timeline.setEmptyView(title: "No research has been posted yet\n\n:(")
+                self.researches_timeline.setEmptyView(title: "No research has been posted yet")
             } else {
                 self.researches_timeline.restore()
                 self.loopResearches(ref: ref, snapshot: snapshot)

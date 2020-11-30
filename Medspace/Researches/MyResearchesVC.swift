@@ -112,7 +112,7 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
                             }
                             self.researches = sortedResearches
                             self.researches_timeline.reloadData()
-                            self.turnEditState(enabled: true, title: "Edit")
+                            self.turnEditState(enabled: true, title: "Select")
                             self.researches_timeline.restore()
                         } else {
                             self.showAlert(title: "Error", message: error!.localizedDescription)
@@ -124,7 +124,7 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
         }
         if (self.researches.count == 0) {
-            self.researches_timeline.setEmptyView(title: "You have not post a research yet\n\n:(")
+            self.researches_timeline.setEmptyView(title: "You have not post a research yet")
             self.turnEditState(enabled: false, title: "")
             self.stopAnimation()
         }
@@ -160,7 +160,7 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
             edit = true
             setToolbarDelete(hide: false)
         } else {
-            editButton.title = "Edit"
+            editButton.title = "Select"
             edit = false
             setToolbarDelete(hide: true)
             cancelSelections()
@@ -192,7 +192,7 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func setToolbarDelete(hide: Bool) {
         let flexible1 = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: self, action: nil)
-        let selectAllButton: UIBarButtonItem = UIBarButtonItem(title: "Select All", style: .plain, target: self, action: #selector(didPressSelectAll))
+        let selectAllButton: UIBarButtonItem = UIBarButtonItem(title: "All", style: .plain, target: self, action: #selector(didPressSelectAll))
         let deleteButton: UIBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(didPressDelete))
         let flexible2 = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: self, action: nil)
         self.toolbarItems = [flexible1, selectAllButton, deleteButton, flexible2]
@@ -234,10 +234,10 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         if (researches.count == 0) {
             turnEditState(enabled: false, title: "")
-            researches_timeline.setEmptyView(title: "You have not post a research yet\n\n:(")
+            researches_timeline.setEmptyView(title: "You have not post a research yet")
         } else {
             edit = false
-            turnEditState(enabled: true, title: "Edit")
+            turnEditState(enabled: true, title: "Select")
         }
     }
     

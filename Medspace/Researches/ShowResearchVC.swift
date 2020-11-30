@@ -17,7 +17,11 @@ class ShowResearchVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
-        scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: research_description.bottomAnchor).isActive = true
+        if #available(iOS 11.0, *) {
+            scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: research_description.bottomAnchor).isActive = true
+        } else {
+            // Fallback on earlier versions
+        }
         research_title.text = research!.title
         research_description.text = research!.description
         date.text = research!.date

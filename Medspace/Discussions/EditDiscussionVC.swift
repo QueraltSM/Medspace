@@ -27,7 +27,11 @@ class EditDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
         disclosure.isUserInteractionEnabled = false
         disclosure.tintColor = UIColor.darkGray
         speciality_textfield.addSubview(disclosure)
-        scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: discussion_description.bottomAnchor).isActive = true
+        if #available(iOS 11.0, *) {
+            scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: discussion_description.bottomAnchor).isActive = true
+        } else {
+            // Fallback on earlier versions
+        }
         scrollview.backgroundColor = UIColor.white
         createPickerView()
         dismissPickerView()

@@ -25,7 +25,11 @@ class ShowCaseVC: UIViewController {
         setMenu()
         user.setTitle("Posted by \(clinical_case!.user.username)", for: .normal)
         user.titleLabel!.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline).italic()
-        scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: examination.bottomAnchor).isActive = true
+        if #available(iOS 11.0, *) {
+            scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: examination.bottomAnchor).isActive = true
+        } else {
+            // Fallback on earlier versions
+        }
         case_title.text = clinical_case!.title
         case_description.text = clinical_case!.description
         description_label.setLabelBorders()

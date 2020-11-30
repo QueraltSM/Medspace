@@ -103,7 +103,7 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
     
     func setToolbarDelete(hide: Bool) {
         let flexible1 = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: self, action: nil)
-        let selectAllButton: UIBarButtonItem = UIBarButtonItem(title: "Select All", style: .plain, target: self, action: #selector(didPressSelectAll))
+        let selectAllButton: UIBarButtonItem = UIBarButtonItem(title: "All", style: .plain, target: self, action: #selector(didPressSelectAll))
         let deleteButton: UIBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(didPressDelete))
         let flexible2 = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: self, action: nil)
         self.toolbarItems = [flexible1, selectAllButton, deleteButton, flexible2]
@@ -144,10 +144,10 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
         }
         if (cases.count == 0) {
             turnEditState(enabled: false, title: "")
-            cases_timeline.setEmptyView(title: "You have not post a case yet\n\n:(")
+            cases_timeline.setEmptyView(title: "You have not post a case yet")
         } else {
             edit = false
-            turnEditState(enabled: true, title: "Edit")
+            turnEditState(enabled: true, title: "Select")
         }
     }
     
@@ -211,7 +211,7 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
                         $0.date > $1.date
                     }
                     self.cases = sortedResearches
-                    self.turnEditState(enabled: true, title: "Edit")
+                    self.turnEditState(enabled: true, title: "Select")
                     self.cases_timeline.reloadData()
                     self.cases_timeline.restore()
                     self.stopAnimation()
@@ -221,7 +221,7 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
             }
         }
         if (self.cases.count == 0) {
-            self.cases_timeline.setEmptyView(title: "You have not post a case yet\n\n:(")
+            self.cases_timeline.setEmptyView(title: "You have not post a case yet")
             self.turnEditState(enabled: false, title: "")
             self.stopAnimation()
         }
@@ -239,7 +239,7 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
             edit = true
             setToolbarDelete(hide: false)
         } else {
-            editButton.title = "Edit"
+            editButton.title = "Select"
             edit = false
             setToolbarDelete(hide: true)
             cancelSelections()

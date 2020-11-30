@@ -15,19 +15,26 @@ class EditNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
     var selectedSpeciality: String?
     var news: News?
     var needsUpdate: Bool = false
+    var imageUpdated: Bool = false
     @IBOutlet weak var descriptionview: UITextView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: descriptionview.bottomAnchor).isActive = true
+        if #available(iOS 11.0, *) {
+            scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: descriptionview.bottomAnchor).isActive = true
+        } else {
+            scrollview.bottomAnchor.constraint(equalTo: descriptionview.bottomAnchor).isActive = true
+        }
         scrollview.backgroundColor = UIColor.white
         titleview.delegate = self
+        descriptionview.delegate = self
         speciality_textfield.delegate = self
-        speciality_textfield.textColor = UIColor.black
+        speciality_textfield.textColor = UIColor.gray
+        descriptionview.textColor = UIColor.gray
         speciality_textfield.text = news!.speciality.name
         descriptionview.text = news!.description
         titleview.text = news!.title
-        titleview.textColor = UIColor.black
+        titleview.textColor = UIColor.gray
         image_header.image = news!.image
         let disclosure = UITableViewCell()
         disclosure.frame = speciality_textfield.bounds
@@ -110,7 +117,7 @@ class EditNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
     
     func shareNews() {
         self.startAnimation()
-        guard let imageData: Data = news?.image.jpegData(compressionQuality: 0.1) else {
+        guard let imageData: Data = self.image_header.image!.jpegData(compressionQuality: 0.1) else {
             return
         }
         let metaDataConfig = StorageMetadata()
@@ -123,9 +130,23 @@ class EditNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
                 return
             } else {
                 self.postNews(path: "News/\(self.news!.id)", title: self.titleview.text, description: self.descriptionview.text!, speciality: self.speciality_textfield.text!, user: self.news!.user.id, date: self.news!.date)
-                self.presentVC(segue: "MyNewsVC")
+                self.presentShowNews()
             }
         }
+    }
+    
+    func presentShowNews() {
+        var color = UIColor.init()
+        for s in specialities {
+            if s.name == self.speciality_textfield.text {
+                color = s.color!
+            }
+        }
+        let newsUpdated = News(id: self.news!.id, image: self.image_header.image!, date: self.news!.date, title: self.titleview.text, speciality: Speciality(name: self.speciality_textfield.text!, color: color), description: self.descriptionview.text, user: self.news!.user)
+        
+        let show_news_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowNewsVC") as? ShowNewsVC
+        show_news_vc!.news = newsUpdated
+        navigationController?.pushViewController(show_news_vc!, animated: false)
     }
     
     @IBAction func saveNews(_ sender: Any) {
@@ -139,12 +160,12 @@ class EditNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
         if (descriptionview.text.isEmpty) {
             error += "Write a description\n"
         }
-        if (titleview.text == news!.title && descriptionview.text == news!.description) {
+        if (!imageUpdated && titleview.text == news!.title && descriptionview.text == news!.description) {
             error = "You have not modified the previous data"
         }
         if (error == "") {
             let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-            alert.title = "Do you want to update the news?"
+            alert.title = "Do you want to update this?"
             alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
                 action in
                 self.shareNews()
@@ -158,6 +179,7 @@ class EditNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
+        textView.textColor = UIColor.black
         return newText.count <= 100
     }
 }
@@ -165,9 +187,10 @@ class EditNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
 extension EditNewsVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            image_header.contentMode = .scaleToFill
+            image_header.contentMode = .scaleAspectFill
             image_header.image = pickedImage
             image_header_invalid = false
+            imageUpdated = true
         }
         dismiss(animated: false, completion: nil)
     }

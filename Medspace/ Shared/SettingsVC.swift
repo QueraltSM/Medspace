@@ -4,7 +4,7 @@ import Firebase
 
 class SettingsVC: UIViewController, UITableViewDelegate, UITableViewDataSource  {
     
-    var options = ["Account", "Edit profile", "Change password", "Delete account"]
+    var options = ["Edit profile", "Change password", "Delete account"]
     
     @IBOutlet weak var settingsTable: UITableView!
     
@@ -25,15 +25,9 @@ class SettingsVC: UIViewController, UITableViewDelegate, UITableViewDataSource  
     
       func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = (tableView.dequeueReusableCell(withIdentifier: "cell") as? CollapsibleTableViewCell) ?? CollapsibleTableViewCell(style: .default, reuseIdentifier: "cell")
-        if (options[indexPath.row] == "Account") {
-            cell.imageView!.image = UIImage(named: "Account.png")
-            cell.separator.backgroundColor = .lightGray
-            cell.textLabel!.font = UIFont.boldSystemFont(ofSize: 20)
-        } else {
-            cell.accessoryType = .disclosureIndicator
-            cell.textLabel!.textColor = .darkGray
-            cell.textLabel!.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)
-        }
+        cell.accessoryType = .disclosureIndicator
+        cell.textLabel!.textColor = .black
+        cell.textLabel!.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)
         cell.textLabel?.text = options[indexPath.row]
         return cell
     }

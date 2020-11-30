@@ -114,7 +114,7 @@ class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
         let ref = Database.database().reference()
         ref.child("Cases").observeSingleEvent(of: .value, with: { snapshot in
             if (snapshot.children.allObjects.count == 0) {
-                self.cases_timeline.setEmptyView(title: "No case has been posted yet\n\n:(")
+                self.cases_timeline.setEmptyView(title: "No case has been posted yet")
             } else {
                 self.cases_timeline.restore()
                 self.loopCases(ref: ref, snapshot: snapshot)

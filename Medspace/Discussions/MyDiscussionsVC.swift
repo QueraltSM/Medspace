@@ -29,7 +29,7 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     func getDiscussions() {
-        self.discussions_timeline.setEmptyView(title: "You have not post a discussion yet\n\n:(")
+        self.discussions_timeline.setEmptyView(title: "You have not post a discussion yet")
         ref.child("Discussions").observeSingleEvent(of: .value, with: { snapshot in
             self.loopDiscussions(ref: self.ref, snapshot: snapshot)
         })
@@ -62,7 +62,7 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                     }
                     self.discussions = sortedDiscussions
                     self.discussions_timeline.reloadData()
-                    self.turnEditState(enabled: true, title: "Edit")
+                    self.turnEditState(enabled: true, title: "Select")
                     self.discussions_timeline.restore()
                     self.stopAnimation()
                 })
@@ -70,7 +70,7 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                 self.stopAnimation()
             }
             if (self.discussions.count == 0) {
-                self.discussions_timeline.setEmptyView(title: "You have not post a discussion yet\n\n:(")
+                self.discussions_timeline.setEmptyView(title: "You have not post a discussion yet")
                 self.turnEditState(enabled: false, title: "")
                 self.stopAnimation()
             }
@@ -171,7 +171,7 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     
     func setToolbarDelete(hide: Bool) {
         let flexible1 = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: self, action: nil)
-        let selectAllButton: UIBarButtonItem = UIBarButtonItem(title: "Select All", style: .plain, target: self, action: #selector(didPressSelectAll))
+        let selectAllButton: UIBarButtonItem = UIBarButtonItem(title: "All", style: .plain, target: self, action: #selector(didPressSelectAll))
         let deleteButton: UIBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(didPressDelete))
         let flexible2 = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: self, action: nil)
         self.toolbarItems = [flexible1, selectAllButton, deleteButton, flexible2]
@@ -217,10 +217,10 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         }
         if (discussions.count == 0) {
             turnEditState(enabled: false, title: "")
-            discussions_timeline.setEmptyView(title: "You have not post a discussion yet\n\n:(")
+            discussions_timeline.setEmptyView(title: "You have not post a discussion yet")
         } else {
             edit = false
-            turnEditState(enabled: true, title: "Edit")
+            turnEditState(enabled: true, title: "Select")
         }
     }
     
@@ -257,7 +257,7 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
             edit = true
             setToolbarDelete(hide: false)
         } else {
-            editButton.title = "Edit"
+            editButton.title = "Select"
             edit = false
             setToolbarDelete(hide: true)
             cancelSelections()

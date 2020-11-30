@@ -14,7 +14,12 @@ class CreateCommentVC: UIViewController, UITextViewDelegate {
         super.viewDidLoad()
         message.delegate = self
         message.textColor = UIColor.gray
-        scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: message.bottomAnchor).isActive = true
+        message.text = ""
+        if #available(iOS 11.0, *) {
+            scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: message.bottomAnchor).isActive = true
+        } else {
+            scrollview.bottomAnchor.constraint(equalTo: message.bottomAnchor).isActive = true
+        }
         scrollview.backgroundColor = UIColor.white
     }
     

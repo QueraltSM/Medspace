@@ -33,7 +33,11 @@ class EditResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate
         disclosure.isUserInteractionEnabled = false
         disclosure.tintColor = UIColor.darkGray
         speciality_textfield.addSubview(disclosure)
-        scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: research_document.bottomAnchor).isActive = true
+        if #available(iOS 11.0, *) {
+            scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: research_document.bottomAnchor).isActive = true
+        } else {
+            // Fallback on earlier versions
+        }
         scrollview.backgroundColor = UIColor.white
         research_document.text = "Press + to upload new document"
         createPickerView()
@@ -113,14 +117,22 @@ class EditResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate
     @IBAction func selectDocument(_ sender: Any) {
         let documentpicker = UIDocumentPickerViewController(documentTypes: [String(kUTTypePDF)], in: .import)
         documentpicker.delegate = self
-        documentpicker.allowsMultipleSelection = false
+        if #available(iOS 11.0, *) {
+            documentpicker.allowsMultipleSelection = false
+        } else {
+            // Fallback on earlier versions
+        }
         present(documentpicker, animated: true, completion: nil)
     }
     
     @IBAction func addDocument(_ sender: Any) {
         let documentpicker = UIDocumentPickerViewController(documentTypes: [String(kUTTypePDF)], in: .import)
         documentpicker.delegate = self
-        documentpicker.allowsMultipleSelection = false
+        if #available(iOS 11.0, *) {
+            documentpicker.allowsMultipleSelection = false
+        } else {
+            // Fallback on earlier versions
+        }
         present(documentpicker, animated: true, completion: nil)
     }
     

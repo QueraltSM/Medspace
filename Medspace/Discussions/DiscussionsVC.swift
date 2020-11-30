@@ -83,7 +83,7 @@ class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         let ref = Database.database().reference()
         ref.child("Discussions").observeSingleEvent(of: .value, with: { snapshot in
             if (snapshot.children.allObjects.count == 0) {
-                self.discussions_timeline.setEmptyView(title: "No discussion has been posted yet\n\n:(")
+                self.discussions_timeline.setEmptyView(title: "No discussion has been posted yet")
             } else {
                 self.discussions_timeline.restore()
                 self.loopDiscussions(ref: ref, snapshot: snapshot)

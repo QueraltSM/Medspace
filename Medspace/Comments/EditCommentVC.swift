@@ -14,7 +14,11 @@ class EditCommentVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         message.text = comment!.message
-        scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: message.bottomAnchor).isActive = true
+        if #available(iOS 11.0, *) {
+            scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: message.bottomAnchor).isActive = true
+        } else {
+            // Fallback on earlier versions
+        }
         scrollview.backgroundColor = UIColor.white
     }
     
