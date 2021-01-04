@@ -12,13 +12,27 @@ class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDele
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
+        initComponents()
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(
+        target: self,action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    func initComponents() {
         discussion_title.delegate = self
         discussion_description.delegate = self
         discussion_title.text = "Anaphylaxis: Emergency treatment"
         discussion_title.textColor = UIColor.gray
         discussion_description.text = "Anaphylaxis is a potentially fatal disorder that is under-recognized and undertreated. This may partly be due to failure to appreciate that anaphylaxis is a much broader syndrome than 'anaphylactic shock' and the goal of therapy should be early recognition and treatment with epinephrine to prevent progression to life-threatening respiratory and/or cardiovascular symptoms and signs, including shock."
         discussion_description.textColor = UIColor.gray
-        speciality_textfield.text = "Allergy and Inmunology"
+        speciality_textfield.text = "Nuclear Medicine"
         speciality_textfield.textColor = UIColor.gray
         let disclosure = UITableViewCell()
         disclosure.frame = speciality_textfield.bounds
@@ -34,6 +48,42 @@ class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDele
         scrollview.backgroundColor = UIColor.white
         createPickerView()
         dismissPickerView()
+    }
+    
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if ((notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue) != nil {
+            if let scrollView = scrollview, let userInfo = notification.userInfo, let endValue = userInfo[UIResponder.keyboardFrameEndUserInfoKey], let durationValue = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey], let curveValue = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] {
+                       let endRect = view.convert((endValue as AnyObject).cgRectValue, from: view.window)
+                       let keyboardOverlap = scrollView.frame.maxY - endRect.origin.y
+                       scrollView.contentInset.bottom = keyboardOverlap
+                       scrollView.scrollIndicatorInsets.bottom = keyboardOverlap
+                       
+                       let duration = (durationValue as AnyObject).doubleValue
+                       let options = UIView.AnimationOptions(rawValue: UInt((curveValue as AnyObject).integerValue << 16))
+                       UIView.animate(withDuration: duration!, delay: 0, options: options, animations: {
+                           self.view.layoutIfNeeded()
+                       }, completion: nil)
+                   }
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if self.view.frame.origin.y != 0 {
+            self.view.frame.origin.y = 0
+        }
+    }
+    
+    @objc func dismissKeyboard(){
+        view.endEditing(true)
+        view.frame.origin.y = 0
+    }
+    
+    
+    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
+        dismissKeyboard()
+        textView.resignFirstResponder()
+        return true
     }
     
     @IBAction func saveDiscussion(_ sender: Any) {
@@ -61,11 +111,11 @@ class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDele
             action in
             let user = uid
             let now = Date().description
-            let path = "Discussions/\(now)::\(uid!)"
+            let path = "Discussions/\(uid!)/\(now)"
             self.postDiscussion(path: path, title: self.discussion_title.text!, description: self.discussion_description.text!, speciality:self.speciality_textfield.text!, user: user!, date: now)
             self.presentVC(segue: "MyDiscussionsVC")
         }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
     

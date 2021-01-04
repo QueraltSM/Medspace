@@ -21,13 +21,13 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         comments_timeline.separatorColor = UIColor.clear
         comments_timeline.rowHeight = UITableView.automaticDimension
         if news != nil {
-            getComments(path: "Comments/News/\(news!.id)")
+            getComments(path: "Comments/News/\(news!.user.id)/\(news!.id)")
         } else if clinical_case != nil {
-            getComments(path: "Comments/Cases/\(clinical_case!.id)")
+            getComments(path: "Comments/Cases/\(clinical_case!.user.id)/\(clinical_case!.id)")
         } else if discussion != nil {
-            getComments(path: "Comments/Discussions/\(discussion!.id)")
+            getComments(path: "Comments/Discussions/\(discussion!.user.id)/\(discussion!.id)")
         } else if research != nil {
-            getComments(path: "Comments/Researches/\(research!.id)")
+            getComments(path: "Comments/Researches/\(research!.user.id)/\(research!.id)")
         } else {
             getComments(path: path!)
         }
@@ -37,22 +37,25 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         self.startAnimation()
         for child in snapshot.children.allObjects as! [DataSnapshot] {
             let dict = child.value as? [String : AnyObject] ?? [:]
-            let message = dict["message"]! as! String
-            let date = dict["date"]! as! String
-            let userid = dict["user"]! as! String
-            ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
-                in
-                let dict = snapshot.value as? [String : AnyObject] ?? [:]
-                let username = dict["username"]! as! String
-                let fullname = dict["fullname"]! as! String
-                self.comments.append(Comment(id: child.key, date: date, message: message, user: User(id: userid, fullname: fullname, username: username)))
-                let sortedComments = self.comments.sorted {
-                    $0.date > $1.date
-                }
-                self.comments = sortedComments
-                self.comments_timeline.reloadData()
-                self.stopAnimation()
-            })
+            for childDict in dict {
+                let data = childDict.value as? [String : AnyObject] ?? [:]
+                let message = data["message"]! as! String
+                let date = data["date"]! as! String
+                let userid = data["user"]! as! String
+                ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
+                    in
+                    let dict = snapshot.value as? [String : AnyObject] ?? [:]
+                    let username = dict["username"]! as! String
+                    let fullname = dict["fullname"]! as! String
+                    self.comments.append(Comment(id: childDict.key, date: date, message: message, user: User(id: userid, fullname: fullname, username: username)))
+                    let sortedComments = self.comments.sorted {
+                        $0.date > $1.date
+                    }
+                    self.comments = sortedComments
+                    self.comments_timeline.reloadData()
+                    self.stopAnimation()
+                })
+            }
         }
     }
     
@@ -106,7 +109,7 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             deleteAction.backgroundColor = UIColor.red
             return [editAction, deleteAction]
         }
-        return nil
+        return [];
     }
     
     func askDelete(comment: Comment, pos: Int) {
@@ -121,7 +124,7 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                 self.comments_timeline.setEmptyView(title: "No comment has been posted yet")
             }
         }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
     

@@ -17,18 +17,17 @@ class ShowCaseVC: UIViewController {
     @IBOutlet weak var description_label: UILabel!
     @IBOutlet weak var history_label: UILabel!
     @IBOutlet weak var examination_label: UILabel!
-    @IBOutlet weak var user: UIButton!
-    var user_author: User?
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        setMenu()
-        user.setTitle("Posted by \(clinical_case!.user.username)", for: .normal)
-        user.titleLabel!.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline).italic()
+        initComponents()
+    }
+    
+    func initComponents(){
         if #available(iOS 11.0, *) {
             scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: examination.bottomAnchor).isActive = true
         } else {
-            // Fallback on earlier versions
+            scrollview.bottomAnchor.constraint(equalTo: examination.bottomAnchor).isActive = true
         }
         case_title.text = clinical_case!.title
         case_description.text = clinical_case!.description
@@ -44,9 +43,7 @@ class ShowCaseVC: UIViewController {
         speciality.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline)
         speciality.round(corners: .allCorners, cornerRadius: 10)
         speciality.textAlignment = .center
-        if (user_author == nil && clinical_case?.user.id == uid) {
-            configCase(enabled: true)
-        }
+        configCase(enabled: clinical_case!.user.id == uid)
     }
     
     func configCase(enabled: Bool) {
@@ -55,6 +52,9 @@ class ShowCaseVC: UIViewController {
         if enabled {
             editButton.title = "Edit"
             deleteButton.title = "Delete"
+        } else {
+            editButton.title = ""
+            deleteButton.title = ""
         }
     }
 
@@ -63,11 +63,12 @@ class ShowCaseVC: UIViewController {
         alert.title = "Are you sure you want delete it?"
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
             action in
-            let path = "Cases/\(self.clinical_case!.id)"
+            let path = "Cases/\(uid!)/\(self.clinical_case!.id)"
             self.removeDataDB(path: path)
+            self.removeDataDB(path: "Comments/\(path)")
             self.presentVC(segue: "MyCasesVC")
         }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
     
@@ -81,5 +82,12 @@ class ShowCaseVC: UIViewController {
         let comments_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "CommentsVC") as? CommentsVC
         comments_vc!.clinical_case = clinical_case
         navigationController?.pushViewController(comments_vc!, animated: false)
+    }
+
+    @IBAction func goBack(_ sender: Any) {
+        let defaults = UserDefaults.standard
+        if let back = defaults.string(forKey: "back") {
+            presentVC(segue: back)
+        }
     }
 }

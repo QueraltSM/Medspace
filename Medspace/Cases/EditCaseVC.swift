@@ -14,18 +14,32 @@ class EditCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        initComponents()
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(
+        target: self,action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    func initComponents() {
         case_title.delegate = self
         case_description.delegate = self
         case_title.text = clinical_case!.title
-        case_title.textColor = UIColor.black
+        case_title.textColor = UIColor.gray
         case_description.text = clinical_case!.description
-        case_description.textColor = UIColor.black
+        case_description.textColor = UIColor.gray
         case_history.text = clinical_case!.history
-        case_history.textColor = UIColor.black
+        case_history.textColor = UIColor.gray
         case_examination.text = clinical_case!.examination
-        case_examination.textColor = UIColor.black
+        case_examination.textColor = UIColor.gray
         speciality_textfield.text = clinical_case!.speciality.name
-        speciality_textfield.textColor = UIColor.black
+        speciality_textfield.textColor = UIColor.gray
         let disclosure = UITableViewCell()
         disclosure.frame = speciality_textfield.bounds
         disclosure.accessoryType = .disclosureIndicator
@@ -35,11 +49,38 @@ class EditCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
         if #available(iOS 11.0, *) {
             scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: case_examination.bottomAnchor).isActive = true
         } else {
-            // Fallback on earlier versions
+            scrollview.bottomAnchor.constraint(equalTo: case_examination.bottomAnchor).isActive = true
         }
         scrollview.backgroundColor = UIColor.white
         createPickerView()
         dismissPickerView()
+    }
+    
+    @objc func dismissKeyboard(){
+        view.endEditing(true)
+        view.frame.origin.y = 0
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if self.view.frame.origin.y != 0 {
+            self.view.frame.origin.y = 0
+        }
+    }
+
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if ((notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue) != nil {
+            if let scrollView = scrollview, let userInfo = notification.userInfo, let endValue = userInfo[UIResponder.keyboardFrameEndUserInfoKey], let durationValue = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey], let curveValue = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] {
+                       let endRect = view.convert((endValue as AnyObject).cgRectValue, from: view.window)
+                       let keyboardOverlap = scrollView.frame.maxY - endRect.origin.y
+                       scrollView.contentInset.bottom = keyboardOverlap
+                       scrollView.scrollIndicatorInsets.bottom = keyboardOverlap
+                       let duration = (durationValue as AnyObject).doubleValue
+                       let options = UIView.AnimationOptions(rawValue: UInt((curveValue as AnyObject).integerValue << 16))
+                       UIView.animate(withDuration: duration!, delay: 0, options: options, animations: {
+                           self.view.layoutIfNeeded()
+                       }, completion: nil)
+                   }
+        }
     }
     
     func createPickerView() {
@@ -111,6 +152,12 @@ class EditCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
         }
     }
     
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor.gray {
+            textView.textColor = UIColor.black
+        }
+    }
+    
     func askPost(){
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
         alert.title = "Do you want to update the clinical case?"
@@ -118,13 +165,13 @@ class EditCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
             action in
             let user = uid
             let now = self.clinical_case!.date
-            let path = "Cases/\(now)::\(uid!)"
+            let path = "Cases/\(uid!)/\(now)"
             self.postCase(path: path, title: self.case_title.text!, description: self.case_description.text!,
                           history: self.case_history.text!, examination: self.case_examination.text!,
                 speciality:self.speciality_textfield.text!, user: user!, date: now)
             self.presentVC(segue: "MyCasesVC")
         }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
     

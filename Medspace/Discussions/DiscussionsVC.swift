@@ -8,14 +8,15 @@ class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     var searchController = UISearchController()
     var discussions = [Discussion]()
     var discussionsMatched = [Discussion]()
-    var user: User?
+    var searchBarIsHidden: Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
-        if user != nil && user!.id != uid {
-            self.title = "\(user!.username) discussions"
-        }
+        initComponents()
+    }
+    
+    func initComponents(){
         discussions_timeline.delegate = self
         discussions_timeline.dataSource = self
         discussions_timeline.separatorColor = UIColor.clear
@@ -25,6 +26,7 @@ class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         refreshControl.attributedTitle = NSAttributedString(string: "")
         refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
         discussions_timeline.addSubview(refreshControl)
+        UserDefaults.standard.set("DiscussionsVC", forKey: "back")
     }
 
     @IBAction func didTapMenu(_ sender: Any) {
@@ -35,12 +37,13 @@ class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         self.startAnimation()
         for child in snapshot.children.allObjects as! [DataSnapshot] {
             let dict = child.value as? [String : AnyObject] ?? [:]
-            let title = dict["title"]! as! String
-            let description = dict["description"]! as! String
-            let speciality = dict["speciality"]! as! String
-            let date = dict["date"]! as! String
-            let userid = dict["user"]! as! String
-            if user != nil && user!.id == userid || user == nil {
+            for childDict in dict {
+                let data = childDict.value as? [String : AnyObject] ?? [:]
+                let title = data["title"]! as! String
+                let description = data["description"]! as! String
+                let speciality = data["speciality"]! as! String
+                let date = data["date"]! as! String
+                let userid = data["user"]! as! String
                 ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
                     in
                     let dict = snapshot.value as? [String : AnyObject] ?? [:]
@@ -52,7 +55,7 @@ class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
                             color = s.color!
                         }
                     }
-                    self.discussions.append(Discussion(id: child.key, title: title, description: description, date: date, speciality: Speciality(name: speciality, color: color), user: User(id: userid, fullname: fullname, username: username)))
+                    self.discussions.append(Discussion(id: childDict.key, title: title, description: description, date: date, speciality: Speciality(name: speciality, color: color), user: User(id: userid, fullname: fullname, username: username)))
                     let sortedDiscussions = self.discussions.sorted {
                         $0.date > $1.date
                     }
@@ -76,7 +79,14 @@ class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     }
     
     @IBAction func didTapSearch(_ sender: Any) {
-        setSearchBar()
+        if searchBarIsHidden {
+            setSearchBar()
+            searchBarIsHidden = false
+        } else {
+            searchController.isActive = false
+            discussions_timeline.tableHeaderView = nil
+            searchBarIsHidden = true
+        }
     }
     
     func getDiscussions() {
@@ -130,9 +140,6 @@ class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         let selected_discussion = discussions[indexPath.row]
         let show_discussion_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowDiscussionVC") as? ShowDiscussionVC
         show_discussion_vc!.discussion = selected_discussion
-        if user != nil {
-            show_discussion_vc?.user_author = user
-        }
         navigationController?.pushViewController(show_discussion_vc!, animated: false)
     }
     
@@ -151,11 +158,7 @@ class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         cell?.data_title.text = entry.title
         cell?.data_speciality.text = entry.speciality.name
         cell?.speciality_color = entry.speciality.color
-        var user_text = ""
-        if user == nil && entry.user.id != uid {
-            user_text = "Posted by \(entry.user.username)"
-        }
-        cell?.data_user.text = user_text
+        cell?.data_user.text = "Posted by \(entry.user.username)"
         return cell!
     }
 }

@@ -11,10 +11,15 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     var discussionsMatched = [Discussion]()
     var ref: DatabaseReference!
     var edit = false
+    var searchBarIsHidden: Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
+        initComponents()
+    }
+    
+    func initComponents(){
         ref = Database.database().reference()
         discussions_timeline.delegate = self
         discussions_timeline.dataSource = self
@@ -26,11 +31,12 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
         discussions_timeline.addSubview(refreshControl)
         discussions_timeline.allowsMultipleSelection = true
+        UserDefaults.standard.set("MyDiscussionsVC", forKey: "back")
     }
     
     func getDiscussions() {
         self.discussions_timeline.setEmptyView(title: "You have not post a discussion yet")
-        ref.child("Discussions").observeSingleEvent(of: .value, with: { snapshot in
+        ref.child("Discussions/\(uid!)").observeSingleEvent(of: .value, with: { snapshot in
             self.loopDiscussions(ref: self.ref, snapshot: snapshot)
         })
     }
@@ -69,11 +75,11 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
             } else {
                 self.stopAnimation()
             }
-            if (self.discussions.count == 0) {
-                self.discussions_timeline.setEmptyView(title: "You have not post a discussion yet")
-                self.turnEditState(enabled: false, title: "")
-                self.stopAnimation()
-            }
+        }
+        if (self.discussions.count == 0) {
+            self.discussions_timeline.setEmptyView(title: "You have not post a case yet")
+            self.turnEditState(enabled: false, title: "")
+            self.stopAnimation()
         }
     }
     
@@ -89,7 +95,14 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     @IBAction func didTapSearch(_ sender: Any) {
-        setSearchBar()
+        if searchBarIsHidden {
+            setSearchBar()
+            searchBarIsHidden = false
+        } else {
+            searchController.isActive = false
+            discussions_timeline.tableHeaderView = nil
+            searchBarIsHidden = true
+        }
     }
     
     @IBAction func didTapMenu(_ sender: Any) {
@@ -162,13 +175,6 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         editButton.title = title
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if (editingStyle == UITableViewCell.EditingStyle.delete) {
-            discussions.remove(at: indexPath.item)
-            discussions_timeline.reloadData()
-        }
-    }
-    
     func setToolbarDelete(hide: Bool) {
         let flexible1 = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: self, action: nil)
         let selectAllButton: UIBarButtonItem = UIBarButtonItem(title: "All", style: .plain, target: self, action: #selector(didPressSelectAll))
@@ -207,8 +213,9 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                 let index = discussions.firstIndex(where: { (item) -> Bool in
                     item.id == item.id
                 })
-                let path = "Discussions/\(discussions[index!].id)"
+                let path = "Discussions/\(uid!)/\(discussions[index!].id)"
                 removeDataDB(path: path)
+                removeDataDB(path: "Comments/\(path)")
                 discussions.remove(at: index!)
             }
             discussions_timeline.beginUpdates()
@@ -239,7 +246,7 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                 action in
                 self.deleteSelectedRows()
             }))
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
     }

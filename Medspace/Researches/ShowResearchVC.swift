@@ -3,7 +3,6 @@ import FirebaseAuth
 
 class ShowResearchVC: UIViewController {
 
-    @IBOutlet weak var user: UIButton!
     @IBOutlet weak var scrollview: UIScrollView!
     @IBOutlet weak var deleteButton: UIBarButtonItem!
     @IBOutlet weak var editButton: UIBarButtonItem!
@@ -12,30 +11,28 @@ class ShowResearchVC: UIViewController {
     @IBOutlet weak var research_title: UILabel!
     @IBOutlet weak var research_description: UILabel!
     var research: Research?
-    var user_author: User?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setMenu()
+        initComponents()
+    }
+    
+    func initComponents(){
         if #available(iOS 11.0, *) {
             scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: research_description.bottomAnchor).isActive = true
         } else {
-            // Fallback on earlier versions
+            scrollview.bottomAnchor.constraint(equalTo: research_description.bottomAnchor).isActive = true
         }
         research_title.text = research!.title
         research_description.text = research!.description
         date.text = research!.date
-        user.setTitle("Posted by \(research!.user.username)", for: .normal)
-        user.titleLabel!.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline).italic()
         speciality.text = research!.speciality.name.description
         speciality.backgroundColor = research!.speciality.color
         speciality.textColor = UIColor.black
         speciality.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline)
         speciality.round(corners: .allCorners, cornerRadius: 10)
         speciality.textAlignment = .center
-        if (user_author == nil && research!.user.id == uid) {
-            configResearch(enabled: true)
-        }
+        configResearch(enabled: research!.user.id == uid)
     }
     
     func configResearch(enabled: Bool) {
@@ -44,6 +41,9 @@ class ShowResearchVC: UIViewController {
         if enabled {
             editButton.title = "Edit"
             deleteButton.title = "Delete"
+        } else {
+            editButton.title = ""
+            deleteButton.title = ""
         }
     }
     
@@ -58,13 +58,14 @@ class ShowResearchVC: UIViewController {
         alert.title = "Are you sure you want delete it?"
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
             action in
-            let path = "Researches/\(self.research!.id)"
+            let path = "Researches/\(uid!)/\(self.research!.id)"
             self.removeDataDB(path: path)
             self.removeDataStorage(path: path)
+            self.removeDataDB(path: "Comments/\(path)")
             let vc: UIViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MyResearchesVC") as! MyResearchesVC
             self.present(vc, animated: false, completion: nil)
         }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
     
@@ -78,5 +79,12 @@ class ShowResearchVC: UIViewController {
         let document_viewer_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "DocumentViewerVC") as? DocumentViewerVC
         document_viewer_vc!.document = research!.pdf
         navigationController?.pushViewController(document_viewer_vc!, animated: false)
+    }
+    
+    @IBAction func goBack(_ sender: Any) {
+        let defaults = UserDefaults.standard
+        if let back = defaults.string(forKey: "back") {
+            presentVC(segue: back)
+        }
     }
 }

@@ -13,6 +13,10 @@ class ShowNewsVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        initComponents()
+    }
+    
+    func initComponents(){
         if #available(iOS 11.0, *) {
             scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: news_description.bottomAnchor).isActive = true
         } else {
@@ -25,12 +29,14 @@ class ShowNewsVC: UIViewController {
     }
 
     func configNews(enabled: Bool) {
-        print("Enabled=> \(enabled)")
         editButton.isEnabled = enabled
         deleteButton.isEnabled = enabled
         if enabled {
             editButton.title = "Edit"
             deleteButton.title = "Delete"
+        } else {
+            editButton.title = ""
+            deleteButton.title = ""
         }
     }
     
@@ -45,19 +51,21 @@ class ShowNewsVC: UIViewController {
         alert.title = "Do you want to delete this?"
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
             action in
-            let path = "News/\(self.news!.id)"
+            let path = "News/\(uid!)/\(self.news!.id)"
             self.removeDataDB(path: path)
             self.removeDataDB(path: "Comments/\(path)")
             self.removeDataStorage(path: path)
             self.presentVC(segue: "MyNewsVC")
         }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
     
     @IBAction func goBack(_ sender: Any) {
-        let newsVC = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "NewsVC") as? NewsVC
-        navigationController?.pushViewController(newsVC!, animated: false)
+        let defaults = UserDefaults.standard
+        if let back = defaults.string(forKey: "back") {
+            presentVC(segue: back)
+        }
     }
     
     @IBAction func viewComments(_ sender: Any) {

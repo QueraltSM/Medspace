@@ -15,13 +15,15 @@ class LoginVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        initComponents()
+    }
+    
+    func initComponents(){
         db = Database.database().reference().child("Users")
         self.navigationController?.isNavigationBarHidden = true
-        login_button.layer.borderColor = UIColor.black.cgColor
-        login_button.layer.borderWidth = 1
         login_button.layer.cornerRadius = login_button.frame.size.height / 2.0
-        email.setUnderline(color: UIColor.black)
-        password.setUnderline(color: UIColor.black)
+        email.setUnderline(color: UIColor.white)
+        password.setUnderline(color: UIColor.white)
     }
     
     func loginDB() {
@@ -61,7 +63,6 @@ class LoginVC: UIViewController {
                         let usertype = value?["type"] as? String ?? ""
                         let fullname = value?["fullname"] as? String ?? ""
                         let username = value?["username"] as? String ?? ""
-                        let usermail = value?["email"] as? String ?? ""
                     self.setUserData(fullname: fullname, usertype: usertype, username: username, isUserLoggedIn: true)
                 })
             }
@@ -91,7 +92,7 @@ class LoginVC: UIViewController {
         alert.addTextField { (textField : UITextField!) -> Void in
             textField.placeholder = "Email"
         }
-        let save = UIAlertAction(title: "Send", style: .default, handler: { alertAction -> Void in
+        let save = UIAlertAction(title: "Send", style: .cancel, handler: { alertAction -> Void in
             if let textField = alert.textFields?[0] {
                 if textField.text!.count > 0 {
                     Auth.auth().sendPasswordReset(withEmail: textField.text!) { error in
@@ -106,7 +107,7 @@ class LoginVC: UIViewController {
                 }
             }
         })
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: {
+        let cancel = UIAlertAction(title: "Cancel", style: .destructive, handler: {
             (action : UIAlertAction!) -> Void in })
         alert.addAction(cancel)
         alert.addAction(save)

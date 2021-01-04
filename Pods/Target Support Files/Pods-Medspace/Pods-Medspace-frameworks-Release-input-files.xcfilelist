@@ -1,0 +1,3 @@
+${PODS_ROOT}/Target Support Files/Pods-Medspace/Pods-Medspace-frameworks.sh
+${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework
+${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework

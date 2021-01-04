@@ -11,10 +11,15 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
     var casesMatched = [Case]()
     var edit = false
     var ref: DatabaseReference!
+    var searchBarIsHidden: Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
+        initComponents()
+    }
+    
+    func initComponents(){
         ref = Database.database().reference()
         cases_timeline.delegate = self
         cases_timeline.dataSource = self
@@ -26,6 +31,7 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
         refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
         cases_timeline.addSubview(refreshControl)
         cases_timeline.allowsMultipleSelection = true
+        UserDefaults.standard.set("MyCasesVC", forKey: "back")
     }
     
     @objc func refresh(_ sender: AnyObject) {
@@ -46,7 +52,14 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
     }
     
     @IBAction func didTapSearch(_ sender: Any) {
-        setSearchBar()
+        if searchBarIsHidden {
+            setSearchBar()
+            searchBarIsHidden = false
+        } else {
+            searchController.isActive = false
+            cases_timeline.tableHeaderView = nil
+            searchBarIsHidden = true
+        }
     }
     
     @IBAction func didTapMenu(_ sender: Any) {
@@ -111,13 +124,6 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
         self.navigationController?.setToolbarHidden(hide, animated: false)
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if (editingStyle == UITableViewCell.EditingStyle.delete) {
-            cases.remove(at: indexPath.item)
-            cases_timeline.reloadData()
-        }
-    }
-    
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         cases_timeline.setEditing(editing, animated: true)
@@ -134,8 +140,9 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
                 let index = cases.firstIndex(where: { (item) -> Bool in
                     item.id == item.id
                 })
-                let path = "Cases/\(cases[index!].id)"
+                let path = "Cases/\(uid!)/\(cases[index!].id)"
                 removeDataDB(path: path)
+                removeDataDB(path: "Comments/\(path)")
                 cases.remove(at: index!)
             }
             cases_timeline.beginUpdates()
@@ -166,7 +173,7 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
                 action in
                 self.deleteSelectedRows()
             }))
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
     }
@@ -216,21 +223,20 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
                     self.cases_timeline.restore()
                     self.stopAnimation()
                 })
-            } else {
-                self.stopAnimation()
             }
         }
+    }
+    
+    func getCases() {
+        ref.child("Cases/\(uid!)").observeSingleEvent(of: .value, with: { snapshot in
+            self.loopCases(ref: self.ref, snapshot: snapshot)
+        })
         if (self.cases.count == 0) {
             self.cases_timeline.setEmptyView(title: "You have not post a case yet")
             self.turnEditState(enabled: false, title: "")
             self.stopAnimation()
         }
-    }
-    
-    func getCases() {
-        ref.child("Cases").observeSingleEvent(of: .value, with: { snapshot in
-            self.loopCases(ref: self.ref, snapshot: snapshot)
-        })
+        self.stopAnimation()
     }
     
     @IBAction func didTapEdit(_ sender: Any) {
@@ -264,5 +270,4 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
         cell?.data_user.text = ""
         return cell!
     }
-    
 }

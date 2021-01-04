@@ -14,6 +14,10 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISe
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        initComponents()
+    }
+    
+    func initComponents(){
         uid = Auth.auth().currentUser!.uid
         usertype = UserDefaults.standard.string(forKey: "usertype")
         fullname = UserDefaults.standard.string(forKey: "fullname")
@@ -30,6 +34,7 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISe
         refreshControl.attributedTitle = NSAttributedString(string: "")
         refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
         news_timeline.addSubview(refreshControl)
+        UserDefaults.standard.set("NewsVC", forKey: "back")
     }
     
     func filterContent(for searchText: String) {

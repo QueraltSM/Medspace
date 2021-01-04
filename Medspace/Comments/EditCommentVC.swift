@@ -43,7 +43,7 @@ class EditCommentVC: UIViewController {
                 comments_vc!.path = self.commentPath
                 self.navigationController?.pushViewController(comments_vc!, animated: false)
             }))
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
             self.present(alert, animated: true, completion: nil)
         } else {
             showAlert(title: "Error", message: error)

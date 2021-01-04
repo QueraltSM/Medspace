@@ -12,10 +12,15 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     var edit = false
     var ref: DatabaseReference!
     @IBOutlet weak var editButton: UIBarButtonItem!
+    var searchBarIsHidden: Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
+        initComponents()
+    }
+    
+    func initComponents(){
         ref = Database.database().reference()
         researches_timeline.delegate = self
         researches_timeline.dataSource = self
@@ -27,6 +32,18 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
         researches_timeline.addSubview(refreshControl)
         researches_timeline.allowsMultipleSelection = true
+        UserDefaults.standard.set("MyResearchesVC", forKey: "back")
+    }
+    
+    @IBAction func didTapSearchButton(_ sender: Any) {
+        if searchBarIsHidden {
+            setSearchBar()
+            searchBarIsHidden = false
+        } else {
+            searchController.isActive = false
+            researches_timeline.tableHeaderView = nil
+            searchBarIsHidden = true
+        }
     }
     
     func turnEditState(enabled: Bool, title: String) {
@@ -131,7 +148,7 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func getResearches() {
-        ref.child("Researches").observeSingleEvent(of: .value, with: { snapshot in
+        ref.child("Researches/\(uid!)").observeSingleEvent(of: .value, with: { snapshot in
             self.loopResearches(ref: self.ref, snapshot: snapshot)
         })
     }
@@ -200,13 +217,6 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.navigationController?.setToolbarHidden(hide, animated: false)
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if (editingStyle == UITableViewCell.EditingStyle.delete) {
-            researches.remove(at: indexPath.item)
-            researches_timeline.reloadData()
-        }
-    }
-    
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         researches_timeline.setEditing(editing, animated: true)
@@ -223,9 +233,10 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
                 let index = researches.firstIndex(where: { (item) -> Bool in
                     item.id == item.id
                 })
-                let path = "Researches/\(researches[index!].id)"
+                let path = "Researches/\(uid!)/\(researches[index!].id)"
                 removeDataDB(path: path)
                 removeDataStorage(path: path)
+                removeDataDB(path: "Comments/\(path)")
                 researches.remove(at: index!)
             }
             researches_timeline.beginUpdates()
@@ -256,7 +267,7 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
             action in
                 self.deleteSelectedRows()
             }))
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
     }

@@ -9,14 +9,14 @@ class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     var casesMatched = [Case]()
     var searchController = UISearchController()
     @IBOutlet weak var cases_timeline: UITableView!
-    var user: User?
+    var searchBarIsHidden: Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if user != nil && user!.id != uid {
-            self.title = "\(user!.username) cases"
-        }
-        setMenu()
+        initComponents()
+    }
+    
+    func initComponents(){
         cases_timeline.delegate = self
         cases_timeline.dataSource = self
         cases_timeline.separatorColor = UIColor.clear
@@ -26,6 +26,7 @@ class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
         refreshControl.attributedTitle = NSAttributedString(string: "")
         refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
         cases_timeline.addSubview(refreshControl)
+        UserDefaults.standard.set("CasesVC", forKey: "back")
     }
 
     func setSearchBar() {
@@ -68,21 +69,21 @@ class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
             }
         }
     }
-
     
     func loopCases(ref: DatabaseReference, snapshot: DataSnapshot) {
         self.startAnimation()
         for child in snapshot.children.allObjects as! [DataSnapshot] {
             let dict = child.value as? [String : AnyObject] ?? [:]
-            let title = dict["title"]! as! String
-            let description = dict["description"]! as! String
-            let history = dict["history"]! as! String
-            let examination = dict["examination"]! as! String
-            let speciality = dict["speciality"]! as! String
-            let date = dict["date"]! as! String
-            let final_date = self.getFormattedDate(date: date)
-            let userid = dict["user"]! as! String
-            if user != nil && user!.id == userid || user == nil {
+            for childDict in dict {
+                let data = childDict.value as? [String : AnyObject] ?? [:]
+                let title = data["title"]! as! String
+                let description = data["description"]! as! String
+                let history = data["history"]! as! String
+                let examination = data["examination"]! as! String
+                let speciality = data["speciality"]! as! String
+                let date = data["date"]! as! String
+                let final_date = self.getFormattedDate(date: date)
+                let userid = data["user"]! as! String
                 ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
                     in
                     let dict = snapshot.value as? [String : AnyObject] ?? [:]
@@ -94,7 +95,7 @@ class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
                             color = s.color!
                         }
                     }
-                    self.cases.append(Case(id: child.key, title: title, description: description, history: history, examination: examination, date: final_date, speciality: Speciality(name: speciality, color: color), user: User(id: userid, fullname: fullname, username: username)))
+                    self.cases.append(Case(id: childDict.key, title: title, description: description, history: history, examination: examination, date: final_date, speciality: Speciality(name: speciality, color: color), user: User(id: userid, fullname: fullname, username: username)))
                     let sortedCases = self.cases.sorted {
                         $0.date > $1.date
                     }
@@ -131,9 +132,6 @@ class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
         let selected_case = cases[indexPath.row]
         let show_case_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowCaseVC") as? ShowCaseVC
         show_case_vc!.clinical_case = selected_case
-        if user != nil {
-            show_case_vc?.user_author = user
-        }
         navigationController?.pushViewController(show_case_vc!, animated: false)
     }
     
@@ -152,15 +150,18 @@ class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
         cell?.data_title.text = entry.title
         cell?.data_speciality.text = entry.speciality.name
         cell?.speciality_color = entry.speciality.color
-        var user_text = ""
-        if user == nil && entry.user.id != uid {
-            user_text = "Posted by \(entry.user.username)"
-        }
-        cell?.data_user.text = user_text
+        cell?.data_user.text =  "Posted by \(entry.user.username)"
         return cell!
     }
     
     @IBAction func didTapSearchButton(_ sender: Any) {
-        setSearchBar()
+        if searchBarIsHidden {
+            setSearchBar()
+            searchBarIsHidden = false
+        } else {
+            searchController.isActive = false
+            cases_timeline.tableHeaderView = nil
+            searchBarIsHidden = true
+        }
     }
 }

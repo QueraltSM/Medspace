@@ -2,8 +2,7 @@ import UIKit
 import Firebase
 import FirebaseAuth
 
-var admin_menu : AdminMenuVC!
-var doctor_menu: DoctorMenuVC!
+var side_menu : SideMenuVC!
 var uid: String!
 var usertype: String!
 var username: String!
@@ -64,6 +63,9 @@ extension UITextField {
         self.layer.shadowOpacity = 1.0
         self.layer.shadowRadius = 0.0
     }
+    
+    
+    
 }
 
 extension UIColor {
@@ -134,19 +136,12 @@ extension UIViewController {
     }
     
     func setMenu() {
-        if (usertype! == "Admin") {
-            admin_menu = self.storyboard?.instantiateViewController(withIdentifier: "AdminMenuVC") as? AdminMenuVC
-        } else {
-            doctor_menu = self.storyboard?.instantiateViewController(withIdentifier: "DoctorMenuVC") as? DoctorMenuVC
-        }
+        side_menu = storyboard!.instantiateViewController(withIdentifier: "SideMenuVC") as? SideMenuVC
     }
     
     func getMenuView() -> UIViewController {
         AppDelegate.menu_bool = false
-        if (usertype! == "Admin") {
-            return admin_menu
-        }
-        return doctor_menu
+        return side_menu
     }
     
     func closeMenu() {
@@ -182,8 +177,16 @@ extension UIViewController {
     
     func showAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
         self.present(alert, animated: false)
+    }
+    
+    func validate(_ textView: UITextView) -> Bool {
+        guard let text = textView.text,
+            !text.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).isEmpty else {
+            return false
+        }
+        return true
     }
     
     func postNews(path: String, title: String, description: String, speciality: String, user: String, date: String) {

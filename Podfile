@@ -6,7 +6,8 @@ target 'Medspace' do
   use_frameworks!
 
   # Pods for Medspace
-	pod 'Firebase', '4.0.3'
+	pod 'Firebase/Core'
+	pod 'Firebase'
 	pod 'Firebase/Database'
 	pod 'Firebase/Auth'
 	pod 'Firebase/Storage'

@@ -14,6 +14,15 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
+        initComponents()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    func initComponents(){
         if #available(iOS 11.0, *) {
             scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: news_description.bottomAnchor).isActive = true
         } else {
@@ -29,7 +38,7 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         news_description.text = "The UT Austin research team, led by Jason Lavinder, a research associate in the Cockrell School of Engineering, and Greg Ippolito, assistant professor in the College of Natural Sciences and Dell Medical School, developed the new antibody test for SARS-CoV-2 and provided the viral antigens for this study via their UT Austin colleague and collaborator, associate professor Jason McLellan."
         scrollview.backgroundColor = UIColor.white
         speciality_textfield.textColor = UIColor.gray
-        speciality_textfield.text = "Allergy and Inmunology"
+        speciality_textfield.text = "Nuclear Medicine"
         let disclosure = UITableViewCell()
         disclosure.frame = speciality_textfield.bounds
         disclosure.accessoryType = .disclosureIndicator
@@ -38,6 +47,40 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         speciality_textfield.addSubview(disclosure)
         createPickerView()
         dismissPickerView()
+    }
+    
+    @objc func dismissKeyboard(){
+        view.endEditing(true)
+        view.frame.origin.y = 0
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if self.view.frame.origin.y != 0 {
+            self.view.frame.origin.y = 0
+        }
+    }
+
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if ((notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue) != nil {
+            if let scrollView = scrollview, let userInfo = notification.userInfo, let endValue = userInfo[UIResponder.keyboardFrameEndUserInfoKey], let durationValue = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey], let curveValue = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] {
+                       let endRect = view.convert((endValue as AnyObject).cgRectValue, from: view.window)
+                       let keyboardOverlap = scrollView.frame.maxY - endRect.origin.y
+                       scrollView.contentInset.bottom = keyboardOverlap
+                       scrollView.scrollIndicatorInsets.bottom = keyboardOverlap
+                       
+                       let duration = (durationValue as AnyObject).doubleValue
+                       let options = UIView.AnimationOptions(rawValue: UInt((curveValue as AnyObject).integerValue << 16))
+                       UIView.animate(withDuration: duration!, delay: 0, options: options, animations: {
+                           self.view.layoutIfNeeded()
+                       }, completion: nil)
+                   }
+        }
+    }
+    
+    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
+        dismissKeyboard()
+        textView.resignFirstResponder()
+        return true
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -98,7 +141,7 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
             popoverController.sourceView = self.view
             popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.maxY, width: 0, height: 0)
         }
-        alert.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: {
+        alert.addAction(UIAlertAction(title: "Photo Library", style: .cancel, handler: {
             action in
             picker.sourceType = .photoLibrary
             picker.modalPresentationStyle = .currentContext
@@ -112,7 +155,7 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
                 alert.dismiss(animated: true, completion: nil)
             }))
         }
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
     
@@ -146,7 +189,7 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         self.startAnimation()
         let user = uid
         let now = Date().description
-        let path = "News/\(now)::\(uid!)"
+        let path = "News/\(uid!)/\(now)"
         guard let imageData: Data = image_header.image!.jpegData(compressionQuality: 0.1) else {
             return
         }
@@ -172,7 +215,7 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
             action in
             self.saveNews()
         }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
     

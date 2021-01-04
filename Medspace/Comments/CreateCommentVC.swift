@@ -12,9 +12,51 @@ class CreateCommentVC: UIViewController, UITextViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        initComponents()
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(
+        target: self,action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func dismissKeyboard(){
+        view.endEditing(true)
+        view.frame.origin.y = 0
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if self.view.frame.origin.y != 0 {
+            self.view.frame.origin.y = 0
+        }
+    }
+
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if ((notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue) != nil {
+            if let scrollView = scrollview, let userInfo = notification.userInfo, let endValue = userInfo[UIResponder.keyboardFrameEndUserInfoKey], let durationValue = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey], let curveValue = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] {
+                       let endRect = view.convert((endValue as AnyObject).cgRectValue, from: view.window)
+                       let keyboardOverlap = scrollView.frame.maxY - endRect.origin.y
+                       scrollView.contentInset.bottom = keyboardOverlap
+                       scrollView.scrollIndicatorInsets.bottom = keyboardOverlap
+                       
+                       let duration = (durationValue as AnyObject).doubleValue
+                       let options = UIView.AnimationOptions(rawValue: UInt((curveValue as AnyObject).integerValue << 16))
+                       UIView.animate(withDuration: duration!, delay: 0, options: options, animations: {
+                           self.view.layoutIfNeeded()
+                       }, completion: nil)
+                   }
+        }
+    }
+    
+    func initComponents(){
         message.delegate = self
         message.textColor = UIColor.gray
-        message.text = ""
+        message.text = "Write a message"
         if #available(iOS 11.0, *) {
             scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: message.bottomAnchor).isActive = true
         } else {
@@ -30,11 +72,11 @@ class CreateCommentVC: UIViewController, UITextViewDelegate {
             action in
             let user = uid
             let now = Date().description
-            let path = "\(self.commentPath!)/\(now)::\(uid!)"
+            let path = "\(self.commentPath!)/\(uid!)/\(now)"
             self.postComment(path: path, message: self.message.text!, user: user!, date: now)
             self.goBack()
         }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
     

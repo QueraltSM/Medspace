@@ -73,17 +73,17 @@ class SettingsVC: UIViewController, UITableViewDelegate, UITableViewDataSource  
                 }
             }
         }))
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
             self.present(alert, animated: true, completion: nil)
     }
     
     func changePassword() {
-        let alert = UIAlertController(title: "Change password", message: "Enter new one", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Change password", message: "Enter a new one", preferredStyle: .alert)
         alert.addTextField { (textField : UITextField!) -> Void in
             textField.placeholder = "Password"
             textField.isSecureTextEntry = true
         }
-        let save = UIAlertAction(title: "Done", style: .default, handler: { alertAction -> Void in
+        let save = UIAlertAction(title: "Done", style: .cancel, handler: { alertAction -> Void in
             if let textField = alert.textFields?[0] {
                 if textField.text!.count > 0 {
                     Auth.auth().currentUser!.updatePassword(to: textField.text!) { error in
@@ -98,7 +98,7 @@ class SettingsVC: UIViewController, UITableViewDelegate, UITableViewDataSource  
                 }
             }
         })
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: {
+        let cancel = UIAlertAction(title: "Cancel", style: .destructive, handler: {
             (action : UIAlertAction!) -> Void in })
         alert.addAction(cancel)
         alert.addAction(save)

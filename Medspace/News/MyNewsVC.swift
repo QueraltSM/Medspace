@@ -17,6 +17,10 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
     override func viewDidLoad() {
         super.viewDidLoad()
         setMenu()
+        initComponents()
+    }
+    
+    func initComponents(){
         ref = Database.database().reference()
         news_timeline.delegate = self
         news_timeline.dataSource = self
@@ -28,6 +32,7 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
         refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
         news_timeline.addSubview(refreshControl)
         news_timeline.allowsMultipleSelection = true
+        UserDefaults.standard.set("MyNewsVC", forKey: "back")
     }
     
     func turnEditState(enabled: Bool, title: String) {
@@ -135,7 +140,7 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
     }
     
     func getNews() {
-        ref.child("News").observeSingleEvent(of: .value, with: { snapshot in
+        ref.child("News/\(uid!)").observeSingleEvent(of: .value, with: { snapshot in
             if (snapshot.children.allObjects.count == 0) {
                 self.news_timeline.setEmptyView(title: "You have not post a news yet")
             } else {
@@ -209,13 +214,6 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
         }
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if (editingStyle == UITableViewCell.EditingStyle.delete) {
-            news.remove(at: indexPath.item)
-            news_timeline.reloadData()
-        }
-    }
-    
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         news_timeline.setEditing(editing, animated: true)
@@ -232,9 +230,10 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
                 let index = news.firstIndex(where: { (item) -> Bool in
                     item.id == item.id
                 })
-                let path = "News/\(news[index!].id)"
+                let path = "News/\(uid!)/\(news[index!].id)"
                 removeDataDB(path: path)
                 removeDataStorage(path: path)
+                removeDataDB(path: "Comments/\(path)")
                 news.remove(at: index!)
             }
             news_timeline.beginUpdates()
@@ -260,7 +259,7 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
                 action in
                 self.deleteSelectedRows()
             }))
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
     }
