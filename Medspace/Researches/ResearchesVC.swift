@@ -72,40 +72,43 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     func loopResearches(ref: DatabaseReference, snapshot: DataSnapshot) {
-        self.startAnimation()
         for child in snapshot.children.allObjects as! [DataSnapshot] {
+            self.startAnimation()
             let dict = child.value as? [String : AnyObject] ?? [:]
-            let title = dict["title"]! as! String
-            let speciality = dict["speciality"]! as! String
-            let date = dict["date"]! as! String
-            let description = dict["description"]! as! String
-            let userid = dict["user"]! as! String
-            ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
-                in
-                let dict = snapshot.value as? [String : AnyObject] ?? [:]
-                let username = dict["username"]! as! String
-                let fullname = dict["fullname"]! as! String
-                var color = UIColor.init()
-                for s in specialities {
-                    if s.name == speciality {
-                        color = s.color!
-                    }
-                }
-                let storageRef = Storage.storage().reference().child("Researches/\(child.key)")
-                storageRef.downloadURL { (url, error) in
-                    self.stopAnimation()
-                    if error == nil {
-                        self.researches.append(Research(id: child.key, pdf: url!, date: date, title: title, speciality: Speciality(name: speciality, color: color), description: description, user: User(id: userid, fullname: fullname, username: username)))
-                        let sortedResearches = self.researches.sorted {
-                            $0.date > $1.date
+            for childDict in dict {
+                let data = childDict.value as? [String : AnyObject] ?? [:]
+                let title = data["title"]! as! String
+                let speciality = data["speciality"]! as! String
+                let date = data["date"]! as! String
+                let description = data["description"]! as! String
+                let userid = data["user"]! as! String
+                ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
+                    in
+                    let dict = snapshot.value as? [String : AnyObject] ?? [:]
+                    let username = dict["username"]! as! String
+                    let fullname = dict["fullname"]! as! String
+                    var color = UIColor.init()
+                    for s in specialities {
+                        if s.name == speciality {
+                            color = s.color!
                         }
-                        self.researches = sortedResearches
-                        self.researches_timeline.reloadData()
-                    } else {
-                        self.showAlert(title: "Error", message: (error?.localizedDescription)!)
                     }
-                }
-            })
+                    let storageRef = Storage.storage().reference().child("Researches/\(child.key)/\(childDict.key)")
+                    storageRef.downloadURL { (url, error) in
+                        if error == nil {
+                            self.researches.append(Research(id: childDict.key, pdf: url!, date: date, title: title, speciality: Speciality(name: speciality, color: color), description: description, user: User(id: userid, fullname: fullname, username: username)))
+                            let sortedResearches = self.researches.sorted {
+                                $0.date > $1.date
+                            }
+                            self.researches = sortedResearches
+                            self.researches_timeline.reloadData()
+                            self.stopAnimation()
+                        } else {
+                            self.showAlert(title: "Error", message: (error?.localizedDescription)!)
+                        }
+                    }
+                })
+            }
         }
     }
     

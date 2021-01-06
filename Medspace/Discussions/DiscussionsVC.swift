@@ -34,8 +34,8 @@ class DiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     }
     
     func loopDiscussions(ref: DatabaseReference, snapshot: DataSnapshot) {
-        self.startAnimation()
         for child in snapshot.children.allObjects as! [DataSnapshot] {
+            self.startAnimation()
             let dict = child.value as? [String : AnyObject] ?? [:]
             for childDict in dict {
                 let data = childDict.value as? [String : AnyObject] ?? [:]

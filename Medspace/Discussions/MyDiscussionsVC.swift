@@ -72,15 +72,13 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                     self.discussions_timeline.restore()
                     self.stopAnimation()
                 })
-            } else {
-                self.stopAnimation()
             }
         }
         if (self.discussions.count == 0) {
-            self.discussions_timeline.setEmptyView(title: "You have not post a case yet")
+            self.discussions_timeline.setEmptyView(title: "You have not post a discussion yet")
             self.turnEditState(enabled: false, title: "")
-            self.stopAnimation()
         }
+        self.stopAnimation()
     }
     
     func setSearchBar() {

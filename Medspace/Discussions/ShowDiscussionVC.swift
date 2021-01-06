@@ -12,7 +12,6 @@ class ShowDiscussionVC: UIViewController {
     @IBOutlet weak var speciality: UILabel!
     @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var deleteButton: UIBarButtonItem!
-    @IBOutlet weak var user: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,8 +24,8 @@ class ShowDiscussionVC: UIViewController {
         } else {
             scrollview.bottomAnchor.constraint(equalTo: discussion_description.bottomAnchor).isActive = true
         }
-        user.setTitle("Posted by \(discussion!.user.username)", for: .normal)
-        user.titleLabel!.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline).italic()
+        //user.setTitle("Posted by \(discussion!.user.username)", for: .normal)
+        //user.titleLabel!.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline).italic()
         discussion_title.text = discussion!.title
         discussion_description.text = discussion!.description
         date.text = discussion!.date

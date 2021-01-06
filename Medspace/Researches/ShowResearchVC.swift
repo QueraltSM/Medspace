@@ -62,8 +62,7 @@ class ShowResearchVC: UIViewController {
             self.removeDataDB(path: path)
             self.removeDataStorage(path: path)
             self.removeDataDB(path: "Comments/\(path)")
-            let vc: UIViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MyResearchesVC") as! MyResearchesVC
-            self.present(vc, animated: false, completion: nil)
+            self.presentVC(segue: "MyResearchesVC")
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
         self.present(alert, animated: true, completion: nil)

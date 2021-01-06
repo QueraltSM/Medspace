@@ -99,8 +99,8 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func loopResearches(ref: DatabaseReference, snapshot: DataSnapshot) {
-        self.startAnimation()
         for child in snapshot.children.allObjects as! [DataSnapshot] {
+            self.startAnimation()
             let dict = child.value as? [String : AnyObject] ?? [:]
             let title = dict["title"]! as! String
             let speciality = dict["speciality"]! as! String
@@ -108,8 +108,7 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
             let description = dict["description"]! as! String
             let userid = dict["user"]! as! String
             if userid == uid {
-                ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
-                    in
+                ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot in
                     let dict = snapshot.value as? [String : AnyObject] ?? [:]
                     let username = dict["username"]! as! String
                     let fullname = dict["fullname"]! as! String
@@ -119,9 +118,8 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
                             color = s.color!
                         }
                     }
-                    let storageRef = Storage.storage().reference().child("Researches/\(child.key)")
+                    let storageRef = Storage.storage().reference().child("Researches/\(uid!)/\(child.key)")
                     storageRef.downloadURL { (url, error) in
-                        self.stopAnimation()
                         if error == nil {
                             self.researches.append(Research(id: child.key, pdf: url!, date: date, title: title, speciality: Speciality(name: speciality, color: color), description: description, user: User(id: userid, fullname: fullname, username: username)))
                             let sortedResearches = self.researches.sorted {
@@ -131,20 +129,19 @@ class MyResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSour
                             self.researches_timeline.reloadData()
                             self.turnEditState(enabled: true, title: "Select")
                             self.researches_timeline.restore()
+                            self.stopAnimation()
                         } else {
                             self.showAlert(title: "Error", message: error!.localizedDescription)
                         }
                     }
                 })
-            } else {
-                self.stopAnimation()
             }
         }
         if (self.researches.count == 0) {
             self.researches_timeline.setEmptyView(title: "You have not post a research yet")
             self.turnEditState(enabled: false, title: "")
-            self.stopAnimation()
         }
+        self.stopAnimation()
     }
     
     func getResearches() {

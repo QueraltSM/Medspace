@@ -67,13 +67,12 @@ class CreateCommentVC: UIViewController, UITextViewDelegate {
     
     func askPost() {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        alert.title = "Do you want to finally share this?"
+        alert.title = "Do you want to share this?"
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
             action in
-            let user = uid
             let now = Date().description
             let path = "\(self.commentPath!)/\(uid!)/\(now)"
-            self.postComment(path: path, message: self.message.text!, user: user!, date: now)
+            self.postComment(path: path, message: self.message.text!, user: uid!, date: now)
             self.goBack()
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
@@ -81,7 +80,7 @@ class CreateCommentVC: UIViewController, UITextViewDelegate {
     }
     
     @IBAction func savePost(_ sender: Any) {
-        if message.text.isEmpty {
+        if !validate(message) {
             showAlert(title: "Error", message: "Write a message")
         } else {
             askPost()

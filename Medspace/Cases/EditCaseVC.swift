@@ -15,31 +15,21 @@ class EditCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
     override func viewDidLoad() {
         super.viewDidLoad()
         initComponents()
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(
-        target: self,action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tap)
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     func initComponents() {
         case_title.delegate = self
         case_description.delegate = self
         case_title.text = clinical_case!.title
-        case_title.textColor = UIColor.gray
+        case_title.textColor = UIColor.darkGray
         case_description.text = clinical_case!.description
-        case_description.textColor = UIColor.gray
+        case_description.textColor = UIColor.darkGray
         case_history.text = clinical_case!.history
-        case_history.textColor = UIColor.gray
+        case_history.textColor = UIColor.darkGray
         case_examination.text = clinical_case!.examination
-        case_examination.textColor = UIColor.gray
+        case_examination.textColor = UIColor.darkGray
         speciality_textfield.text = clinical_case!.speciality.name
-        speciality_textfield.textColor = UIColor.gray
+        speciality_textfield.textColor = UIColor.darkGray
         let disclosure = UITableViewCell()
         disclosure.frame = speciality_textfield.bounds
         disclosure.accessoryType = .disclosureIndicator
@@ -54,33 +44,6 @@ class EditCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
         scrollview.backgroundColor = UIColor.white
         createPickerView()
         dismissPickerView()
-    }
-    
-    @objc func dismissKeyboard(){
-        view.endEditing(true)
-        view.frame.origin.y = 0
-    }
-    
-    @objc func keyboardWillHide(notification: NSNotification) {
-        if self.view.frame.origin.y != 0 {
-            self.view.frame.origin.y = 0
-        }
-    }
-
-    @objc func keyboardWillShow(notification: NSNotification) {
-        if ((notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue) != nil {
-            if let scrollView = scrollview, let userInfo = notification.userInfo, let endValue = userInfo[UIResponder.keyboardFrameEndUserInfoKey], let durationValue = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey], let curveValue = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] {
-                       let endRect = view.convert((endValue as AnyObject).cgRectValue, from: view.window)
-                       let keyboardOverlap = scrollView.frame.maxY - endRect.origin.y
-                       scrollView.contentInset.bottom = keyboardOverlap
-                       scrollView.scrollIndicatorInsets.bottom = keyboardOverlap
-                       let duration = (durationValue as AnyObject).doubleValue
-                       let options = UIView.AnimationOptions(rawValue: UInt((curveValue as AnyObject).integerValue << 16))
-                       UIView.animate(withDuration: duration!, delay: 0, options: options, animations: {
-                           self.view.layoutIfNeeded()
-                       }, completion: nil)
-                   }
-        }
     }
     
     func createPickerView() {
@@ -129,17 +92,8 @@ class EditCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
 
     @IBAction func saveCase(_ sender: Any) {
         var error = ""
-        if (case_title.text.isEmpty) {
-            error += "Write a title\n"
-        }
-        if (case_description.text.isEmpty) {
-            error += "Write a description\n"
-        }
-        if (case_history.text.isEmpty) {
-            error += "Write a history\n"
-        }
-        if (case_examination.text.isEmpty) {
-            error += "Write a examination\n"
+        if !validate(case_title) || !validate(case_description) || !validate(case_history) || !validate(case_examination)   {
+            error = "Fill out all required fields\n"
         }
         if clinical_case!.title == case_title.text && clinical_case!.description == case_description.text &&
             clinical_case!.history == case_history.text && clinical_case!.examination == case_examination.text {
@@ -152,23 +106,19 @@ class EditCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
         }
     }
     
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == UIColor.gray {
-            textView.textColor = UIColor.black
-        }
+    func textViewDidChange(_ textView: UITextView) {
+        textView.textColor = UIColor.black
     }
     
     func askPost(){
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        alert.title = "Do you want to update the clinical case?"
+        alert.title = "Do you want to update this?"
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
             action in
-            let user = uid
-            let now = self.clinical_case!.date
-            let path = "Cases/\(uid!)/\(now)"
+            let path = "Cases/\(uid!)/\(self.clinical_case!.id)"
             self.postCase(path: path, title: self.case_title.text!, description: self.case_description.text!,
                           history: self.case_history.text!, examination: self.case_examination.text!,
-                speciality:self.speciality_textfield.text!, user: user!, date: now)
+                speciality:self.speciality_textfield.text!, user: uid!, date: self.clinical_case!.date)
             self.presentVC(segue: "MyCasesVC")
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
@@ -177,6 +127,6 @@ class EditCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
-        return newText.count <= 100
+        return newText.count <= 250
     }
 }

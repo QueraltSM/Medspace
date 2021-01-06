@@ -20,43 +20,6 @@ class EditResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         initComponents()
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(
-        target: self,action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tap)
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc func dismissKeyboard(){
-        view.endEditing(true)
-        view.frame.origin.y = 0
-    }
-    
-    @objc func keyboardWillHide(notification: NSNotification) {
-        if self.view.frame.origin.y != 0 {
-            self.view.frame.origin.y = 0
-        }
-    }
-
-    @objc func keyboardWillShow(notification: NSNotification) {
-        if ((notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue) != nil {
-            if let scrollView = scrollview, let userInfo = notification.userInfo, let endValue = userInfo[UIResponder.keyboardFrameEndUserInfoKey], let durationValue = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey], let curveValue = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] {
-                       let endRect = view.convert((endValue as AnyObject).cgRectValue, from: view.window)
-                       let keyboardOverlap = scrollView.frame.maxY - endRect.origin.y
-                       scrollView.contentInset.bottom = keyboardOverlap
-                       scrollView.scrollIndicatorInsets.bottom = keyboardOverlap
-                       let duration = (durationValue as AnyObject).doubleValue
-                       let options = UIView.AnimationOptions(rawValue: UInt((curveValue as AnyObject).integerValue << 16))
-                       UIView.animate(withDuration: duration!, delay: 0, options: options, animations: {
-                           self.view.layoutIfNeeded()
-                       }, completion: nil)
-                   }
-        }
     }
     
     func initComponents() {
@@ -64,10 +27,11 @@ class EditResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate
         research_description.delegate = self
         research_title.text = research!.title
         research_description.text = research!.description
-        research_title.textColor = UIColor.black
-        research_description.textColor = UIColor.black
+        research_title.textColor = UIColor.darkGray
+        research_description.textColor = UIColor.darkGray
         speciality_textfield.text = research!.speciality.name
-        speciality_textfield.textColor = UIColor.black
+        speciality_textfield.textColor = UIColor.darkGray
+        research_document.textColor = UIColor.darkGray
         let disclosure = UITableViewCell()
         disclosure.frame = speciality_textfield.bounds
         disclosure.accessoryType = .disclosureIndicator
@@ -156,13 +120,9 @@ class EditResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate
     
     
     @IBAction func selectDocument(_ sender: Any) {
-        let documentpicker = UIDocumentPickerViewController(documentTypes: [String(kUTTypePDF)], in: .import)
+        let documentpicker = UIDocumentPickerViewController(documentTypes: ["com.apple.iwork.pages.pages", "com.apple.iwork.numbers.numbers", "com.apple.iwork.keynote.key","public.image", "com.apple.application", "public.item","public.data", "public.content", "public.audiovisual-content", "public.movie", "public.audiovisual-content", "public.video", "public.audio", "public.text", "public.data", "public.zip-archive", "com.pkware.zip-archive", "public.composite-content", "public.text"], in: .import)
         documentpicker.delegate = self
-        if #available(iOS 11.0, *) {
-            documentpicker.allowsMultipleSelection = false
-        } else {
-            // Fallback on earlier versions
-        }
+        documentpicker.modalPresentationStyle = .fullScreen
         present(documentpicker, animated: true, completion: nil)
     }
     
@@ -179,11 +139,8 @@ class EditResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate
     
     @IBAction func nextDescription(_ sender: Any) {
         var error = ""
-        if research_title.text.isEmpty {
-            error += "Write a title\n"
-        }
-        if research_description.text.isEmpty {
-            error += "Write a description\n"
+        if !validate(research_title) || !validate(research_description)  {
+            error = "Fill out all required fields\n"
         }
         if invalid_document {
             error += "Upload a document\n"
@@ -200,9 +157,8 @@ class EditResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate
     
     func savePDF() {
         self.startAnimation()
-        let user = uid
         let now = Date().description
-        let path = "Researches/\(now)::\(user!)"
+        let path = "Researches/\(uid!)/\(now)"
         Storage.storage().reference().child(path).putFile(from: self.documentURL!, metadata: nil) { metadata, error in
             self.stopAnimation()
             if error == nil {
@@ -215,27 +171,27 @@ class EditResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate
     
     func askPost(){
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        alert.title = "Do you want to update the research?"
+        alert.title = "Do you want to update this?"
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
             action in
-            let user = uid
-            let now = self.research!.date
-            let path = "Researches/\(now)::\(uid!)"
-            self.postResearch(path: path, title: self.research_title.text!, description: self.research_description.text!, speciality:self.speciality_textfield.text!, user: user!, date: now)
-            self.savePDF()
+            let path = "Researches/\(uid!)/\(self.research!.id)"
+            self.postResearch(path: path, title: self.research_title.text!, description: self.research_description.text!, speciality:self.speciality_textfield.text!, user: uid!, date: self.research!.date)
+            if self.file_is_updated {
+                self.savePDF()
+            } else {
+                self.presentVC(segue: "MyResearchesVC")
+            }
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
     
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == UIColor.gray {
-            textView.textColor = UIColor.black
-        }
+    func textViewDidChange(_ textView: UITextView) {
+        textView.textColor = UIColor.black
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
-        return newText.count <= 100
+        return newText.count <= 250
     }
 }

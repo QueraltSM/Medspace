@@ -225,18 +225,17 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
                 })
             }
         }
+        if (self.cases.count == 0) {
+            self.cases_timeline.setEmptyView(title: "You have not post a case yet")
+            self.turnEditState(enabled: false, title: "")
+        }
+        self.stopAnimation()
     }
     
     func getCases() {
         ref.child("Cases/\(uid!)").observeSingleEvent(of: .value, with: { snapshot in
             self.loopCases(ref: self.ref, snapshot: snapshot)
         })
-        if (self.cases.count == 0) {
-            self.cases_timeline.setEmptyView(title: "You have not post a case yet")
-            self.turnEditState(enabled: false, title: "")
-            self.stopAnimation()
-        }
-        self.stopAnimation()
     }
     
     @IBAction func didTapEdit(_ sender: Any) {

@@ -17,11 +17,6 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         initComponents()
     }
     
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
     func initComponents(){
         if #available(iOS 11.0, *) {
             scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: news_description.bottomAnchor).isActive = true
@@ -48,41 +43,7 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         createPickerView()
         dismissPickerView()
     }
-    
-    @objc func dismissKeyboard(){
-        view.endEditing(true)
-        view.frame.origin.y = 0
-    }
-    
-    @objc func keyboardWillHide(notification: NSNotification) {
-        if self.view.frame.origin.y != 0 {
-            self.view.frame.origin.y = 0
-        }
-    }
 
-    @objc func keyboardWillShow(notification: NSNotification) {
-        if ((notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue) != nil {
-            if let scrollView = scrollview, let userInfo = notification.userInfo, let endValue = userInfo[UIResponder.keyboardFrameEndUserInfoKey], let durationValue = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey], let curveValue = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] {
-                       let endRect = view.convert((endValue as AnyObject).cgRectValue, from: view.window)
-                       let keyboardOverlap = scrollView.frame.maxY - endRect.origin.y
-                       scrollView.contentInset.bottom = keyboardOverlap
-                       scrollView.scrollIndicatorInsets.bottom = keyboardOverlap
-                       
-                       let duration = (durationValue as AnyObject).doubleValue
-                       let options = UIView.AnimationOptions(rawValue: UInt((curveValue as AnyObject).integerValue << 16))
-                       UIView.animate(withDuration: duration!, delay: 0, options: options, animations: {
-                           self.view.layoutIfNeeded()
-                       }, completion: nil)
-                   }
-        }
-    }
-    
-    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
-        dismissKeyboard()
-        textView.resignFirstResponder()
-        return true
-    }
-    
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == UIColor.gray {
             textView.text = ""
@@ -161,22 +122,19 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
-        return newText.count <= 100
+        return newText.count <= 250
     }
     
     @IBAction func savePost(_ sender: Any) {
         var error = ""
         if image_header_invalid {
-            error += "Choose a valid image\n"
+            error += "Upload a valid image\n"
         }
         if speciality_textfield.textColor == UIColor.gray {
-            error += "Select a speciality\n"
+            error += "Choose a valid speciality\n"
         }
-        if titleview.textColor == UIColor.gray || titleview.text.isEmpty {
-            error += "Write a title\n"
-        }
-        if news_description.textColor == UIColor.gray || news_description.text.isEmpty {
-            error += "Write a description\n"
+        if !validate(titleview) || !validate(news_description) {
+            error += "Fill out all required fields\n"
         }
         if error == "" {
             askPost()
@@ -202,7 +160,7 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
                 self.showAlert(title: "Error", message: error.localizedDescription)
                 return
             } else {
-                self.postNews(path: path, title: self.titleview.text!, description: self.news_description.text!, speciality: self.speciality_textfield.text!, user: user!, date: now)
+                self.postNews(path: path, title: self.titleview.text!, description: self.news_description.text!, speciality: self.speciality_textfield.text!, user: user!, date: self.getFormattedDate(date: now))
                 self.presentVC(segue: "MyNewsVC")
             }
         }
@@ -220,6 +178,7 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
     }
     
     @IBAction func didTapMenuButton(_ sender: Any) {
+        view.endEditing(true)
         swipeMenu()
     }
 }

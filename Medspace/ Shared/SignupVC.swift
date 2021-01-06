@@ -114,4 +114,8 @@ class SignupVC: UIViewController {
         }
         return result
     }
+    
+    @IBAction func login(_ sender: Any) {
+        presentVC(segue: "LoginVC")
+    }
 }

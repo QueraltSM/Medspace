@@ -221,13 +221,11 @@ class EditNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
         textView.textColor = UIColor.black
-        return newText.count <= 100
+        return newText.count <= 250
     }
     
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == UIColor.gray {
-            textView.textColor = UIColor.black
-        }
+    func textViewDidChange(_ textView: UITextView) {
+        textView.textColor = UIColor.black
     }
 }
 

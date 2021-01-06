@@ -17,28 +17,24 @@ class CollapsableViewModel {
         for child in self.children {
             child.needsSeparator = false
         }
-        self.children.last?.needsSeparator = true
     }
 }
 
 class CollapsibleTableViewCell: UITableViewCell {
     let separator = UIView(frame: .zero)
     func configure(withViewModel viewModel: CollapsableViewModel) {
-        self.textLabel?.text = viewModel.label
         self.imageView?.image = viewModel.image
-        self.textLabel?.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.headline)
         backgroundColor = UIColor.clear
         layoutMargins = UIEdgeInsets(top: 0, left: 30, bottom: 0, right: 0)
         if viewModel.children.count == 0 {
             accessoryType = UITableViewCell.AccessoryType.disclosureIndicator
         }
-        if viewModel.needsSeparator {
-            let viewSeparatorLine = UIView(frame:CGRect(x: 0, y: contentView.frame.size.height - 1.0, width: contentView.frame.size.width, height: 0.3))
-            viewSeparatorLine.backgroundColor = UIColor.gray
-            contentView.addSubview(viewSeparatorLine)
-        } else {
-            separator.removeFromSuperview()
+        var attributs = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 16, weight: .bold)]
+        if !viewModel.needsSeparator {
+            attributs = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 16, weight: .regular)]
         }
+        let option = NSMutableAttributedString(string: viewModel.label, attributes:attributs)
+        self.textLabel?.attributedText = option
     }
     
     override func layoutSubviews() {

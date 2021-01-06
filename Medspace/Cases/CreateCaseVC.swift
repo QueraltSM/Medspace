@@ -14,16 +14,6 @@ class CreateCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         super.viewDidLoad()
         setMenu()
         initComponents()
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(
-        target: self,action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tap)
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     func initComponents() {
@@ -57,40 +47,6 @@ class CreateCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         dismissPickerView()
     }
     
-    @objc func dismissKeyboard(){
-        view.endEditing(true)
-        view.frame.origin.y = 0
-    }
-    
-    @objc func keyboardWillHide(notification: NSNotification) {
-        if self.view.frame.origin.y != 0 {
-            self.view.frame.origin.y = 0
-        }
-    }
-
-    @objc func keyboardWillShow(notification: NSNotification) {
-        if ((notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue) != nil {
-            if let scrollView = scrollview, let userInfo = notification.userInfo, let endValue = userInfo[UIResponder.keyboardFrameEndUserInfoKey], let durationValue = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey], let curveValue = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] {
-                       let endRect = view.convert((endValue as AnyObject).cgRectValue, from: view.window)
-                       let keyboardOverlap = scrollView.frame.maxY - endRect.origin.y
-                       scrollView.contentInset.bottom = keyboardOverlap
-                       scrollView.scrollIndicatorInsets.bottom = keyboardOverlap
-                       
-                       let duration = (durationValue as AnyObject).doubleValue
-                       let options = UIView.AnimationOptions(rawValue: UInt((curveValue as AnyObject).integerValue << 16))
-                       UIView.animate(withDuration: duration!, delay: 0, options: options, animations: {
-                           self.view.layoutIfNeeded()
-                       }, completion: nil)
-                   }
-        }
-    }
-    
-    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
-        dismissKeyboard()
-        textView.resignFirstResponder()
-        return true
-    }
-    
     func createPickerView() {
         let pickerView = UIPickerView()
         pickerView.delegate = self
@@ -121,6 +77,7 @@ class CreateCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
     }
     
     @IBAction func didTapMenuButton(_ sender: Any) {
+        view.endEditing(true)
         swipeMenu()
     }
     
@@ -128,19 +85,10 @@ class CreateCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
     @IBAction func savePost(_ sender: Any) {
         var error = ""
         if speciality.textColor == UIColor.gray {
-            error += "Choose a speciality\n"
+            error += "Choose a valid speciality\n"
         }
-        if titleview.textColor == UIColor.gray || !validate(titleview) {
-            error += "Write a title\n"
-        }
-        if description_view.textColor == UIColor.gray || !validate(description_view) {
-            error += "Write a description\n"
-        }
-        if history.textColor == UIColor.gray || !validate(history) {
-            error += "Write a history\n"
-        }
-        if examination.textColor == UIColor.gray || !validate(examination) {
-            error += "Write a examination"
+        if !validate(titleview) || !validate(description_view) || !validate(history) || !validate(examination) {
+            error += "Fill out all required fields\n"
         }
         if error == "" {
             askPost()
@@ -158,7 +106,7 @@ class CreateCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
-        return newText.count <= 100
+        return newText.count <= 250
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -180,10 +128,9 @@ class CreateCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         alert.title = "Do you want to share this?"
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
             action in
-            let user = uid
             let now = Date().description
             let path = "Cases/\(uid!)/\(now)"
-            self.postCase(path: path, title: self.titleview.text!, description: self.description_view.text!, history: self.history.text!, examination: self.examination.text!, speciality:self.speciality.text!, user: user!, date: now)
+            self.postCase(path: path, title: self.titleview.text!, description: self.description_view.text!, history: self.history.text!, examination: self.examination.text!, speciality:self.speciality.text!, user: uid!, date: self.getFormattedDate(date: now))
             self.presentVC(segue: "MyCasesVC")
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))

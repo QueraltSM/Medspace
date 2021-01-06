@@ -13,18 +13,8 @@ class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDele
         super.viewDidLoad()
         setMenu()
         initComponents()
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(
-        target: self,action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tap)
     }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
+
     func initComponents() {
         discussion_title.delegate = self
         discussion_description.delegate = self
@@ -50,52 +40,13 @@ class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDele
         dismissPickerView()
     }
     
-    
-    @objc func keyboardWillShow(notification: NSNotification) {
-        if ((notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue) != nil {
-            if let scrollView = scrollview, let userInfo = notification.userInfo, let endValue = userInfo[UIResponder.keyboardFrameEndUserInfoKey], let durationValue = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey], let curveValue = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] {
-                       let endRect = view.convert((endValue as AnyObject).cgRectValue, from: view.window)
-                       let keyboardOverlap = scrollView.frame.maxY - endRect.origin.y
-                       scrollView.contentInset.bottom = keyboardOverlap
-                       scrollView.scrollIndicatorInsets.bottom = keyboardOverlap
-                       
-                       let duration = (durationValue as AnyObject).doubleValue
-                       let options = UIView.AnimationOptions(rawValue: UInt((curveValue as AnyObject).integerValue << 16))
-                       UIView.animate(withDuration: duration!, delay: 0, options: options, animations: {
-                           self.view.layoutIfNeeded()
-                       }, completion: nil)
-                   }
-        }
-    }
-    
-    @objc func keyboardWillHide(notification: NSNotification) {
-        if self.view.frame.origin.y != 0 {
-            self.view.frame.origin.y = 0
-        }
-    }
-    
-    @objc func dismissKeyboard(){
-        view.endEditing(true)
-        view.frame.origin.y = 0
-    }
-    
-    
-    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
-        dismissKeyboard()
-        textView.resignFirstResponder()
-        return true
-    }
-    
     @IBAction func saveDiscussion(_ sender: Any) {
         var error = ""
         if speciality_textfield.textColor == UIColor.gray {
-            error += "Choose a speciality\n"
+            error += "Choose a valid speciality\n"
         }
-        if discussion_title.textColor == UIColor.gray || discussion_title.text.isEmpty {
-            error += "Write a title\n"
-        }
-        if discussion_description.textColor == UIColor.gray || discussion_description.text.isEmpty {
-            error += "Write a description\n"
+        if !validate(discussion_title) || !validate(discussion_description){
+            error += "Fill out all required fields\n"
         }
         if error == "" {
             askPost()
@@ -109,10 +60,9 @@ class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDele
         alert.title = "Do you want to share this?"
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
             action in
-            let user = uid
             let now = Date().description
             let path = "Discussions/\(uid!)/\(now)"
-            self.postDiscussion(path: path, title: self.discussion_title.text!, description: self.discussion_description.text!, speciality:self.speciality_textfield.text!, user: user!, date: now)
+            self.postDiscussion(path: path, title: self.discussion_title.text!, description: self.discussion_description.text!, speciality:self.speciality_textfield.text!, user: uid!, date: self.getFormattedDate(date: now))
             self.presentVC(segue: "MyDiscussionsVC")
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
@@ -166,7 +116,7 @@ class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDele
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
-        return newText.count <= 100
+        return newText.count <= 250
     }
     
     @objc func action() {

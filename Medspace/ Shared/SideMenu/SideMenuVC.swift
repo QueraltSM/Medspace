@@ -15,7 +15,7 @@ class SideMenuVC: UIViewController, UITableViewDelegate, UITableViewDataSource  
         CollapsableViewModel(label: "Add post", image: UIImage(named: "NewPost.png"), segue:"CreateNewsVC"),
         CollapsableViewModel(label: "My posts", image: UIImage(named: "MyPosts.png"), segue:"MyNewsVC"),
         CollapsableViewModel(label: "Settings", image: UIImage(named: "Settings.png"), segue:"SettingsVC"),
-        CollapsableViewModel(label: "Logout", image: UIImage(named: "Logout.png"))]
+        CollapsableViewModel(label: "Log Out", image: UIImage(named: "Logout.png"))]
     
     let doctorData = [
         CollapsableViewModel(label: "Home", image: UIImage(named: "Home.png"), segue:"NewsVC"),
@@ -32,7 +32,7 @@ class SideMenuVC: UIViewController, UITableViewDelegate, UITableViewDataSource  
             CollapsableViewModel(label: "Discussions", image: UIImage(named: "Discussions.png"), segue:"MyDiscussionsVC"),
             CollapsableViewModel(label: "Researches", image: UIImage(named: "Researches.png"), segue:"MyResearchesVC")]),
         CollapsableViewModel(label: "Settings", image: UIImage(named: "Settings.png"), segue:"SettingsVC"),
-        CollapsableViewModel(label: "Logout", image: UIImage(named: "Logout.png"))]
+        CollapsableViewModel(label: "Log Out", image: UIImage(named: "Logout.png"))]
     
     var displayedRows: [CollapsableViewModel] = []
     
@@ -54,14 +54,17 @@ class SideMenuVC: UIViewController, UITableViewDelegate, UITableViewDataSource  
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: menu_table.frame.width, height: 100))
-        headerView.layer.borderWidth = 1
-        headerView.layer.borderColor = UIColor.darkGray.cgColor
         let myLabel = UILabel()
         myLabel.frame = CGRect(x:0, y:0, width:menu_table.frame.width, height:100)
         myLabel.font = UIFont.boldSystemFont(ofSize: 15)
         myLabel.textColor = UIColor.black
         myLabel.textAlignment = .center
-        myLabel.text = username
+        let attributsBold = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 16, weight: .bold)]
+        let attributsNormal = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 16, weight: .regular)]
+        let greeting = NSMutableAttributedString(string: "Hi ", attributes:attributsNormal)
+        let user = NSMutableAttributedString(string: username, attributes:attributsBold)
+        greeting.append(user)
+        myLabel.attributedText = greeting
         headerView.addSubview(myLabel)
         return headerView
     }
@@ -97,7 +100,7 @@ class SideMenuVC: UIViewController, UITableViewDelegate, UITableViewDataSource  
             tableView.endUpdates()
         }
         viewModel.isCollapsed = !viewModel.isCollapsed
-        if (viewModel.label == "Logout") {
+        if (viewModel.label == "Log Out") {
             logout()
         } else if (viewModel.segue != nil) {
             closeMenu()

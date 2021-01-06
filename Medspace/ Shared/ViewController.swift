@@ -186,6 +186,9 @@ extension UIViewController {
             !text.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).isEmpty else {
             return false
         }
+        if textView.textColor == UIColor.gray {
+            return false
+        }
         return true
     }
     
