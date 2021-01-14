@@ -20,7 +20,7 @@ class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDele
         discussion_description.delegate = self
         discussion_title.text = "Anaphylaxis: Emergency treatment"
         discussion_title.textColor = UIColor.gray
-        discussion_description.text = "Anaphylaxis is a potentially fatal disorder that is under-recognized and undertreated. This may partly be due to failure to appreciate that anaphylaxis is a much broader syndrome than 'anaphylactic shock' and the goal of therapy should be early recognition and treatment with epinephrine to prevent progression to life-threatening respiratory and/or cardiovascular symptoms and signs, including shock."
+        discussion_description.text = "This may partly be due to failure to appreciate that anaphylaxis is a much broader syndrome than 'anaphylactic shock' and the goal of therapy should be early recognition and treatment with epinephrine to prevent progression to life-threatening respiratory and/or cardiovascular symptoms and signs, including shock."
         discussion_description.textColor = UIColor.gray
         speciality_textfield.text = "Nuclear Medicine"
         speciality_textfield.textColor = UIColor.gray

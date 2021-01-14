@@ -23,11 +23,11 @@ class CreateCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         examination.delegate = self
         titleview.text = "Headache"
         titleview.textColor = UIColor.gray
-        description_view.text = "This young man has been brought in unconscious having been well less than 24h previously. The most likely diagnoses are related to drugs or a neurological event. The first part of the care should be to ensure that he is stable from a cardiac and respiratory point of view."
+        description_view.text = "The most likely diagnoses are related to drugs or a neurological event. The first part of the care should be to ensure that he is stable from a cardiac and respiratory point of view."
         description_view.textColor = UIColor.gray
-        history.text = "A 24-year-old man presents to an emergency department complaining of a severe headache. The headache started 24 h previously and has rapidly become more intense. He describes the headache as generalized in his head. He has vomited twice and appears to be developing drowsiness and confusion."
+        history.text = "The headache started 24 h previously and has rapidly become more intense. He describes the headache as generalized in his head. He has vomited twice and appears to be developing drowsiness and confusion."
         history.textColor = UIColor.gray
-        examination.text = "He looks flushed and unwell. His temperature is 39.2°C. He has stiffness on passive flexion of his neck. There is no rash. His sinuses are not tender and his eardrums appear normal. His pulse rate is 120/min and blood pressure 98/74 mmHg"
+        examination.text = "He has stiffness on passive flexion of his neck. There is no rash. His sinuses are not tender and his eardrums appear normal. His pulse rate is 120/min and blood pressure 98/74 mmHg"
         examination.textColor = UIColor.gray
         speciality.text = "Nuclear Medicine"
         speciality.textColor = UIColor.gray

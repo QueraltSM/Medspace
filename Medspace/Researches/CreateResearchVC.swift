@@ -34,7 +34,7 @@ class CreateResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
         titleview.textColor = UIColor.gray
         titleview.text = "Research needs in allergy: an EAACI position paper, in collaboration with EFA"
         speciality_textfield.text = "Nuclear Medicine"
-        research_description.text = "In less than half a century, allergy, originally perceived as a rare disease, has become a major public health threat, today affecting the lives of more than 60 million people in Europe, and probably close to one billion worldwide, thereby heavily impacting the budgets of public health systems."
+        research_description.text = "In less than half a century, allergy, originally perceived as a rare disease, has become a major public health threat, today affecting the lives of more than 60 million people in Europe."
         speciality_textfield.textColor = UIColor.gray
         research_description.textColor = UIColor.gray
         document_name.textColor = UIColor.gray

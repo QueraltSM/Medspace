@@ -30,7 +30,7 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         titleview.textColor = UIColor.gray
         news_description.textColor = UIColor.gray
         titleview.text = "For example: Researchers develop highly scalable, accurate antibody test for covid-19"
-        news_description.text = "The UT Austin research team, led by Jason Lavinder, a research associate in the Cockrell School of Engineering, and Greg Ippolito, assistant professor in the College of Natural Sciences and Dell Medical School, developed the new antibody test for SARS-CoV-2 and provided the viral antigens for this study via their UT Austin colleague and collaborator, associate professor Jason McLellan."
+        news_description.text = "The UT Austin research team, led by Jason Lavinder, a research associate in the Cockrell School of Engineering, and Greg Ippolito, assistant professor in the College of Natural Sciences and Dell Medical School, developed the new antibody test for SARS-CoV-2."
         scrollview.backgroundColor = UIColor.white
         speciality_textfield.textColor = UIColor.gray
         speciality_textfield.text = "Nuclear Medicine"

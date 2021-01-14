@@ -26,8 +26,8 @@ let specialities = [
     Speciality(name: "Psychiatry", color: UIColor.init(hexString: "#b3cfdd")), // blue
     Speciality(name: "Surgery", color: UIColor.init(hexString: "#fff4c6")), // yellow
     Speciality(name: "Urology", color: UIColor.init(hexString: "#b99aff"))] // violet
-var refreshControl = UIRefreshControl()
 
+var refreshControl = UIRefreshControl()
 
 class ViewController: UIViewController {
     var vc: UIViewController!
@@ -131,6 +131,8 @@ extension UIViewController {
     }
     
     func setMenu() {
+        navigationController!.navigationBar.barTintColor = UIColor.white
+        UINavigationBar.appearance().shadowImage = UIImage()
         side_menu = storyboard!.instantiateViewController(withIdentifier: "SideMenuVC") as? SideMenuVC
     }
     
