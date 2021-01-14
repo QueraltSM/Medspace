@@ -1,6 +1,6 @@
 import UIKit
 
-class EditCommentVC: UIViewController {
+class EditCommentVC: UIViewController, UITextViewDelegate {
 
     var comment: Comment?
     var commentPath: String!
@@ -10,21 +10,23 @@ class EditCommentVC: UIViewController {
     var clinical_case: Case?
     var discussion: Discussion?
     var research: Research?
-    
+     
     override func viewDidLoad() {
         super.viewDidLoad()
+        message.delegate = self
         message.text = comment!.message
+        message.textColor = UIColor.darkGray
         if #available(iOS 11.0, *) {
             scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: message.bottomAnchor).isActive = true
         } else {
-            // Fallback on earlier versions
+            scrollview.bottomAnchor.constraint(equalTo: message.bottomAnchor).isActive = true
         }
         scrollview.backgroundColor = UIColor.white
     }
     
     @IBAction func saveComment(_ sender: Any) {
         var error = ""
-        if message.text.isEmpty  {
+        if !validateTxtView(message) {
             error = "Write a message"
         }
         if message.text == comment!.message {
@@ -32,16 +34,13 @@ class EditCommentVC: UIViewController {
         }
         if error == "" {
             let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-            alert.title = "Do you want to finally share this?"
+            alert.title = "Do you want to share this?"
             alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
                 action in
-                let user = uid
                 let now = self.comment!.date
-                let path = "\(self.commentPath!)/\(now)::\(uid!)"
-                self.postComment(path: path, message: self.message.text!, user: user!, date: now)
-                let comments_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "CommentsVC") as? CommentsVC
-                comments_vc!.path = self.commentPath
-                self.navigationController?.pushViewController(comments_vc!, animated: false)
+                let path = "\(self.commentPath!)/\(uid!)/\(now)"
+                self.postComment(path: path, message: self.message.text!, user: uid!, date: now)
+                self.back()
             }))
             alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
             self.present(alert, animated: true, completion: nil)
@@ -50,7 +49,11 @@ class EditCommentVC: UIViewController {
         }
     }
     
-    @IBAction func backSegue(_ sender: Any) {
+    func textViewDidChange(_ textView: UITextView) {
+        textView.textColor = UIColor.black
+    }
+    
+    func back(){
         let comments_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "CommentsVC") as? CommentsVC
         comments_vc!.commentPath = self.commentPath
         comments_vc!.news = self.news
@@ -59,5 +62,9 @@ class EditCommentVC: UIViewController {
         comments_vc!.research = self.research
         comments_vc!.path = self.commentPath
         self.navigationController?.pushViewController(comments_vc!, animated: false)
+    }
+    
+    @IBAction func backSegue(_ sender: Any) {
+        self.back()
     }
 }

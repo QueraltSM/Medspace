@@ -117,7 +117,9 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         alert.title = "Are you sure you want delete this?"
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
             action in
-            self.removeDataDB(path: "\(self.commentPath!)/\(comment.id)")
+            let now = comment.date
+            let path = "\(self.commentPath!)/\(uid!)/\(now)"
+            self.removeDataDB(path: path)
             self.comments.remove(at: pos)
             self.comments_timeline.reloadData()
             if self.comments.count == 0 {

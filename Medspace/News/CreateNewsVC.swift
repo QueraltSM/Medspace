@@ -100,12 +100,13 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         if let popoverController = alert.popoverPresentationController {
             popoverController.sourceView = self.view
-            popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.maxY, width: 0, height: 0)
+            popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+            popoverController.permittedArrowDirections = []
         }
         alert.addAction(UIAlertAction(title: "Photo Library", style: .cancel, handler: {
             action in
             picker.sourceType = .photoLibrary
-            picker.modalPresentationStyle = .currentContext
+            picker.modalPresentationStyle = .fullScreen
             self.present(picker, animated: true, completion: nil)
         }))
         if (!image_header_invalid) {
@@ -133,7 +134,7 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         if speciality_textfield.textColor == UIColor.gray {
             error += "Choose a valid speciality\n"
         }
-        if !validate(titleview) || !validate(news_description) {
+        if !validateTxtView(titleview) || !validateTxtView(news_description) {
             error += "Fill out all required fields\n"
         }
         if error == "" {
@@ -160,7 +161,7 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
                 self.showAlert(title: "Error", message: error.localizedDescription)
                 return
             } else {
-                self.postNews(path: path, title: self.titleview.text!, description: self.news_description.text!, speciality: self.speciality_textfield.text!, user: user!, date: self.getFormattedDate(date: now))
+                self.postNews(path: path, title: self.titleview.text!, description: self.news_description.text!, speciality: self.speciality_textfield.text!, user: user!, date: now)
                 self.presentVC(segue: "MyNewsVC")
             }
         }
@@ -186,7 +187,7 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
 extension CreateNewsVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            image_header.contentMode = .scaleToFill
+            image_header.contentMode = .scaleAspectFit
             image_header.image = pickedImage
             image_header_invalid = false
             image_header.isHidden = false

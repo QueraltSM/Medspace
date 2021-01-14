@@ -13,6 +13,7 @@
 		6208307E24E9C13A00291825 /* Medspace.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6208307C24E9C13A00291825 /* Medspace.xcdatamodeld */; };
 		6208308024E9C14200291825 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6208307F24E9C14200291825 /* Assets.xcassets */; };
 		6208308324E9C14200291825 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6208308124E9C14200291825 /* LaunchScreen.storyboard */; };
+		6210042D25AE16AA008A1609 /* Medical_Background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6210042C25AE16A9008A1609 /* Medical_Background.jpg */; };
 		621535AC24EACF14007B18BA /* SignupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621535AB24EACF14007B18BA /* SignupVC.swift */; };
 		621C6D40250E3B38001A345D /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621C6D3F250E3B38001A345D /* SettingsVC.swift */; };
 		6223B29824FA5634000F6E83 /* ShowNewsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6223B29724FA5634000F6E83 /* ShowNewsVC.swift */; };
@@ -92,6 +93,7 @@
 		6208307F24E9C14200291825 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6208308224E9C14200291825 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6208308424E9C14200291825 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6210042C25AE16A9008A1609 /* Medical_Background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Medical_Background.jpg; sourceTree = "<group>"; };
 		621535AB24EACF14007B18BA /* SignupVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupVC.swift; sourceTree = "<group>"; };
 		621C6D3F250E3B38001A345D /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
 		6223B29724FA5634000F6E83 /* ShowNewsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowNewsVC.swift; sourceTree = "<group>"; };
@@ -204,6 +206,7 @@
 		6246D9C224EA77210057872E /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				6210042C25AE16A9008A1609 /* Medical_Background.jpg */,
 				62FFEEF72508C0C3006A7BE8 /* Comments.png */,
 				6229EEC325080E9600EA7CC1 /* Cases.png */,
 				62AE62CC250FADDD008E2EBD /* Settings.png */,
@@ -408,6 +411,7 @@
 				6246D9C424EA772A0057872E /* Logo.png in Resources */,
 				62AE62CD250FADDF008E2EBD /* Settings.png in Resources */,
 				62F1193A2507870B004A05AC /* GoogleService-Info.plist in Resources */,
+				6210042D25AE16AA008A1609 /* Medical_Background.jpg in Resources */,
 				6208308024E9C14200291825 /* Assets.xcassets in Resources */,
 				6208307B24E9C13A00291825 /* Main.storyboard in Resources */,
 				6229EEC625080E9700EA7CC1 /* Discussions.png in Resources */,

@@ -86,7 +86,7 @@ class EditDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
     
     @IBAction func saveDiscussion(_ sender: Any) {
         var error = ""
-        if !validate(discussion_title) || !validate(discussion_description) {
+        if !validateTxtView(discussion_title) || !validateTxtView(discussion_description) {
             error = "Fill out all required fields\n"
         }
         if (speciality_textfield.text == discussion!.speciality.name && discussion_title.text == discussion!.title && discussion_description.text == discussion!.description) {

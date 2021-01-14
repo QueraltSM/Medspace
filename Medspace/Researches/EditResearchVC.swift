@@ -139,7 +139,7 @@ class EditResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate
     
     @IBAction func nextDescription(_ sender: Any) {
         var error = ""
-        if !validate(research_title) || !validate(research_description)  {
+        if !validateTxtView(research_title) || !validateTxtView(research_description)  {
             error = "Fill out all required fields\n"
         }
         if invalid_document {

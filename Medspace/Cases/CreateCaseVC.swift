@@ -87,7 +87,7 @@ class CreateCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         if speciality.textColor == UIColor.gray {
             error += "Choose a valid speciality\n"
         }
-        if !validate(titleview) || !validate(description_view) || !validate(history) || !validate(examination) {
+        if !validateTxtView(titleview) || !validateTxtView(description_view) || !validateTxtView(history) || !validateTxtView(examination) {
             error += "Fill out all required fields\n"
         }
         if error == "" {
@@ -130,7 +130,7 @@ class CreateCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
             action in
             let now = Date().description
             let path = "Cases/\(uid!)/\(now)"
-            self.postCase(path: path, title: self.titleview.text!, description: self.description_view.text!, history: self.history.text!, examination: self.examination.text!, speciality:self.speciality.text!, user: uid!, date: self.getFormattedDate(date: now))
+            self.postCase(path: path, title: self.titleview.text!, description: self.description_view.text!, history: self.history.text!, examination: self.examination.text!, speciality:self.speciality.text!, user: uid!, date: now)
             self.presentVC(segue: "MyCasesVC")
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))

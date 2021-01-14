@@ -98,33 +98,36 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISe
         for child in snapshot.children.allObjects as! [DataSnapshot] {
             self.startAnimation()
             let dict = child.value as? [String : AnyObject] ?? [:]
-            let storageRef = Storage.storage().reference().child("News/\(child.key)")
-            storageRef.getData(maxSize: 1 * 1024 * 1024) { (data, error) -> Void in
-                let title = dict["title"]! as! String
-                let speciality = dict["speciality"]! as! String
-                let date = dict["date"]! as! String
-                let description = dict["description"]! as! String
-                let pic = UIImage(data: data!)
-                let userid = dict["user"]! as! String
-                ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
-                    in
-                    let dict = snapshot.value as? [String : AnyObject] ?? [:]
-                    let username = dict["username"]! as! String
-                    let fullname = dict["fullname"]! as! String
-                    var color = UIColor.init()
-                    for s in specialities {
-                        if s.name == speciality {
-                            color = s.color!
+            for childDict in dict {
+                let dataChild = childDict.value as? [String : AnyObject] ?? [:]
+                let storageRef = Storage.storage().reference().child("News/\(child.key)/\(childDict.key)")
+                storageRef.getData(maxSize: 1 * 1024 * 1024) { (data, error) -> Void in
+                    let title = dataChild["title"]! as! String
+                    let speciality = dataChild["speciality"]! as! String
+                    let date = dataChild["date"]! as! String
+                    let description = dataChild["description"]! as! String
+                    let pic = UIImage(data: data!)
+                    let userid = dataChild["user"]! as! String
+                    ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
+                        in
+                        let dict = snapshot.value as? [String : AnyObject] ?? [:]
+                        let username = dict["username"]! as! String
+                        let fullname = dict["fullname"]! as! String
+                        var color = UIColor.init()
+                        for s in specialities {
+                            if s.name == speciality {
+                                color = s.color!
+                            }
                         }
-                    }
-                    self.news.append(News(id: child.key, image: pic!, date: date, title: title, speciality: Speciality(name: speciality, color: color), description: description, user: User(id: userid, fullname: fullname, username: username)))
-                    let sortedNews = self.news.sorted {
-                        $0.date > $1.date
-                    }
-                    self.news = sortedNews
-                    self.news_timeline.reloadData()
-                    self.stopAnimation()
-                })
+                        self.news.append(News(id: childDict.key, image: pic!, date: date, title: title, speciality: Speciality(name: speciality, color: color), description: description, user: User(id: userid, fullname: fullname, username: username)))
+                        let sortedNews = self.news.sorted {
+                            $0.date > $1.date
+                        }
+                        self.news = sortedNews
+                        self.news_timeline.reloadData()
+                        self.stopAnimation()
+                    })
+                }
             }
         }
     }

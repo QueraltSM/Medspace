@@ -7,6 +7,8 @@ var container: UIView = UIView()
 
 class LoginVC: UIViewController {
     
+    @IBOutlet weak var signup_button: UIButton!
+    @IBOutlet weak var form_title: UILabel!
     @IBOutlet weak var email: UITextField!
     @IBOutlet weak var password: UITextField!
     @IBOutlet weak var login_button: UIButton!
@@ -22,8 +24,12 @@ class LoginVC: UIViewController {
         db = Database.database().reference().child("Users")
         self.navigationController?.isNavigationBarHidden = true
         login_button.layer.cornerRadius = login_button.frame.size.height / 2.0
-        email.setUnderline(color: UIColor.white)
-        password.setUnderline(color: UIColor.white)
+        //email.setUnderline(color: UIColor.darkGray)
+        //password.setUnderline(color: UIColor.darkGray)
+        email.textColor = UIColor.black
+        password.textColor = UIColor.black
+        email.placeHolderColor = UIColor.black
+        password.placeHolderColor = UIColor.black
     }
     
     func loginDB() {
@@ -70,19 +76,19 @@ class LoginVC: UIViewController {
     }
     
     @IBAction func login(_ sender: Any) {
-        if (email.text!.isEmpty) {
-            self.email.setUnderline(color: UIColor.red)
-        } else {
-            self.email.setUnderline(color: UIColor.black)
+        var color = UIColor.gray
+        if email.text!.isEmpty {
+            color = UIColor.red
         }
-        if (password.text!.isEmpty) {
-            self.password.setUnderline(color: UIColor.red)
-        } else {
-            self.password.setUnderline(color: UIColor.black)
+        self.email.setUnderline(color: color)
+        color = UIColor.gray
+        if password.text!.isEmpty {
+            color = UIColor.red
         }
+        self.password.setUnderline(color: color)
         if (!email.text!.isEmpty && !password.text!.isEmpty) {
-            self.email.setUnderline(color: UIColor.black)
-            self.password.setUnderline(color: UIColor.black)
+            self.email.setUnderline(color: UIColor.gray)
+            self.password.setUnderline(color: UIColor.gray)
             loginDB()
         }
     }

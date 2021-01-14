@@ -45,7 +45,7 @@ class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDele
         if speciality_textfield.textColor == UIColor.gray {
             error += "Choose a valid speciality\n"
         }
-        if !validate(discussion_title) || !validate(discussion_description){
+        if !validateTxtView(discussion_title) || !validateTxtView(discussion_description){
             error += "Fill out all required fields\n"
         }
         if error == "" {
@@ -62,7 +62,7 @@ class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDele
             action in
             let now = Date().description
             let path = "Discussions/\(uid!)/\(now)"
-            self.postDiscussion(path: path, title: self.discussion_title.text!, description: self.discussion_description.text!, speciality:self.speciality_textfield.text!, user: uid!, date: self.getFormattedDate(date: now))
+            self.postDiscussion(path: path, title: self.discussion_title.text!, description: self.discussion_description.text!, speciality:self.speciality_textfield.text!, user: uid!, date: now)
             self.presentVC(segue: "MyDiscussionsVC")
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))

@@ -99,10 +99,10 @@ class MyNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
     }
     
     func loopNews(ref: DatabaseReference, snapshot: DataSnapshot) {
-        self.startAnimation()
         for child in snapshot.children.allObjects as! [DataSnapshot] {
+            self.startAnimation()
             let dict = child.value as? [String : AnyObject] ?? [:]
-            let storageRef = Storage.storage().reference().child("News/\(child.key)")
+            let storageRef = Storage.storage().reference().child("News/\(uid!)/\(child.key)")
             storageRef.getData(maxSize: 1 * 1024 * 1024) { (data, error) -> Void in
                 let title = dict["title"]! as! String
                 let speciality = dict["speciality"]! as! String

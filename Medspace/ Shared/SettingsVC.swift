@@ -5,46 +5,67 @@ import Firebase
 class SettingsVC: UIViewController, UITableViewDelegate, UITableViewDataSource  {
     
     var options = ["Edit profile", "Change password", "Delete account"]
-    
+    var ref: DatabaseReference!
     @IBOutlet weak var settingsTable: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        ref = Database.database().reference()
         self.settingsTable.delegate = self
         self.settingsTable.dataSource = self
-        settingsTable.separatorStyle = .none
+        let footerView = UIView()
+        footerView.backgroundColor = UIColor.clear
+        self.settingsTable.tableFooterView = footerView
+        self.settingsTable.backgroundColor = UIColor.clear
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-      func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return options.count
     }
     
-      func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 10
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.width, height: 50))
+        headerView.backgroundColor = UIColor.clear
+        return headerView
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = (tableView.dequeueReusableCell(withIdentifier: "cell") as? CollapsibleTableViewCell) ?? CollapsibleTableViewCell(style: .default, reuseIdentifier: "cell")
-        cell.accessoryType = .disclosureIndicator
         cell.textLabel!.textColor = .black
-        cell.textLabel!.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)
-        cell.textLabel?.text = options[indexPath.row]
+        cell.textLabel!.textAlignment = .center
+        cell.textLabel!.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.headline)
+        cell.textLabel!.text = options[indexPath.section]
+        cell.contentView.backgroundColor = UIColor.clear
+        cell.contentView.setBorder(color: UIColor.lightGray)
         return cell
     }
     
       func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedRow = options[indexPath.row]
-        if (selectedRow == "Edit profile") {
-            self.presentVC(segue: "EditProfileVC")
-        } else if (selectedRow == "Change password") {
-            changePassword()
-        } else if (selectedRow == "Delete account") {
-            deleteAccount()
+        switch(indexPath.section) {
+            case 0:
+                self.presentVC(segue: "EditProfileVC")
+                break
+            case 1:
+                changePassword()
+                break
+            case 2:
+                deleteAccount()
+                break
+            default:
+                break
         }
     }
     
-    func removeUserPosts(path: String) {
-        Database.database().reference().child(path).observeSingleEvent(of: .value, with: { snapshot in
+    func removePosts(path: String) {
+        self.ref.child(path).observeSingleEvent(of: .value, with: { snapshot in
             let enumerator = snapshot.children
             while let rest = enumerator.nextObject() as? DataSnapshot {
                 let value = rest.value as? NSDictionary
@@ -56,25 +77,78 @@ class SettingsVC: UIViewController, UITableViewDelegate, UITableViewDataSource  
         })
     }
     
+    func loopComments(path: String, ref: DatabaseReference, snapshot: DataSnapshot, userid: String) {
+        for child in snapshot.children.allObjects as! [DataSnapshot] {
+            let dict = child.value as? [String : AnyObject] ?? [:]
+            for childDict in dict {
+                let data = childDict.value as? [String : AnyObject] ?? [:]
+                for childData in data {
+                    if (childData.key == userid) {
+                        self.removeDataDB(path: "\(path)/\(child.key)/\(childDict.key)/\(childData.key)")
+                    }
+                }
+            }
+        }
+    }
+    
+    func removeComments(path: String, userid: String) {
+        ref.child(path).observeSingleEvent(of: .value, with: { snapshot in
+            self.loopComments(path: path, ref: self.ref, snapshot: snapshot, userid: userid)
+        })
+    }
+    
+    func removeFiles(path: String){
+        ref.child(path).observeSingleEvent(of: .value, with: { snapshot in
+            for child in snapshot.children.allObjects as! [DataSnapshot] {
+                self.removeDataStorage(path: "\(path)/\(child.key)")
+            }
+        })
+    }
+    
+    func removeAll(userid: String){
+        self.removePosts(path: "News/\(userid)")
+        removeFiles(path: "News/\(userid)")
+        removeFiles(path: "Researches/\(userid)")
+        self.removePosts(path: "Cases/\(userid)")
+        self.removePosts(path: "Discussions/\(userid)")
+        self.removePosts(path: "Researches/\(userid)")
+        self.removePosts(path: "Comments/News/\(userid)")
+        self.removePosts(path: "Comments/Cases/\(userid)")
+        self.removePosts(path: "Comments/Discussions/\(userid)")
+        self.removePosts(path: "Comments/Researches/\(userid)")
+        self.removeComments(path: "Comments/News", userid: userid)
+        self.removeComments(path: "Comments/Cases", userid: userid)
+        self.removeComments(path: "Comments/Discussions", userid: userid)
+        self.removeComments(path: "Comments/Researches", userid: userid)
+        self.removeDataDB(path: "Users/\(userid)")
+        UserDefaults.standard.set(false, forKey: "isUserLoggedIn")
+    }
+    
     func deleteAccount(){
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
         alert.title = "Are you sure you want to delete your account?"
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
             action in
-            self.removeUserPosts(path: "Cases")
-            self.removeUserPosts(path: "Discussions")
-            self.removeUserPosts(path: "Researches")
+            let userid = uid!
             Auth.auth().currentUser!.delete { error in
                 if error == nil {
-                    self.showAlert(title: "Goodbye doctor", message: "We hope to see you again")
-                    self.presentVC(segue: "LoginVC")
+                    self.removeAll(userid: userid)
+                    let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+                    alert.title = "Goodbye"
+                    alert.message = "We hope to see you again"
+                    alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: {
+                        action in
+                        self.presentVC(segue: "LoginVC")
+                    }))
+                    alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
                 } else {
-                    self.showAlert(title: "Error", message: "There was an error deleting your account. Please try again")
+                    self.showAlert(title: "Error", message: "There was an error deleting your account")
                 }
             }
         }))
-            alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
-            self.present(alert, animated: true, completion: nil)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     func changePassword() {
@@ -83,7 +157,7 @@ class SettingsVC: UIViewController, UITableViewDelegate, UITableViewDataSource  
             textField.placeholder = "Password"
             textField.isSecureTextEntry = true
         }
-        let save = UIAlertAction(title: "Done", style: .cancel, handler: { alertAction -> Void in
+        let save = UIAlertAction(title: "Done", style: .default, handler: { alertAction -> Void in
             if let textField = alert.textFields?[0] {
                 if textField.text!.count > 0 {
                     Auth.auth().currentUser!.updatePassword(to: textField.text!) { error in
@@ -95,6 +169,8 @@ class SettingsVC: UIViewController, UITableViewDelegate, UITableViewDataSource  
                         }
                         self.showAlert(title:title, message: message)
                     }
+                } else {
+                    self.showAlert(title: "Error", message: "Password can not be empty")
                 }
             }
         })

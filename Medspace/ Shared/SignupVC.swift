@@ -14,14 +14,19 @@ class SignupVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        signup_button.layer.borderColor = UIColor.black.cgColor
-        signup_button.layer.borderWidth = 1
+        db = Database.database().reference()
         signup_button.layer.cornerRadius = signup_button.frame.size.height / 2.0
-        repeat_password.setUnderline(color: UIColor.black)
-        email.setUnderline(color: UIColor.black)
-        password.setUnderline(color: UIColor.black)
-        fullname.setUnderline(color: UIColor.black)
-        username.setUnderline(color: UIColor.black)
+        email.setUnderline(color: UIColor.darkGray)
+        password.setUnderline(color: UIColor.darkGray)
+        email.textColor = UIColor.black
+        password.textColor = UIColor.black
+        fullname.textColor = UIColor.black
+        username.textColor = UIColor.black
+        email.placeHolderColor = UIColor.black
+        password.placeHolderColor = UIColor.black
+        fullname.placeHolderColor = UIColor.black
+        username.placeHolderColor = UIColor.black
+        
     }
     
     func passwordMatched() -> Bool {
@@ -36,8 +41,11 @@ class SignupVC: UIViewController {
     }
     
     @IBAction func createAccount(_ sender: Any) {
+        print("createAccount")
+        print(areEmptyFields())
+        print(passwordMatched())
         if (!areEmptyFields() && passwordMatched()) {
-            Database.database().reference().child("Users").observeSingleEvent(of: .value, with: { snapshot in
+            db.child("Users").observeSingleEvent(of: .value, with: { snapshot in
                 let enumerator = snapshot.children
                 var taken = false
                 while let rest = enumerator.nextObject() as? DataSnapshot {
@@ -73,46 +81,21 @@ class SignupVC: UIViewController {
         }
     }
     
+    func notEmpty(result:Bool, textfield: UITextField) -> Bool {
+        var empty = false
+        var color = UIColor.black
+        if !result {
+            color = UIColor.red
+            empty = true
+        }
+        textfield.setUnderline(color: color)
+        return empty
+    }
+    
     func areEmptyFields() -> Bool {
-        var result = false
-        if username.text!.isEmpty {
-            username.setUnderline(color: UIColor.red)
-            result = true
-        } else {
-            username.setUnderline(color: UIColor.black)
-        }
-        if username.text!.contains(" ") {
-            username.setUnderline(color: UIColor.red)
-            result = true
-            self.showAlert(title: "Error", message: "Username can not contain spaces")
-        } else {
-            username.setUnderline(color: UIColor.black)
-        }
-        if fullname.text!.isEmpty {
-            fullname.setUnderline(color: UIColor.red)
-            result = true
-        } else {
-            fullname.setUnderline(color: UIColor.black)
-        }
-        if email.text!.isEmpty {
-            email.setUnderline(color: UIColor.red)
-            result = true
-        } else {
-            email.setUnderline(color: UIColor.black)
-        }
-        if password.text!.isEmpty {
-            password.setUnderline(color: UIColor.red)
-            result = true
-        } else {
-            password.setUnderline(color: UIColor.black)
-        }
-        if repeat_password.text!.isEmpty {
-            repeat_password.setUnderline(color: UIColor.red)
-            result = true
-        } else {
-            repeat_password.setUnderline(color: UIColor.black)
-        }
-        return result
+        return notEmpty(result: validateTxtfield(username), textfield: username) && notEmpty(result: validateTxtfield(fullname), textfield: fullname)
+        && notEmpty(result: validateTxtfield(email), textfield: email) && notEmpty(result: validateTxtfield(password), textfield: password)
+        && notEmpty(result: validateTxtfield(repeat_password), textfield: repeat_password)
     }
     
     @IBAction func login(_ sender: Any) {

@@ -55,17 +55,12 @@ extension UITextField {
     }
     
     func setUnderline(color: UIColor) {
-        self.borderStyle = .none
-        self.layer.backgroundColor = UIColor.white.cgColor
-        self.layer.masksToBounds = false
-        self.layer.shadowColor = color.cgColor
-        self.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
-        self.layer.shadowOpacity = 1.0
-        self.layer.shadowRadius = 0.0
+        let bottomLine = CALayer()
+        bottomLine.frame = CGRect(x: 0, y: self.frame.size.height - 1, width: self.frame.size.width, height: 1)
+        bottomLine.backgroundColor = color.cgColor
+        borderStyle = .none
+        layer.addSublayer(bottomLine)
     }
-    
-    
-    
 }
 
 extension UIColor {
@@ -181,12 +176,23 @@ extension UIViewController {
         self.present(alert, animated: false)
     }
     
-    func validate(_ textView: UITextView) -> Bool {
+    func validateTxtView(_ textView: UITextView) -> Bool {
         guard let text = textView.text,
             !text.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).isEmpty else {
             return false
         }
         if textView.textColor == UIColor.gray {
+            return false
+        }
+        return true
+    }
+    
+    func validateTxtfield(_ textField: UITextField) -> Bool {
+        guard let text = textField.text,
+            !text.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).isEmpty else {
+            return false
+        }
+        if textField.textColor == UIColor.gray {
             return false
         }
         return true
