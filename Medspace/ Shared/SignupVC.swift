@@ -14,19 +14,22 @@ class SignupVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        initComponents()
+    }
+    
+    func initComponents(){
         db = Database.database().reference()
-        signup_button.layer.cornerRadius = signup_button.frame.size.height / 2.0
-        email.setUnderline(color: UIColor.darkGray)
-        password.setUnderline(color: UIColor.darkGray)
+        self.navigationController?.isNavigationBarHidden = true
         email.textColor = UIColor.black
         password.textColor = UIColor.black
+        repeat_password.textColor = UIColor.black
         fullname.textColor = UIColor.black
         username.textColor = UIColor.black
-        email.placeHolderColor = UIColor.black
-        password.placeHolderColor = UIColor.black
-        fullname.placeHolderColor = UIColor.black
-        username.placeHolderColor = UIColor.black
-        
+        email.placeHolderColor = UIColor.gray
+        password.placeHolderColor = UIColor.gray
+        repeat_password.placeHolderColor = UIColor.gray
+        fullname.placeHolderColor = UIColor.gray
+        username.placeHolderColor = UIColor.gray
     }
     
     func passwordMatched() -> Bool {
@@ -35,15 +38,12 @@ class SignupVC: UIViewController {
             result = false
             password.setUnderline(color: UIColor.red)
             repeat_password.setUnderline(color: UIColor.red)
-            self.showAlert(title: "Error", message: "Password do not match!")
+            self.showAlert(title: "Error", message: "Password do not match")
         }
         return result
     }
     
     @IBAction func createAccount(_ sender: Any) {
-        print("createAccount")
-        print(areEmptyFields())
-        print(passwordMatched())
         if (!areEmptyFields() && passwordMatched()) {
             db.child("Users").observeSingleEvent(of: .value, with: { snapshot in
                 let enumerator = snapshot.children
@@ -66,10 +66,6 @@ class SignupVC: UIViewController {
     func createUser() {
         Auth.auth().createUser(withEmail: email.text!, password: password.text!) {(authResult, error) in
             if error != nil {
-                self.fullname.setUnderline(color: UIColor.red)
-                self.email.setUnderline(color: UIColor.red)
-                self.password.setUnderline(color: UIColor.red)
-                self.repeat_password.setUnderline(color: UIColor.red)
                 self.showAlert(title: "Error", message: error!.localizedDescription)
             } else {
                 let uid = authResult!.uid
@@ -81,21 +77,34 @@ class SignupVC: UIViewController {
         }
     }
     
-    func notEmpty(result:Bool, textfield: UITextField) -> Bool {
-        var empty = false
-        var color = UIColor.black
-        if !result {
-            color = UIColor.red
-            empty = true
-        }
-        textfield.setUnderline(color: color)
-        return empty
-    }
-    
     func areEmptyFields() -> Bool {
-        return notEmpty(result: validateTxtfield(username), textfield: username) && notEmpty(result: validateTxtfield(fullname), textfield: fullname)
-        && notEmpty(result: validateTxtfield(email), textfield: email) && notEmpty(result: validateTxtfield(password), textfield: password)
-        && notEmpty(result: validateTxtfield(repeat_password), textfield: repeat_password)
+        if !validateTxtfield(username) {
+            self.username.setUnderline(color: UIColor.red)
+        } else {
+            self.username.setUnderline(color: UIColor.white)
+        }
+        if !validateTxtfield(fullname) {
+            self.fullname.setUnderline(color: UIColor.red)
+        } else {
+            self.fullname.setUnderline(color: UIColor.white)
+        }
+        if !validateTxtfield(email) {
+            self.email.setUnderline(color: UIColor.red)
+        } else {
+            self.email.setUnderline(color: UIColor.white)
+        }
+        if !validateTxtfield(password) {
+            self.password.setUnderline(color: UIColor.red)
+        } else {
+            self.password.setUnderline(color: UIColor.white)
+        }
+        if !validateTxtfield(repeat_password) {
+            self.repeat_password.setUnderline(color: UIColor.red)
+        } else {
+            self.repeat_password.setUnderline(color: UIColor.white)
+        }
+        return validateTxtfield(username) && validateTxtfield(fullname) && validateTxtfield(email) && validateTxtfield(password)
+            && validateTxtfield(repeat_password)
     }
     
     @IBAction func login(_ sender: Any) {
