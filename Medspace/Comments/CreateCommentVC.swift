@@ -6,8 +6,9 @@ class CreateCommentVC: UIViewController, UITextViewDelegate {
     var clinical_case: Case?
     var discussion: Discussion?
     var research: Research?
-    @IBOutlet weak var message: UITextView!
+    
     @IBOutlet weak var scrollview: UIScrollView!
+    @IBOutlet weak var message: UITextView!
     var commentPath: String?
     
     override func viewDidLoad() {
@@ -61,7 +62,12 @@ class CreateCommentVC: UIViewController, UITextViewDelegate {
         return newText.count <= 200
     }
     
-    func goBack() {
+
+    @IBAction func pushBack(_ sender: Any) {
+        self.goBack()
+    }
+    
+    func goBack(){
         let segue_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "CommentsVC") as? CommentsVC
         if news != nil {
             segue_vc!.news = news

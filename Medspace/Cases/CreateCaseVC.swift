@@ -17,17 +17,18 @@ class CreateCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
     }
     
     func initComponents() {
+        speciality.delegate = self
         titleview.delegate = self
         description_view.delegate = self
         history.delegate = self
         examination.delegate = self
         titleview.text = "Headache"
         titleview.textColor = UIColor.gray
-        description_view.text = "The most likely diagnoses are related to drugs or a neurological event. The first part of the care should be to ensure that he is stable from a cardiac and respiratory point of view."
+        description_view.text = "The first part of the care should be to ensure that he is stable from a cardiac and respiratory point of view."
         description_view.textColor = UIColor.gray
-        history.text = "The headache started 24 h previously and has rapidly become more intense. He describes the headache as generalized in his head. He has vomited twice and appears to be developing drowsiness and confusion."
+        history.text = "He has vomited twice and appears to be developing drowsiness and confusion."
         history.textColor = UIColor.gray
-        examination.text = "He has stiffness on passive flexion of his neck. There is no rash. His sinuses are not tender and his eardrums appear normal. His pulse rate is 120/min and blood pressure 98/74 mmHg"
+        examination.text = "His sinuses are not tender and his eardrums appear normal. His pulse rate is 120/min and blood pressure 98/74 mmHg."
         examination.textColor = UIColor.gray
         speciality.text = "Nuclear Medicine"
         speciality.textColor = UIColor.gray
@@ -65,6 +66,11 @@ class CreateCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         toolBar.setItems([space, button], animated: true)
         toolBar.isUserInteractionEnabled = true
         speciality.inputAccessoryView = toolBar
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        self.resignFirstResponder()
+        return false
     }
     
     @objc func action() {

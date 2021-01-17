@@ -30,7 +30,7 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         titleview.textColor = UIColor.gray
         news_description.textColor = UIColor.gray
         titleview.text = "For example: Researchers develop highly scalable, accurate antibody test for covid-19"
-        news_description.text = "The UT Austin research team, led by Jason Lavinder, a research associate in the Cockrell School of Engineering, and Greg Ippolito, assistant professor in the College of Natural Sciences and Dell Medical School, developed the new antibody test for SARS-CoV-2."
+        news_description.text = "The UT Austin research team, led by Jason Lavinder, a research associate in the Cockrell School of Engineering, and Greg Ippolito..."
         scrollview.backgroundColor = UIColor.white
         speciality_textfield.textColor = UIColor.gray
         speciality_textfield.text = "Nuclear Medicine"
@@ -44,6 +44,11 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         dismissPickerView()
     }
 
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        self.resignFirstResponder()
+        return false
+    }
+    
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == UIColor.gray {
             textView.text = ""
@@ -103,21 +108,21 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
             popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
             popoverController.permittedArrowDirections = []
         }
-        alert.addAction(UIAlertAction(title: "Photo Library", style: .cancel, handler: {
+        alert.addAction(UIAlertAction(title: "Import photo", style: .default, handler: {
             action in
             picker.sourceType = .photoLibrary
             picker.modalPresentationStyle = .fullScreen
             self.present(picker, animated: true, completion: nil)
         }))
         if (!image_header_invalid) {
-            alert.addAction(UIAlertAction(title: "Remove Photo", style: .default, handler: {
+            alert.addAction(UIAlertAction(title: "Remove Photo", style: .destructive, handler: {
                 action in
                 self.image_header.image = UIImage(named: "Medspace-News.png")
                 self.image_header_invalid = true
                 alert.dismiss(animated: true, completion: nil)
             }))
         }
-        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
     
@@ -187,7 +192,7 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
 extension CreateNewsVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            image_header.contentMode = .scaleAspectFit
+            image_header.contentMode = .scaleToFill
             image_header.image = pickedImage
             image_header_invalid = false
             image_header.isHidden = false

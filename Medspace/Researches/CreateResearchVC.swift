@@ -32,6 +32,8 @@ class CreateResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
         research_description.delegate = self
         speciality_textfield.delegate = self
         titleview.textColor = UIColor.gray
+        document_name.text = "No document selected"
+        document_name.numberOfLines = 0
         titleview.text = "Research needs in allergy: an EAACI position paper, in collaboration with EFA"
         speciality_textfield.text = "Nuclear Medicine"
         research_description.text = "In less than half a century, allergy, originally perceived as a rare disease, has become a major public health threat, today affecting the lives of more than 60 million people in Europe."
@@ -47,6 +49,11 @@ class CreateResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
         speciality_textfield.addSubview(disclosure)
         createPickerView()
         dismissPickerView()
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        self.resignFirstResponder()
+        return false
     }
     
     public func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
@@ -65,10 +72,28 @@ class CreateResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
     }
     
     @IBAction func selectDocument(_ sender: Any) {
-        let documentpicker = UIDocumentPickerViewController(documentTypes: ["com.apple.iwork.pages.pages", "com.apple.iwork.numbers.numbers", "com.apple.iwork.keynote.key","public.image", "com.apple.application", "public.item","public.data", "public.content", "public.audiovisual-content", "public.movie", "public.audiovisual-content", "public.video", "public.audio", "public.text", "public.data", "public.zip-archive", "com.pkware.zip-archive", "public.composite-content", "public.text"], in: .import)
-        documentpicker.delegate = self
-        documentpicker.modalPresentationStyle = .fullScreen
-        present(documentpicker, animated: true, completion: nil)
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        if let popoverController = alert.popoverPresentationController {
+            popoverController.sourceView = self.view
+            popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+            popoverController.permittedArrowDirections = []
+        }
+        alert.addAction(UIAlertAction(title: "Import file", style: .default, handler: {
+            action in
+            let documentpicker = UIDocumentPickerViewController(documentTypes: ["com.apple.iwork.pages.pages", "com.apple.iwork.numbers.numbers", "com.apple.iwork.keynote.key","public.image", "com.apple.application", "public.item","public.data", "public.content", "public.audiovisual-content", "public.movie", "public.audiovisual-content", "public.video", "public.audio", "public.text", "public.data", "public.zip-archive", "com.pkware.zip-archive", "public.composite-content", "public.text"], in: .import)
+            documentpicker.delegate = self
+            documentpicker.modalPresentationStyle = .fullScreen
+            self.present(documentpicker, animated: true, completion: nil)
+        }))
+        if (documentURL != nil) {
+            alert.addAction(UIAlertAction(title: "Remove file", style: .destructive, handler: {
+                action in
+                self.documentURL = nil
+                self.document_name.text = "No document selected"
+            }))
+        }
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     @objc func action() {

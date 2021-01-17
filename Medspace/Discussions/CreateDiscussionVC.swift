@@ -16,11 +16,12 @@ class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDele
     }
 
     func initComponents() {
+        speciality_textfield.delegate = self
         discussion_title.delegate = self
         discussion_description.delegate = self
         discussion_title.text = "Anaphylaxis: Emergency treatment"
         discussion_title.textColor = UIColor.gray
-        discussion_description.text = "This may partly be due to failure to appreciate that anaphylaxis is a much broader syndrome than 'anaphylactic shock' and the goal of therapy should be early recognition and treatment with epinephrine to prevent progression to life-threatening respiratory and/or cardiovascular symptoms and signs, including shock."
+        discussion_description.text = "This may partly be due to failure to appreciate that anaphylaxis is a much broader syndrome than 'anaphylactic shock' and the goal of therapy should be early recognition and treatment with epinephrine to prevent progression to life-threatening respiratory."
         discussion_description.textColor = UIColor.gray
         speciality_textfield.text = "Nuclear Medicine"
         speciality_textfield.textColor = UIColor.gray
@@ -38,6 +39,11 @@ class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDele
         scrollview.backgroundColor = UIColor.white
         createPickerView()
         dismissPickerView()
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        self.resignFirstResponder()
+        return false
     }
     
     @IBAction func saveDiscussion(_ sender: Any) {
