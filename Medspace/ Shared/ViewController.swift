@@ -130,9 +130,16 @@ extension UIViewController {
         return ""
     }
     
-    func setMenu() {
+    func customNavBar() {
+        self.view.backgroundColor = UIColor.white
+        self.view.tintColor = UIColor.white
+        navigationController!.navigationBar.backgroundColor = UIColor.white
         navigationController!.navigationBar.barTintColor = UIColor.white
         UINavigationBar.appearance().shadowImage = UIImage()
+    }
+    
+    func setMenu() {
+        customNavBar()
         side_menu = storyboard!.instantiateViewController(withIdentifier: "SideMenuVC") as? SideMenuVC
     }
     

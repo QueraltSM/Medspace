@@ -13,6 +13,11 @@ class EditCommentVC: UIViewController, UITextViewDelegate {
      
     override func viewDidLoad() {
         super.viewDidLoad()
+        initComponents()
+        customNavBar()
+    }
+    
+    func initComponents(){
         message.delegate = self
         message.text = comment!.message
         message.textColor = UIColor.darkGray

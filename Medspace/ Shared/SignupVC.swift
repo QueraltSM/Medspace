@@ -68,7 +68,7 @@ class SignupVC: UIViewController {
             if error != nil {
                 self.showAlert(title: "Error", message: error!.localizedDescription)
             } else {
-                let uid = authResult!.uid
+                let uid = authResult!.user.uid
                 self.db = Database.database().reference().child("Users/\(uid)")
                 self.db.setValue(["username": self.username.text!, "fullname":self.fullname.text!, "type": "Doctor"])
                 self.showAlert(title: "Success!", message: "Your account has been created")

@@ -2,7 +2,7 @@ import UIKit
 import FirebaseDatabase
 import FirebaseAuth
 
-class EditDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
+class EditDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
 
     @IBOutlet weak var scrollview: UIScrollView!
     @IBOutlet weak var speciality_textfield: UITextField!
@@ -14,11 +14,13 @@ class EditDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         initComponents()
+        customNavBar()
     }
     
     func initComponents(){
         discussion_title.delegate = self
         discussion_description.delegate = self
+        speciality_textfield.delegate = self
         discussion_title.text = discussion!.title
         discussion_title.textColor = UIColor.darkGray
         discussion_description.text = discussion!.description
@@ -119,5 +121,16 @@ class EditDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
         return newText.count <= 250
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        self.resignFirstResponder()
+        return false
+    }
+    
+    @IBAction func goBack(_ sender: Any) {
+        let discussion_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowDiscussionVC") as? ShowDiscussionVC
+        discussion_vc!.discussion = discussion
+        self.navigationController?.pushViewController(discussion_vc!, animated: false)
     }
 }

@@ -21,43 +21,7 @@ class EditNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
     override func viewDidLoad() {
         super.viewDidLoad()
         initComponents()
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(
-        target: self,action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tap)
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc func dismissKeyboard(){
-        view.endEditing(true)
-        view.frame.origin.y = 0
-    }
-    
-    @objc func keyboardWillHide(notification: NSNotification) {
-        if self.view.frame.origin.y != 0 {
-            self.view.frame.origin.y = 0
-        }
-    }
-
-    @objc func keyboardWillShow(notification: NSNotification) {
-        if ((notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue) != nil {
-            if let scrollView = scrollview, let userInfo = notification.userInfo, let endValue = userInfo[UIResponder.keyboardFrameEndUserInfoKey], let durationValue = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey], let curveValue = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] {
-                       let endRect = view.convert((endValue as AnyObject).cgRectValue, from: view.window)
-                       let keyboardOverlap = scrollView.frame.maxY - endRect.origin.y
-                       scrollView.contentInset.bottom = keyboardOverlap
-                       scrollView.scrollIndicatorInsets.bottom = keyboardOverlap
-                       let duration = (durationValue as AnyObject).doubleValue
-                       let options = UIView.AnimationOptions(rawValue: UInt((curveValue as AnyObject).integerValue << 16))
-                       UIView.animate(withDuration: duration!, delay: 0, options: options, animations: {
-                           self.view.layoutIfNeeded()
-                       }, completion: nil)
-                   }
-        }
+        customNavBar()
     }
     
     func initComponents(){
@@ -77,6 +41,7 @@ class EditNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
         titleview.text = news!.title
         titleview.textColor = UIColor.gray
         image_header.image = news!.image
+        image_header.contentMode = .scaleToFill
         let disclosure = UITableViewCell()
         disclosure.frame = speciality_textfield.bounds
         disclosure.accessoryType = .disclosureIndicator
@@ -124,21 +89,22 @@ class EditNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
             popoverController.sourceView = self.view
             popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.maxY, width: 0, height: 0)
         }
-        alert.addAction(UIAlertAction(title: "Photo Library", style: .cancel, handler: {
+        alert.addAction(UIAlertAction(title: "Import photo", style: .default, handler: {
             action in
             picker.sourceType = .photoLibrary
-            picker.modalPresentationStyle = .currentContext
+            picker.modalPresentationStyle = .fullScreen
             self.present(picker, animated: true, completion: nil)
         }))
         if (!image_header_invalid) {
-            alert.addAction(UIAlertAction(title: "Remove Photo", style: .default, handler: {
+            alert.addAction(UIAlertAction(title: "Remove Photo", style: .destructive, handler: {
                 action in
                 self.image_header.image = UIImage(named: "Medspace-News.png")
                 self.image_header_invalid = true
+                self.image_header.heightAnchor.constraint(equalToConstant: CGFloat(241)).isActive = true
                 alert.dismiss(animated: true, completion: nil)
             }))
         }
-        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
     
@@ -163,14 +129,14 @@ class EditNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
         }
         let metaDataConfig = StorageMetadata()
         metaDataConfig.contentType = "image/jpg"
-        let storageRef = Storage.storage().reference(withPath: "News/\(news!.id)")
+        let storageRef = Storage.storage().reference(withPath: "News/\(uid!)/\(news!.id)")
         storageRef.putData(imageData, metadata: metaDataConfig){ (metaData, error) in
             self.stopAnimation()
             if let error = error {
                 self.showAlert(title: "Error", message: error.localizedDescription)
                 return
             } else {
-                self.postNews(path: "News/\(self.news!.id)", title: self.titleview.text, description: self.descriptionview.text!, speciality: self.speciality_textfield.text!, user: self.news!.user.id, date: self.news!.date)
+                self.postNews(path: "News/\(uid!)/\(self.news!.id)", title: self.titleview.text, description: self.descriptionview.text!, speciality: self.speciality_textfield.text!, user: self.news!.user.id, date: self.news!.date)
                 self.presentShowNews()
             }
         }
@@ -227,15 +193,27 @@ class EditNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
     func textViewDidChange(_ textView: UITextView) {
         textView.textColor = UIColor.black
     }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        self.resignFirstResponder()
+        return false
+    }
+    
+    @IBAction func goBack(_ sender: Any) {
+        let news_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowNewsVC") as? ShowNewsVC
+        news_vc!.news = news
+        self.navigationController?.pushViewController(news_vc!, animated: false)
+    }
 }
 
 extension EditNewsVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            image_header.contentMode = .scaleAspectFill
+            image_header.contentMode = .scaleToFill
             image_header.image = pickedImage
             image_header_invalid = false
             imageUpdated = true
+            image_header.heightAnchor.constraint(equalToConstant: CGFloat(241)).isActive = true
         }
         dismiss(animated: false, completion: nil)
     }

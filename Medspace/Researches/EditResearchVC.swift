@@ -20,18 +20,19 @@ class EditResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         initComponents()
+        customNavBar()
     }
     
     func initComponents() {
         research_title.delegate = self
         research_description.delegate = self
+        research_document.textColor = UIColor.black
         research_title.text = research!.title
         research_description.text = research!.description
         research_title.textColor = UIColor.darkGray
         research_description.textColor = UIColor.darkGray
         speciality_textfield.text = research!.speciality.name
         speciality_textfield.textColor = UIColor.darkGray
-        research_document.textColor = UIColor.darkGray
         let disclosure = UITableViewCell()
         disclosure.frame = speciality_textfield.bounds
         disclosure.accessoryType = .disclosureIndicator
@@ -44,7 +45,7 @@ class EditResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate
             scrollview.bottomAnchor.constraint(equalTo: research_document.bottomAnchor).isActive = true
         }
         scrollview.backgroundColor = UIColor.white
-        research_document.text = "Press + to upload new document"
+        research_document.text = "No new document selected"
         createPickerView()
         dismissPickerView()
         documentURL = research!.pdf
@@ -95,12 +96,6 @@ class EditResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate
         speciality_textfield.text = selectedSpeciality
     }
     
-    @IBAction func viewDocument(_ sender: Any) {
-        let document_viewer_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "DocumentViewerVC") as? DocumentViewerVC
-        document_viewer_vc!.document = documentURL
-        navigationController?.pushViewController(document_viewer_vc!, animated: false)
-    }
-    
     public func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         guard let myURL = urls.first else {
             return
@@ -114,16 +109,32 @@ class EditResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate
     public func documentMenu(didPickDocumentPicker documentPicker: UIDocumentPickerViewController) {
         documentPicker.delegate = self
         invalid_document = true
-        research_document.text = "No document has been selected"
+        research_document.text = "No new document selected"
         present(documentPicker, animated: false, completion: nil)
     }
     
+    @IBAction func viewDocument(_ sender: Any) {
+        let document_viewer_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "DocumentViewerVC") as? DocumentViewerVC
+        document_viewer_vc!.document = documentURL
+        navigationController?.pushViewController(document_viewer_vc!, animated: false)
+    }
     
     @IBAction func selectDocument(_ sender: Any) {
-        let documentpicker = UIDocumentPickerViewController(documentTypes: ["com.apple.iwork.pages.pages", "com.apple.iwork.numbers.numbers", "com.apple.iwork.keynote.key","public.image", "com.apple.application", "public.item","public.data", "public.content", "public.audiovisual-content", "public.movie", "public.audiovisual-content", "public.video", "public.audio", "public.text", "public.data", "public.zip-archive", "com.pkware.zip-archive", "public.composite-content", "public.text"], in: .import)
-        documentpicker.delegate = self
-        documentpicker.modalPresentationStyle = .fullScreen
-        present(documentpicker, animated: true, completion: nil)
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        if let popoverController = alert.popoverPresentationController {
+            popoverController.sourceView = self.view
+            popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+            popoverController.permittedArrowDirections = []
+        }
+        alert.addAction(UIAlertAction(title: "Import file", style: .default, handler: {
+            action in
+            let documentpicker = UIDocumentPickerViewController(documentTypes: ["com.apple.iwork.pages.pages", "com.apple.iwork.numbers.numbers", "com.apple.iwork.keynote.key","public.image", "com.apple.application", "public.item","public.data", "public.content", "public.audiovisual-content", "public.movie", "public.audiovisual-content", "public.video", "public.audio", "public.text", "public.data", "public.zip-archive", "com.pkware.zip-archive", "public.composite-content", "public.text"], in: .import)
+            documentpicker.delegate = self
+            documentpicker.modalPresentationStyle = .fullScreen
+            self.present(documentpicker, animated: true, completion: nil)
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     @IBAction func addDocument(_ sender: Any) {
@@ -193,5 +204,16 @@ class EditResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
         return newText.count <= 250
+    }
+    
+    @IBAction func goBack(_ sender: Any) {
+        let research_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowResearchVC") as? ShowResearchVC
+        research_vc!.research = research
+        self.navigationController?.pushViewController(research_vc!, animated: false)
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        self.resignFirstResponder()
+        return false
     }
 }

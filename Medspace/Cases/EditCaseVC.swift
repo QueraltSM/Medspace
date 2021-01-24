@@ -1,6 +1,6 @@
 import UIKit
 
-class EditCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
+class EditCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
 
     @IBOutlet weak var scrollview: UIScrollView!
     @IBOutlet weak var speciality_textfield: UITextField!
@@ -15,11 +15,15 @@ class EditCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
     override func viewDidLoad() {
         super.viewDidLoad()
         initComponents()
+        customNavBar()
     }
     
     func initComponents() {
         case_title.delegate = self
         case_description.delegate = self
+        case_examination.delegate = self
+        case_history.delegate = self
+        speciality_textfield.delegate = self
         case_title.text = clinical_case!.title
         case_title.textColor = UIColor.darkGray
         case_description.text = clinical_case!.description
@@ -88,7 +92,6 @@ class EditCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
         selectedSpeciality = specialities[row].name
         speciality_textfield.text = selectedSpeciality
     }
-    
 
     @IBAction func saveCase(_ sender: Any) {
         var error = ""
@@ -128,5 +131,16 @@ class EditCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
         return newText.count <= 250
+    }
+    
+    @IBAction func goBack(_ sender: Any) {
+        let case_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowCaseVC") as? ShowCaseVC
+        case_vc!.clinical_case = clinical_case
+        self.navigationController?.pushViewController(case_vc!, animated: false)
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        self.resignFirstResponder()
+        return false
     }
 }

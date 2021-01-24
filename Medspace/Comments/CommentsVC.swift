@@ -101,12 +101,11 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                 comments_vc!.comment = self.comments[indexPath.row]
                 self.navigationController?.pushViewController(comments_vc!, animated: false)
             })
-            editAction.backgroundColor = UIColor.blue
-            let deleteAction = UITableViewRowAction(style: .default, title: "Delete", handler: { (action, indexPath) in
+            editAction.backgroundColor = UIColor.init(hexString: "#28B463")
+            let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete", handler: { (action, indexPath) in
                 let comment = self.comments[indexPath.row]
                 self.askDelete(comment: comment, pos: indexPath.row)
             })
-            deleteAction.backgroundColor = UIColor.red
             return [editAction, deleteAction]
         }
         return [];
