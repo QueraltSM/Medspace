@@ -8,7 +8,7 @@ var usertype: String!
 var username: String!
 var fullname: String!
 let specialities = [
-    Speciality(name: "Allergy and Inmunology", color: UIColor.init(hexString: "#daf0ff")), // blue
+    Speciality(name: "Allergy & Inmunology", color: UIColor.init(hexString: "#daf0ff")), // blue
     Speciality(name: "Anesthesiology", color: UIColor.init(hexString: "#ff6961")), // red
     Speciality(name: "Dermatology", color: UIColor.init(hexString: "#339933")), // green
     Speciality(name: "Diagnostic Radiology", color: UIColor.init(hexString: "#8fd3fe")), // blue
@@ -278,6 +278,13 @@ extension UIViewController {
             segue = "NewsVC"
         }
         self.presentVC(segue: segue)
+    }
+    
+    func back() {
+        let defaults = UserDefaults.standard
+        if let back = defaults.string(forKey: "back") {
+            presentVC(segue: back)
+        }
     }
 }
 

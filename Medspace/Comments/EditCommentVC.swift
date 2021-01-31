@@ -45,7 +45,7 @@ class EditCommentVC: UIViewController, UITextViewDelegate {
                 let now = self.comment!.date
                 let path = "\(self.commentPath!)/\(uid!)/\(now)"
                 self.postComment(path: path, message: self.message.text!, user: uid!, date: now)
-                self.back()
+                self.goBack()
             }))
             alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
             self.present(alert, animated: true, completion: nil)
@@ -58,7 +58,7 @@ class EditCommentVC: UIViewController, UITextViewDelegate {
         textView.textColor = UIColor.black
     }
     
-    func back(){
+    func goBack(){
         let comments_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "CommentsVC") as? CommentsVC
         comments_vc!.commentPath = self.commentPath
         comments_vc!.news = self.news
@@ -70,6 +70,6 @@ class EditCommentVC: UIViewController, UITextViewDelegate {
     }
     
     @IBAction func backSegue(_ sender: Any) {
-        self.back()
+        self.goBack()
     }
 }

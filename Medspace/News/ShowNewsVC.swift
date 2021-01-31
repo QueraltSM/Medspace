@@ -14,6 +14,7 @@ class ShowNewsVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initComponents()
+        customNavBar()
     }
     
     func initComponents(){
@@ -25,21 +26,14 @@ class ShowNewsVC: UIViewController {
         image_header.image = news!.image
         news_title.text = news!.title
         news_description.text = news!.description
-        configNews(enabled: news!.user.id == uid)
+        if news!.user.id != uid {
+            editButton.tintColor = UIColor.white
+            deleteButton.tintColor =  UIColor.white
+        }
+        editButton.isEnabled = news!.user.id == uid
+        deleteButton.isEnabled = news!.user.id == uid
     }
 
-    func configNews(enabled: Bool) {
-        editButton.isEnabled = enabled
-        deleteButton.isEnabled = enabled
-        if enabled {
-            editButton.title = "Edit"
-            deleteButton.title = "Delete"
-        } else {
-            editButton.title = ""
-            deleteButton.title = ""
-        }
-    }
-    
     @IBAction func editNews(_ sender: Any) {
         let edit_news_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditNewsVC") as? EditNewsVC
         edit_news_vc!.news = self.news
@@ -55,17 +49,14 @@ class ShowNewsVC: UIViewController {
             self.removeDataDB(path: path)
             self.removeDataDB(path: "Comments/\(path)")
             self.removeDataStorage(path: path)
-            self.presentVC(segue: "MyNewsVC")
+            self.back()
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
     
     @IBAction func goBack(_ sender: Any) {
-        let defaults = UserDefaults.standard
-        if let back = defaults.string(forKey: "back") {
-            presentVC(segue: back)
-        }
+        back()
     }
     
     @IBAction func viewComments(_ sender: Any) {

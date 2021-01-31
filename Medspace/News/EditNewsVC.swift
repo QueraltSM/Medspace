@@ -123,22 +123,26 @@ class EditNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
     }
     
     func shareNews() {
-        self.startAnimation()
-        guard let imageData: Data = self.image_header.image!.jpegData(compressionQuality: 0.1) else {
-            return
-        }
-        let metaDataConfig = StorageMetadata()
-        metaDataConfig.contentType = "image/jpg"
-        let storageRef = Storage.storage().reference(withPath: "News/\(uid!)/\(news!.id)")
-        storageRef.putData(imageData, metadata: metaDataConfig){ (metaData, error) in
-            self.stopAnimation()
-            if let error = error {
-                self.showAlert(title: "Error", message: error.localizedDescription)
+        self.postNews(path: "News/\(uid!)/\(self.news!.id)", title: self.titleview.text, description: self.descriptionview.text!, speciality: self.speciality_textfield.text!, user: self.news!.user.id, date: self.news!.date)
+        if imageUpdated {
+            self.startAnimation()
+            guard let imageData: Data = self.image_header.image!.jpegData(compressionQuality: 0.1) else {
                 return
-            } else {
-                self.postNews(path: "News/\(uid!)/\(self.news!.id)", title: self.titleview.text, description: self.descriptionview.text!, speciality: self.speciality_textfield.text!, user: self.news!.user.id, date: self.news!.date)
-                self.presentShowNews()
             }
+            let metaDataConfig = StorageMetadata()
+            metaDataConfig.contentType = "image/jpg"
+            let storageRef = Storage.storage().reference(withPath: "News/\(uid!)/\(news!.id)")
+            storageRef.putData(imageData, metadata: metaDataConfig){ (metaData, error) in
+                self.stopAnimation()
+                if let error = error {
+                    self.showAlert(title: "Error", message: error.localizedDescription)
+                    return
+                } else {
+                    self.presentShowNews()
+                }
+            }
+        } else {
+            self.presentShowNews()
         }
     }
     

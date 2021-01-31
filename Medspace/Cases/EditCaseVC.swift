@@ -122,7 +122,7 @@ class EditCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
             self.postCase(path: path, title: self.case_title.text!, description: self.case_description.text!,
                           history: self.case_history.text!, examination: self.case_examination.text!,
                 speciality:self.speciality_textfield.text!, user: uid!, date: self.clinical_case!.date)
-            self.presentVC(segue: "MyCasesVC")
+            self.presentShowCase()
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
         self.present(alert, animated: true, completion: nil)
@@ -131,6 +131,19 @@ class EditCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
         return newText.count <= 250
+    }
+    
+    func presentShowCase() {
+        var color = UIColor.init()
+        for s in specialities {
+            if s.name == self.speciality_textfield.text {
+                color = s.color!
+            }
+        }
+        let caseUpdated = Case(id: self.clinical_case!.id, title: self.case_title.text, description: self.case_description.text, history: self.case_history.text, examination: self.case_examination.text, date: self.clinical_case!.date, speciality: Speciality(name: self.speciality_textfield.text!, color: color), user: self.clinical_case!.user)
+        let show_case_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowCaseVC") as? ShowCaseVC
+        show_case_vc!.clinical_case = caseUpdated
+        navigationController?.pushViewController(show_case_vc!, animated: false)
     }
     
     @IBAction func goBack(_ sender: Any) {

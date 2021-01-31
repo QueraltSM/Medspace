@@ -3,6 +3,7 @@ import FirebaseAuth
 
 class ShowResearchVC: UIViewController {
 
+    var research: Research?
     @IBOutlet weak var scrollview: UIScrollView!
     @IBOutlet weak var deleteButton: UIBarButtonItem!
     @IBOutlet weak var editButton: UIBarButtonItem!
@@ -10,11 +11,12 @@ class ShowResearchVC: UIViewController {
     @IBOutlet weak var date: UILabel!
     @IBOutlet weak var research_title: UILabel!
     @IBOutlet weak var research_description: UILabel!
-    var research: Research?
+    @IBOutlet weak var user: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         initComponents()
+        customNavBar()
     }
     
     func initComponents(){
@@ -23,29 +25,22 @@ class ShowResearchVC: UIViewController {
         } else {
             scrollview.bottomAnchor.constraint(equalTo: research_description.bottomAnchor).isActive = true
         }
+        user.text = "Posted by \(research!.user.username)"
         research_title.text = research!.title
         research_description.text = research!.description
-        date.text = research!.date
+        date.text = self.getFormattedDate(date: research!.date)
         speciality.text = research!.speciality.name.description
-        speciality.backgroundColor = research!.speciality.color
-        speciality.textColor = UIColor.black
-        speciality.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline)
+        speciality.backgroundColor = self.research!.speciality.color
         speciality.round(corners: .allCorners, cornerRadius: 10)
         speciality.textAlignment = .center
-        configResearch(enabled: research!.user.id == uid)
-    }
-    
-    func configResearch(enabled: Bool) {
-        editButton.isEnabled = enabled
-        deleteButton.isEnabled = enabled
-        if enabled {
-            editButton.title = "Edit"
-            deleteButton.title = "Delete"
-        } else {
-            editButton.title = ""
-            deleteButton.title = ""
+        if research!.user.id != uid {
+            editButton.tintColor = UIColor.white
+            deleteButton.tintColor =  UIColor.white
         }
+        editButton.isEnabled = research!.user.id == uid
+        deleteButton.isEnabled = research!.user.id == uid
     }
+
     
     @IBAction func editResearch(_ sender: Any) {
         let edit_research_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "EditResearchVC") as? EditResearchVC
@@ -62,7 +57,8 @@ class ShowResearchVC: UIViewController {
             self.removeDataDB(path: path)
             self.removeDataStorage(path: path)
             self.removeDataDB(path: "Comments/\(path)")
-            self.presentVC(segue: "MyResearchesVC")
+            self.back()
+            
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
         self.present(alert, animated: true, completion: nil)
@@ -81,9 +77,6 @@ class ShowResearchVC: UIViewController {
     }
     
     @IBAction func goBack(_ sender: Any) {
-        let defaults = UserDefaults.standard
-        if let back = defaults.string(forKey: "back") {
-            presentVC(segue: back)
-        }
+        back()
     }
 }

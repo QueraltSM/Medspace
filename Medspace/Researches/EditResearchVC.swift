@@ -168,16 +168,28 @@ class EditResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate
     
     func savePDF() {
         self.startAnimation()
-        let now = Date().description
-        let path = "Researches/\(uid!)/\(now)"
+        let path = "Researches/\(uid!)/\(self.research!.date)"
         Storage.storage().reference().child(path).putFile(from: self.documentURL!, metadata: nil) { metadata, error in
             self.stopAnimation()
             if error == nil {
-                self.presentVC(segue: "MyResearchesVC")
+                self.presentShowResearch()
             } else {
                 self.showAlert(title: "Error", message: error!.localizedDescription)
             }
         }
+    }
+    
+    func presentShowResearch() {
+        var color = UIColor.init()
+        for s in specialities {
+            if s.name == self.speciality_textfield.text {
+                color = s.color!
+            }
+        }
+        let researchUpdated = Research(id: self.research!.id, pdf: documentURL, date: self.research!.date, title: self.research_title.text, speciality: Speciality(name: self.speciality_textfield.text!, color: color), description: self.research_description.text, user: self.research!.user)
+        let show_research_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowResearchVC") as? ShowResearchVC
+        show_research_vc!.research = researchUpdated
+        navigationController?.pushViewController(show_research_vc!, animated: false)
     }
     
     func askPost(){
@@ -190,7 +202,7 @@ class EditResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate
             if self.file_is_updated {
                 self.savePDF()
             } else {
-                self.presentVC(segue: "MyResearchesVC")
+                self.presentShowResearch()
             }
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))

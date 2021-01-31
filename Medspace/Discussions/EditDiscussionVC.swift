@@ -101,6 +101,19 @@ class EditDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
         }
     }
     
+    func presentShowDiscussion() {
+        var color = UIColor.init()
+        for s in specialities {
+            if s.name == self.speciality_textfield.text {
+                color = s.color!
+            }
+        }
+        let discussionUpdated = Discussion(id: self.discussion!.id, title: self.discussion_title.text, description: self.discussion_description.text, date: self.discussion!.date, speciality: Speciality(name: self.speciality_textfield.text!, color: color), user: self.discussion!.user)
+        let show_discussion_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowDiscussionVC") as? ShowDiscussionVC
+        show_discussion_vc!.discussion = discussionUpdated
+        navigationController?.pushViewController(show_discussion_vc!, animated: false)
+    }
+    
     func askPost(){
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
         alert.title = "Do you want to update this?"
@@ -108,7 +121,7 @@ class EditDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
             action in
             let path = "Discussions/\(uid!)/\(self.discussion!.id)"
             self.postDiscussion(path: path, title: self.discussion_title.text!, description: self.discussion_description.text!, speciality:self.speciality_textfield.text!, user: uid!, date: self.discussion!.date)
-            self.presentVC(segue: "MyDiscussionsVC")
+            self.presentShowDiscussion()
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
         self.present(alert, animated: true, completion: nil)

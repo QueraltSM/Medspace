@@ -12,10 +12,12 @@ class ShowDiscussionVC: UIViewController {
     @IBOutlet weak var speciality: UILabel!
     @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var deleteButton: UIBarButtonItem!
+    @IBOutlet weak var user: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         initComponents()
+        customNavBar()
     }
     
     func initComponents() {
@@ -24,30 +26,20 @@ class ShowDiscussionVC: UIViewController {
         } else {
             scrollview.bottomAnchor.constraint(equalTo: discussion_description.bottomAnchor).isActive = true
         }
-        //user.setTitle("Posted by \(discussion!.user.username)", for: .normal)
-        //user.titleLabel!.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline).italic()
+        user.text = "Posted by \(discussion!.user.username)"
         discussion_title.text = discussion!.title
         discussion_description.text = discussion!.description
-        date.text = discussion!.date
+        date.text = self.getFormattedDate(date: discussion!.date)
         speciality.text = discussion!.speciality.name.description
-        speciality.backgroundColor = discussion!.speciality.color
-        speciality.textColor = UIColor.black
-        speciality.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline)
+        speciality.backgroundColor = self.discussion!.speciality.color
         speciality.round(corners: .allCorners, cornerRadius: 10)
         speciality.textAlignment = .center
-        configDiscussion(enabled: discussion!.user.id == uid)
-    }
-    
-    func configDiscussion(enabled: Bool) {
-        editButton.isEnabled = enabled
-        deleteButton.isEnabled = enabled
-        if enabled {
-            editButton.title = "Edit"
-            deleteButton.title = "Delete"
-        } else {
-            editButton.title = ""
-            deleteButton.title = ""
+        if discussion!.user.id != uid {
+            editButton.tintColor = UIColor.white
+            deleteButton.tintColor =  UIColor.white
         }
+        editButton.isEnabled = discussion!.user.id == uid
+        deleteButton.isEnabled = discussion!.user.id == uid
     }
     
     @IBAction func editDiscussion(_ sender: Any) {
@@ -64,7 +56,7 @@ class ShowDiscussionVC: UIViewController {
             let path = "Discussions/\(uid!)/\(self.discussion!.id)"
             self.removeDataDB(path: path)
             self.removeDataDB(path: "Comments/\(path)")
-            self.presentVC(segue: "MyDiscussionsVC")
+            self.back()
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
         self.present(alert, animated: true, completion: nil)
@@ -77,9 +69,6 @@ class ShowDiscussionVC: UIViewController {
     }
     
     @IBAction func goBack(_ sender: Any) {
-        let defaults = UserDefaults.standard
-        if let back = defaults.string(forKey: "back") {
-            presentVC(segue: back)
-        }
+        back()
     }
 }
