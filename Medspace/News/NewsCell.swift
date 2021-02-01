@@ -11,10 +11,10 @@ class NewsCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         news_speciality.textColor = UIColor.black
-        news_speciality.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)
+        news_speciality.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.headline)
         news_speciality.round(corners: .allCorners, cornerRadius: 10)
         news_speciality.textAlignment = .center
-        news_date.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline)
+        news_date.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.footnote)
         news_title.numberOfLines = 0
         news_title.lineBreakMode = .byWordWrapping
         selectedBackgroundView = {

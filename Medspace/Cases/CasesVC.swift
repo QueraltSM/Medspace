@@ -14,6 +14,7 @@ class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     override func viewDidLoad() {
         super.viewDidLoad()
         initComponents()
+        customNavBar()
     }
     
     func initComponents(){
@@ -82,7 +83,7 @@ class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
                 let examination = data["examination"]! as! String
                 let speciality = data["speciality"]! as! String
                 let date = data["date"]! as! String
-                let final_date = self.getFormattedDate(date: date)
+                //let final_date = self.getFormattedDate(date: date)
                 let userid = data["user"]! as! String
                 ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
                     in
@@ -95,7 +96,7 @@ class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
                             color = s.color!
                         }
                     }
-                    self.cases.append(Case(id: childDict.key, title: title, description: description, history: history, examination: examination, date: final_date, speciality: Speciality(name: speciality, color: color), user: User(id: userid, fullname: fullname, username: username)))
+                    self.cases.append(Case(id: childDict.key, title: title, description: description, history: history, examination: examination, date: date, speciality: Speciality(name: speciality, color: color), user: User(id: userid, fullname: fullname, username: username)))
                     let sortedCases = self.cases.sorted {
                         $0.date > $1.date
                     }
@@ -146,11 +147,10 @@ class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let entry = searchController.isActive ? casesMatched[indexPath.row] : cases[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as? DataCell
-        cell?.data_date.text = self.getFormattedDate(date: entry.date)
         cell?.data_title.text = entry.title
         cell?.data_speciality.text = entry.speciality.name
         cell?.speciality_color = entry.speciality.color
-        cell?.data_user.text =  "Posted by \(entry.user.username)"
+        cell?.data_user.text =  "\(entry.user.username) on \(self.getFormattedDate(date: entry.date))"
         return cell!
     }
     

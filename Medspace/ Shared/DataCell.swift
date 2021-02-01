@@ -4,21 +4,19 @@ class DataCell: UITableViewCell {
 
     @IBOutlet weak var data_view: UIView!
     @IBOutlet weak var data_title: UILabel!
-    @IBOutlet weak var data_date: UILabel!
     @IBOutlet weak var data_speciality: UILabel!
     @IBOutlet weak var data_user: UILabel!
     var speciality_color: UIColor?
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        data_speciality.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)
+        data_speciality.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.headline)
         data_speciality.round(corners: .allCorners, cornerRadius: 10)
         data_speciality.textColor = UIColor.black
         data_speciality.textAlignment = .center
         data_title.numberOfLines = 0
         data_title.lineBreakMode = .byWordWrapping
-        data_date.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline)
-        data_user.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.subheadline).italic()
+        data_user.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.footnote)
         selectedBackgroundView = {
             let view = UIView.init()
             view.backgroundColor = UIColor.clear
