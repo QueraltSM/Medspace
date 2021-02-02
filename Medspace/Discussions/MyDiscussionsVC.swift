@@ -17,6 +17,7 @@ class MyDiscussionsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         super.viewDidLoad()
         setMenu()
         initComponents()
+        customNavBar()
     }
     
     func initComponents(){

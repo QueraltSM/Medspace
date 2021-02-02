@@ -17,6 +17,7 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
         super.viewDidLoad()
         setMenu()
         initComponents()
+        customNavBar()
     }
     
     func initComponents(){
@@ -263,6 +264,7 @@ class MyCasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
         let entry = searchController.isActive ? casesMatched[indexPath.row] : cases[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as? DataCell
         cell?.data_speciality.text = entry.speciality.name
+        cell?.data_title.text = entry.title
         cell?.speciality_color = entry.speciality.color
         cell?.data_user.text = "On \(self.getFormattedDate(date: entry.date))"
         return cell!
