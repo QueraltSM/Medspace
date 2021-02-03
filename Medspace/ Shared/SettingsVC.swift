@@ -4,19 +4,24 @@ import Firebase
 
 class SettingsVC: UIViewController, UITableViewDelegate, UITableViewDataSource  {
     
-    var options = ["Edit profile", "Change password", "Delete account"]
+    var options = ["", "Edit profile", "Change password", "Delete account"]
     var ref: DatabaseReference!
     @IBOutlet weak var settingsTable: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        initComponents()
+        customNavBar()
+    }
+    
+    func initComponents(){
         ref = Database.database().reference()
         self.settingsTable.delegate = self
         self.settingsTable.dataSource = self
         let footerView = UIView()
-        footerView.backgroundColor = UIColor.clear
+        footerView.backgroundColor = UIColor.white
         self.settingsTable.tableFooterView = footerView
-        self.settingsTable.backgroundColor = UIColor.clear
+        self.settingsTable.backgroundColor = UIColor.white
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -41,22 +46,21 @@ class SettingsVC: UIViewController, UITableViewDelegate, UITableViewDataSource  
         let cell = (tableView.dequeueReusableCell(withIdentifier: "cell") as? CollapsibleTableViewCell) ?? CollapsibleTableViewCell(style: .default, reuseIdentifier: "cell")
         cell.textLabel!.textColor = .black
         cell.textLabel!.textAlignment = .center
-        cell.textLabel!.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.headline)
+        cell.textLabel!.font = UIFont(name: "Copperplate-Bold", size: 23)
         cell.textLabel!.text = options[indexPath.section]
         cell.contentView.backgroundColor = UIColor.clear
-        cell.contentView.setBorder(color: UIColor.lightGray)
         return cell
     }
     
       func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch(indexPath.section) {
-            case 0:
+            case 1:
                 self.presentVC(segue: "EditProfileVC")
                 break
-            case 1:
+            case 2:
                 changePassword()
                 break
-            case 2:
+            case 3:
                 deleteAccount()
                 break
             default:

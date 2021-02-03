@@ -2,28 +2,40 @@ import UIKit
 import FirebaseDatabase
 import FirebaseAuth
 
-class EditProfileVC: UIViewController, UITextFieldDelegate  {
+class EditProfileVC: UIViewController, UITextViewDelegate, UITextFieldDelegate  {
 
-    @IBOutlet weak var fullnametxt: UITextField!
+    @IBOutlet weak var fullnametxt: UITextView!
     @IBOutlet weak var usernametxt: UITextField!
     @IBOutlet weak var changePassBtn: UIButton!
     var ref: DatabaseReference!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        usernametxt.text = username
+        initComponents()
+        customNavBar()
+    }
+    
+    func initComponents(){
         usernametxt.delegate = self
-        usernametxt.textColor = UIColor.gray
-        fullnametxt.text = fullname
         fullnametxt.delegate = self
+        fullnametxt.text = fullname
+        usernametxt.text = username
+        usernametxt.textColor = UIColor.gray
         fullnametxt.textColor = UIColor.gray
         ref = Database.database().reference()
     }
     
-    func textFieldDidBeginEditing(_ textView: UITextField) {
+    func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == UIColor.gray {
             textView.text = ""
             textView.textColor = UIColor.black
+        }
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField.textColor == UIColor.gray {
+            textField.text = ""
+            textField.textColor = UIColor.black
         }
     }
     
@@ -44,7 +56,7 @@ class EditProfileVC: UIViewController, UITextFieldDelegate  {
     
     func updateUser() {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        alert.title = "Do you want to update data?"
+        alert.title = "Do you want to update your account data?"
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
             action in
             self.storeUserData()
@@ -54,7 +66,7 @@ class EditProfileVC: UIViewController, UITextFieldDelegate  {
     }
     
     func checkUsername(){
-        Database.database().reference().child("Users").observeSingleEvent(of: .value, with: { snapshot in
+        ref.child("Users").observeSingleEvent(of: .value, with: { snapshot in
             let enumerator = snapshot.children
             var taken = false
             while let rest = enumerator.nextObject() as? DataSnapshot {
@@ -71,9 +83,17 @@ class EditProfileVC: UIViewController, UITextFieldDelegate  {
         })
     }
     
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        return textField.text!.count < 15
+    }
+    
     @IBAction func goSettings(_ sender: Any) {
-        let settingsVC = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "SettingsVC") as? SettingsVC
-        navigationController?.pushViewController(settingsVC!, animated: false)
+        self.presentVC(segue: "SettingsVC")
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
+        return newText.count <= 100
     }
     
     @IBAction func saveChanges(_ sender: Any) {
@@ -81,14 +101,11 @@ class EditProfileVC: UIViewController, UITextFieldDelegate  {
         if usernametxt.text! == username && fullnametxt.text! == fullname {
             error +=  "The data has not been changed since the last time"
         }
-        if usernametxt.text!.isEmpty {
-            error += "Username can not be empty\n"
-        }
-        if fullnametxt.text!.isEmpty {
-            error += "Fullname can not be empty\n"
-        }
         if usernametxt.text!.contains(" ") {
             error += "Username can not contain spaces"
+        }
+        if usernametxt.text!.isEmpty || fullnametxt.text!.isEmpty {
+            error = "Fill out all required fields\n"
         }
         if error == "" && usernametxt.text! == username {
             updateUser()
