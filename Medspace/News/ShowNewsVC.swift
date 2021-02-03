@@ -5,6 +5,7 @@ class ShowNewsVC: UIViewController {
 
     @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var deleteButton: UIBarButtonItem!
+    @IBOutlet weak var news_date: UILabel!
     @IBOutlet weak var image_header: UIImageView!
     @IBOutlet weak var news_title: UILabel!
     @IBOutlet weak var news_description: UILabel!
@@ -24,7 +25,10 @@ class ShowNewsVC: UIViewController {
             scrollview.bottomAnchor.constraint(equalTo: news_description.bottomAnchor).isActive = true
         }
         image_header.image = news!.image
+        image_header.contentMode = .scaleToFill
+        image_header.heightAnchor.constraint(equalToConstant: CGFloat(241)).isActive = true
         news_title.text = news!.title
+        news_date.text = self.getFormattedDate(date: news!.date)
         news_description.text = news!.description
         if news!.user.id != uid {
             editButton.tintColor = UIColor.white

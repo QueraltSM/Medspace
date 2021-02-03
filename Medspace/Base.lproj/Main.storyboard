@@ -472,22 +472,26 @@
                                 <rect key="frame" x="0.0" y="90" width="428" height="806"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" insetsLayoutMarginsFromSafeArea="NO" image="Medspace-News.png" translatesAutoresizingMaskIntoConstraints="NO" id="UCJ-3d-emm">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="252"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="428" height="294.66666666666669"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="414" id="FVb-1y-5RC"/>
-                                            <constraint firstAttribute="width" secondItem="UCJ-3d-emm" secondAttribute="height" multiplier="23:14" id="pah-fM-zOt"/>
-                                            <constraint firstAttribute="height" constant="252" id="wcV-p3-Nnw"/>
+                                            <constraint firstAttribute="width" secondItem="UCJ-3d-emm" secondAttribute="height" multiplier="207:145" constant="7.4285714285714448" id="pah-fM-zOt"/>
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IC6-T5-iJ2">
-                                        <rect key="frame" x="36" y="317" width="342" height="23.666666666666686"/>
+                                        <rect key="frame" x="36" y="387.66666666666669" width="356" height="23.666666666666686"/>
                                         <fontDescription key="fontDescription" name="Copperplate-Bold" family="Copperplate" pointSize="23"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="justified" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7NO-nl-r8L">
-                                        <rect key="frame" x="36" y="378.66666666666669" width="342" height="20.333333333333314"/>
+                                        <rect key="frame" x="36" y="449.33333333333331" width="356" height="20.333333333333314"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jug-nF-kkx">
+                                        <rect key="frame" x="36" y="333" width="356" height="15.666666666666686"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -496,15 +500,18 @@
                                 <constraints>
                                     <constraint firstItem="IC6-T5-iJ2" firstAttribute="centerX" secondItem="go7-vJ-kCN" secondAttribute="centerX" id="4sd-og-Jaa"/>
                                     <constraint firstItem="UCJ-3d-emm" firstAttribute="leading" secondItem="go7-vJ-kCN" secondAttribute="leading" id="KLS-7X-FNt"/>
+                                    <constraint firstItem="IC6-T5-iJ2" firstAttribute="top" secondItem="Jug-nF-kkx" secondAttribute="bottom" constant="39" id="LhM-9B-MOn"/>
                                     <constraint firstItem="7NO-nl-r8L" firstAttribute="top" secondItem="IC6-T5-iJ2" secondAttribute="bottom" constant="38" id="P4k-s9-BbV"/>
                                     <constraint firstItem="UCJ-3d-emm" firstAttribute="top" secondItem="go7-vJ-kCN" secondAttribute="top" id="PW6-sW-NIU"/>
                                     <constraint firstItem="UCJ-3d-emm" firstAttribute="centerX" secondItem="go7-vJ-kCN" secondAttribute="centerX" id="SMl-cL-NIv"/>
                                     <constraint firstAttribute="trailing" secondItem="IC6-T5-iJ2" secondAttribute="trailing" constant="36" id="UZq-oO-QHc"/>
-                                    <constraint firstItem="IC6-T5-iJ2" firstAttribute="top" secondItem="UCJ-3d-emm" secondAttribute="bottom" constant="65" id="dye-rj-oCo"/>
+                                    <constraint firstItem="Jug-nF-kkx" firstAttribute="top" secondItem="UCJ-3d-emm" secondAttribute="bottom" constant="38.333333333333314" id="VKN-zr-NM8"/>
                                     <constraint firstItem="7NO-nl-r8L" firstAttribute="leading" secondItem="IC6-T5-iJ2" secondAttribute="leading" id="hyD-UG-WWn"/>
+                                    <constraint firstAttribute="trailing" secondItem="Jug-nF-kkx" secondAttribute="trailing" constant="36" id="mo9-ql-gnF"/>
                                     <constraint firstItem="IC6-T5-iJ2" firstAttribute="leading" secondItem="go7-vJ-kCN" secondAttribute="leading" constant="36" id="ofB-UQ-37h"/>
                                     <constraint firstItem="7NO-nl-r8L" firstAttribute="trailing" secondItem="IC6-T5-iJ2" secondAttribute="trailing" id="pKq-WG-GCb"/>
                                     <constraint firstItem="7NO-nl-r8L" firstAttribute="centerX" secondItem="go7-vJ-kCN" secondAttribute="centerX" id="pyW-nN-T2n"/>
+                                    <constraint firstItem="Jug-nF-kkx" firstAttribute="leading" secondItem="go7-vJ-kCN" secondAttribute="leading" constant="36" id="vdT-4y-NAb"/>
                                     <constraint firstAttribute="trailing" secondItem="UCJ-3d-emm" secondAttribute="trailing" id="yUF-Jx-tfk"/>
                                 </constraints>
                             </scrollView>
@@ -553,6 +560,7 @@
                         <outlet property="deleteButton" destination="U5x-Um-DqX" id="EBq-Eh-L7e"/>
                         <outlet property="editButton" destination="Sas-Ec-Vf8" id="zK3-Mc-fKl"/>
                         <outlet property="image_header" destination="UCJ-3d-emm" id="fZm-Lg-DsH"/>
+                        <outlet property="news_date" destination="Jug-nF-kkx" id="564-nk-Fjm"/>
                         <outlet property="news_description" destination="7NO-nl-r8L" id="drx-zB-7BW"/>
                         <outlet property="news_title" destination="IC6-T5-iJ2" id="2dc-hG-uYs"/>
                         <outlet property="scrollview" destination="go7-vJ-kCN" id="xmi-yo-kG9"/>
@@ -560,7 +568,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vfw-Tx-KmD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7276.811594202899" y="-754.01785714285711"/>
+            <point key="canvasLocation" x="7275.7009345794386" y="-754.21166306695466"/>
         </scene>
         <!--Side MenuVC-->
         <scene sceneID="knI-02-1KN">
@@ -2340,6 +2348,7 @@
                                 </constraints>
                             </view>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="ZNG-QG-eh6"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="Zwk-39-6hq" firstAttribute="bottom" secondItem="zU5-Su-506" secondAttribute="bottom" constant="34" id="3Lv-7B-2DT"/>

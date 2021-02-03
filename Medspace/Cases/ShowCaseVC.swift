@@ -37,7 +37,7 @@ class ShowCaseVC: UIViewController {
         case_description.text = clinical_case!.description
         history.text = clinical_case!.history
         examination.text = clinical_case!.examination
-        date.text = clinical_case!.date
+        date.text = self.getFormattedDate(date: clinical_case!.date)
         speciality.text = clinical_case!.speciality.name.description
         speciality.backgroundColor = self.clinical_case!.speciality.color
         speciality.round(corners: .allCorners, cornerRadius: 10)
