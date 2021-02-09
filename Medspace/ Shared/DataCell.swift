@@ -29,7 +29,7 @@ class DataCell: UITableViewCell {
         data_speciality.backgroundColor = speciality_color!
         data_view.backgroundColor = UIColor.init(hexString: "#f2f2f2")
         if selected {
-            data_view.layer.borderColor = UIColor.init(hexString: "#2a9df4").cgColor
+            data_view.layer.borderColor = UIColor.init(hexString: "#C0392B").cgColor
             data_view.layer.borderWidth = 2
         } else {
             data_view.layer.borderWidth = 0.5

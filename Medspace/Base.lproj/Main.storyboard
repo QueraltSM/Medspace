@@ -1847,7 +1847,7 @@
         <scene sceneID="Mdg-5u-bZN">
             <objects>
                 <viewController storyboardIdentifier="CasesVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="jny-jv-zDb" customClass="CasesVC" customModule="Medspace" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" id="NrU-37-TUj">
+                    <view key="view" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="NrU-37-TUj">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -1940,7 +1940,7 @@
                                 </prototypes>
                             </tableView>
                         </subviews>
-                        <viewLayoutGuide key="safeArea" id="Hjh-n5-MPt"/>
+                        <viewLayoutGuide key="safeArea" id="dh0-Ki-KNv"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="n5f-UW-xqy" secondAttribute="bottom" id="0RL-bf-Tga"/>
