@@ -19,6 +19,8 @@ class CreateCommentVC: UIViewController, UITextViewDelegate {
     func initComponents(){
         message.delegate = self
         message.textColor = UIColor.gray
+        message.font = UIFont.systemFont(ofSize: 15)
+        message.textAlignment = .justified
         message.text = "Write a message"
         if #available(iOS 11.0, *) {
             scrollview.contentLayoutGuide.bottomAnchor.constraint(equalTo: message.bottomAnchor).isActive = true
@@ -56,12 +58,6 @@ class CreateCommentVC: UIViewController, UITextViewDelegate {
             textView.text = ""
         }
     }
-    
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
-        return newText.count <= 200
-    }
-    
 
     @IBAction func pushBack(_ sender: Any) {
         self.goBack()

@@ -90,12 +90,7 @@ class EditProfileVC: UIViewController, UITextViewDelegate, UITextFieldDelegate  
     @IBAction func goSettings(_ sender: Any) {
         self.presentVC(segue: "SettingsVC")
     }
-    
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
-        return newText.count <= 100
-    }
-    
+     
     @IBAction func saveChanges(_ sender: Any) {
         var error = ""
         if usernametxt.text! == username && fullnametxt.text! == fullname {

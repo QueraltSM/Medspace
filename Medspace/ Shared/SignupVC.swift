@@ -44,7 +44,7 @@ class SignupVC: UIViewController {
     }
     
     @IBAction func createAccount(_ sender: Any) {
-        if (!areEmptyFields() && passwordMatched()) {
+        if (noEmptyFields() && passwordMatched()) {
             db.child("Users").observeSingleEvent(of: .value, with: { snapshot in
                 let enumerator = snapshot.children
                 var taken = false
@@ -70,14 +70,14 @@ class SignupVC: UIViewController {
             } else {
                 let uid = authResult!.user.uid
                 self.db = Database.database().reference().child("Users/\(uid)")
-                self.db.setValue(["username": self.username.text!, "fullname":self.fullname.text!, "type": "Doctor"])
+                self.db.setValue(["username": self.username.text!, "fullname":self.fullname.text!, "type": "Doctor", "email": self.email.text!])
                 self.showAlert(title: "Success!", message: "Your account has been created")
                 self.setUserData(fullname: self.fullname.text!, usertype: "Doctor", username: self.username.text!, isUserLoggedIn: true)
             }
         }
     }
     
-    func areEmptyFields() -> Bool {
+    func noEmptyFields() -> Bool {
         if !validateTxtfield(username) {
             self.username.setUnderline(color: UIColor.red)
         } else {
@@ -103,8 +103,7 @@ class SignupVC: UIViewController {
         } else {
             self.repeat_password.setUnderline(color: UIColor.white)
         }
-        return validateTxtfield(username) && validateTxtfield(fullname) && validateTxtfield(email) && validateTxtfield(password)
-            && validateTxtfield(repeat_password)
+        return validateTxtfield(username) && validateTxtfield(fullname) && validateTxtfield(email) && validateTxtfield(password) && validateTxtfield(repeat_password)
     }
     
     @IBAction func login(_ sender: Any) {

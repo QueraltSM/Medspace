@@ -79,6 +79,8 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = comments_timeline.dequeueReusableCell(withIdentifier: "cell")
         cell!.textLabel?.text = comments[indexPath.row].message
+        cell!.textLabel?.font = UIFont.systemFont(ofSize: 15)
+        cell!.textLabel?.textAlignment = .justified
         let date = getFormattedDate(date: comments[indexPath.row].date)
         var subtitle = comments[indexPath.row].user.username + " at " + date
         if comments[indexPath.row].user.id == Auth.auth().currentUser!.uid {

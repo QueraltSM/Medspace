@@ -213,11 +213,6 @@ class EditResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate
         textView.textColor = UIColor.black
     }
     
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
-        return newText.count <= 250
-    }
-    
     @IBAction func goBack(_ sender: Any) {
         let research_vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ShowResearchVC") as? ShowResearchVC
         research_vc!.research = research

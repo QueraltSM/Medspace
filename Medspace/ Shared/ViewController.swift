@@ -8,24 +8,24 @@ var usertype: String!
 var username: String!
 var fullname: String!
 let specialities = [
-    Speciality(name: "Allergy & Inmunology", color: UIColor.init(hexString: "#daf0ff")), // blue
-    Speciality(name: "Anesthesiology", color: UIColor.init(hexString: "#ff6961")), // red
-    Speciality(name: "Dermatology", color: UIColor.init(hexString: "#339933")), // green
-    Speciality(name: "Diagnostic Radiology", color: UIColor.init(hexString: "#8fd3fe")), // blue
+    Speciality(name: "Allergy & Inmunology", color: UIColor.init(hexString: "#daf0ff")),
+    Speciality(name: "Anesthesiology", color: UIColor.init(hexString: "#A1DBDC")),
+    Speciality(name: "Dermatology", color: UIColor.init(hexString: "#7DCEA0")),
+    Speciality(name: "Diagnostic Radiology", color: UIColor.init(hexString: "#8fd3fe")),
     Speciality(name: "Emergency Medicine", color: UIColor.init(hexString: "#74B72E")),
-    Speciality(name: "Family Medicine", color: UIColor.init(hexString: "#f98d8d")), // pink
-    Speciality(name: "Internal Medicine", color: UIColor.init(hexString: "#6ac5fe")), // blue
-    Speciality(name: "Medical Genetics", color: UIColor.init(hexString: "#ffffbf")), // yellow
-    Speciality(name: "Neurology", color: UIColor.init(hexString: "#f8abba")), // pink
-    Speciality(name: "Nuclear Medicine",  color: UIColor.init(hexString: "#66b366")), // green
-    Speciality(name: "Opthalmology", color: UIColor.init(hexString: "#d8c7ff")), // violet
-    Speciality(name: "Pathology", color: UIColor.init(hexString: "#efde7b")), // yellow
-    Speciality(name: "Pediatrics", color: UIColor.init(hexString: "#f2b8c6")), // pink
-    Speciality(name: "Preventive Medicine", color: UIColor.init(hexString: "#99cc99")), // green
-    Speciality(name: "Radiation Oncology", color: UIColor.init(hexString: "#d1bea8")), // vainilla
-    Speciality(name: "Psychiatry", color: UIColor.init(hexString: "#b3cfdd")), // blue
-    Speciality(name: "Surgery", color: UIColor.init(hexString: "#fff4c6")), // yellow
-    Speciality(name: "Urology", color: UIColor.init(hexString: "#b99aff"))] // violet
+    Speciality(name: "Family Medicine", color: UIColor.init(hexString: "#F5B7B1")),
+    Speciality(name: "Internal Medicine", color: UIColor.init(hexString: "#85C1E9")),
+    Speciality(name: "Medical Genetics", color: UIColor.init(hexString: "#ffffbf")),
+    Speciality(name: "Neurology", color: UIColor.init(hexString: "#E8BAD4")),
+    Speciality(name: "Nuclear Medicine",  color: UIColor.init(hexString: "#66b366")),
+    Speciality(name: "Opthalmology", color: UIColor.init(hexString: "#d8c7ff")),
+    Speciality(name: "Pathology", color: UIColor.init(hexString: "#efde7b")),
+    Speciality(name: "Pediatrics", color: UIColor.init(hexString: "#f2b8c6")),
+    Speciality(name: "Preventive Medicine", color: UIColor.init(hexString: "#99cc99")),
+    Speciality(name: "Radiation Oncology", color: UIColor.init(hexString: "#D6BAE8")),
+    Speciality(name: "Psychiatry", color: UIColor.init(hexString: "#b3cfdd")),
+    Speciality(name: "Surgery", color: UIColor.init(hexString: "#fff4c6")),
+    Speciality(name: "Urology", color: UIColor.init(hexString: "#b99aff"))]
 
 var refreshControl = UIRefreshControl()
 

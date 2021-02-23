@@ -193,9 +193,4 @@ class CreateResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
         selectedSpeciality = specialities[row].name
         speciality_textfield.text = selectedSpeciality
     }
-    
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
-        return newText.count <= 250
-    }
 }

@@ -131,11 +131,6 @@ class EditDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
         textView.textColor = UIColor.black
     }
     
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
-        return newText.count <= 250
-    }
-    
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         self.resignFirstResponder()
         return false

@@ -120,11 +120,6 @@ class CreateDiscussionVC: UIViewController, UITextViewDelegate, UIPickerViewDele
         speciality_textfield.text = selectedSpeciality
     }
     
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
-        return newText.count <= 250
-    }
-    
     @objc func action() {
         if selectedSpeciality == nil {
             selectedSpeciality = specialities[specialities.count / 2].name

@@ -126,11 +126,6 @@ class CreateNewsVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, 
         self.present(alert, animated: true, completion: nil)
     }
     
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
-        return newText.count <= 250
-    }
-    
     @IBAction func savePost(_ sender: Any) {
         var error = ""
         if image_header_invalid {
