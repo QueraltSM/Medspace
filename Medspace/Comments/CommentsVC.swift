@@ -18,8 +18,10 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         super.viewDidLoad()
         comments_timeline.delegate = self
         comments_timeline.dataSource = self
-        comments_timeline.separatorColor = UIColor.clear
+        comments_timeline.separatorColor = UIColor.white
+        comments_timeline.separatorStyle = .none
         comments_timeline.rowHeight = UITableView.automaticDimension
+        comments_timeline.tableFooterView = UIView()
         if news != nil {
             getComments(path: "Comments/News/\(news!.user.id)/\(news!.id)")
         } else if clinical_case != nil {
@@ -78,7 +80,11 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = comments_timeline.dequeueReusableCell(withIdentifier: "cell")
-        cell!.textLabel?.text = comments[indexPath.row].message
+        var message = comments[indexPath.row].message+"\n"
+        if indexPath.row > 0 {
+            message = "\n\n\(message)"
+        }
+        cell!.textLabel?.text = message
         cell!.textLabel?.font = UIFont.systemFont(ofSize: 15)
         cell!.textLabel?.textAlignment = .justified
         let date = getFormattedDate(date: comments[indexPath.row].date)
@@ -87,8 +93,14 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             subtitle = "Me at " + date
         }
         cell!.detailTextLabel?.text = subtitle
-        cell!.detailTextLabel?.textColor = UIColor.gray
+        cell!.detailTextLabel?.textColor = UIColor.init(hexString: "#641E16")
         return cell!
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        comments_timeline.deselectRow(at: indexPath, animated: true)
+        let cell = self.comments_timeline.cellForRow(at: indexPath)
+        cell!.setBorder(color: UIColor.white)
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
@@ -103,17 +115,20 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                 comments_vc!.comment = self.comments[indexPath.row]
                 self.navigationController?.pushViewController(comments_vc!, animated: false)
             })
-            editAction.backgroundColor = UIColor.init(hexString: "#28B463")
+            editAction.backgroundColor = UIColor.init(hexString: "#2874A6")
             let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete", handler: { (action, indexPath) in
                 let comment = self.comments[indexPath.row]
-                self.askDelete(comment: comment, pos: indexPath.row)
+                let cell = self.comments_timeline.cellForRow(at: indexPath)
+                cell!.setBorder(color: UIColor.init(hexString: "#2874A6"))
+                self.askDelete(comment: comment, pos: indexPath.row, indexPath: indexPath)
             })
-            return [editAction, deleteAction]
+            deleteAction.backgroundColor = UIColor.init(hexString: "#2874A6")
+            return [deleteAction, editAction]
         }
         return [];
     }
     
-    func askDelete(comment: Comment, pos: Int) {
+    func askDelete(comment: Comment, pos: Int, indexPath: IndexPath) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
         alert.title = "Are you sure you want delete this?"
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
@@ -127,7 +142,11 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                 self.comments_timeline.setEmptyView(title: "No comment has been posted yet")
             }
         }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: {
+            action in
+            let cell = self.comments_timeline.cellForRow(at: indexPath)
+            cell!.setBorder(color: UIColor.white)
+        }))
         self.present(alert, animated: true, completion: nil)
     }
     

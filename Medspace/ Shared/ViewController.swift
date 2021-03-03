@@ -8,7 +8,7 @@ var usertype: String!
 var username: String!
 var fullname: String!
 let specialities = [
-    Speciality(name: "Allergy & Inmunology", color: UIColor.init(hexString: "#daf0ff")),
+    Speciality(name: "Allergy & Inmunology", color: UIColor.init(hexString: "#EC7063")),
     Speciality(name: "Anesthesiology", color: UIColor.init(hexString: "#A1DBDC")),
     Speciality(name: "Dermatology", color: UIColor.init(hexString: "#7DCEA0")),
     Speciality(name: "Diagnostic Radiology", color: UIColor.init(hexString: "#8fd3fe")),
@@ -25,7 +25,7 @@ let specialities = [
     Speciality(name: "Radiation Oncology", color: UIColor.init(hexString: "#D6BAE8")),
     Speciality(name: "Psychiatry", color: UIColor.init(hexString: "#b3cfdd")),
     Speciality(name: "Surgery", color: UIColor.init(hexString: "#fff4c6")),
-    Speciality(name: "Urology", color: UIColor.init(hexString: "#b99aff"))]
+    Speciality(name: "Urology", color: UIColor.init(hexString: "#27AE60"))]
 
 var refreshControl = UIRefreshControl()
 
@@ -349,7 +349,7 @@ extension UIView {
     
     func setBorder(color: UIColor) {
         layer.borderColor = color.cgColor
-        layer.borderWidth = 1.0
+        layer.borderWidth = 2.0
     }
 }
 

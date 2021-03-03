@@ -1693,7 +1693,7 @@
             </objects>
             <point key="canvasLocation" x="4365.4205607476633" y="348.59611231101513"/>
         </scene>
-        <!--All comments-->
+        <!--Comments-->
         <scene sceneID="lgE-t4-iZO">
             <objects>
                 <viewController storyboardIdentifier="CommentsVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="mzB-6m-X7W" customClass="CommentsVC" customModule="Medspace" customModuleProvider="target" sceneMemberID="viewController">
@@ -1705,10 +1705,10 @@
                                 <rect key="frame" x="0.0" y="0.0" width="428" height="960"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" textLabel="K6p-Ye-jCg" detailTextLabel="h96-oj-Y0D" style="IBUITableViewCellStyleSubtitle" id="rTp-NR-8p2">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="cell" textLabel="K6p-Ye-jCg" detailTextLabel="h96-oj-Y0D" style="IBUITableViewCellStyleSubtitle" id="rTp-NR-8p2">
                                         <rect key="frame" x="0.0" y="28" width="428" height="56.666667938232422"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="rTp-NR-8p2" id="gZa-iE-vhq">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="right" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="rTp-NR-8p2" id="gZa-iE-vhq">
                                             <rect key="frame" x="0.0" y="0.0" width="428" height="56.666667938232422"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
@@ -1719,7 +1719,7 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="h96-oj-Y0D">
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="right" insetsLayoutMarginsFromSafeArea="NO" text="Subtitle" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="h96-oj-Y0D">
                                                     <rect key="frame" x="19.999999999999996" y="32.333333333333329" width="43.666666666666664" height="14.333333333333334"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
@@ -1742,7 +1742,7 @@
                             <constraint firstItem="fwk-5n-Rbb" firstAttribute="bottom" secondItem="AfA-7R-15J" secondAttribute="bottom" constant="34" id="qK6-Lp-FI9"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="All comments" id="zpg-CG-lBi">
+                    <navigationItem key="navigationItem" title="Comments" id="zpg-CG-lBi">
                         <barButtonItem key="leftBarButtonItem" title="Back" style="plain" id="kU1-dF-Aie">
                             <color key="tintColor" red="0.058217801149999998" green="0.34529748560000001" blue="0.57130193709999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <connections>
