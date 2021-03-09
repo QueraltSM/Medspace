@@ -80,11 +80,7 @@ class CommentsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = comments_timeline.dequeueReusableCell(withIdentifier: "cell")
-        var message = comments[indexPath.row].message+"\n"
-        if indexPath.row > 0 {
-            message = "\n\n\(message)"
-        }
-        cell!.textLabel?.text = message
+        cell!.textLabel?.text = comments[indexPath.row].message
         cell!.textLabel?.font = UIFont.systemFont(ofSize: 15)
         cell!.textLabel?.textAlignment = .justified
         let date = getFormattedDate(date: comments[indexPath.row].date)

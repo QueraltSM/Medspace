@@ -44,7 +44,7 @@ class EditProfileVC: UIViewController, UITextViewDelegate, UITextFieldDelegate  
         self.ref.child("Users/\(uid)/username").setValue(self.usernametxt.text)
         self.ref.child("Users/\(uid)/fullname").setValue(self.fullnametxt.text)
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        alert.title = "Account has been updated!"
+        alert.title = "Account has been updated"
         alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: {
             action in
             self.setUserData(fullname: self.fullnametxt.text!, usertype: usertype, username: self.usernametxt.text!, isUserLoggedIn: true)
@@ -52,7 +52,6 @@ class EditProfileVC: UIViewController, UITextViewDelegate, UITextFieldDelegate  
         alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
-    
     
     func updateUser() {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)

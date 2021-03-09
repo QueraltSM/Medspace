@@ -110,9 +110,9 @@ class SettingsVC: UIViewController, UITableViewDelegate, UITableViewDataSource  
     }
     
     func removeAll(userid: String){
-        self.removePosts(path: "News/\(userid)")
         removeFiles(path: "News/\(userid)")
         removeFiles(path: "Researches/\(userid)")
+        self.removePosts(path: "News/\(userid)")
         self.removePosts(path: "Cases/\(userid)")
         self.removePosts(path: "Discussions/\(userid)")
         self.removePosts(path: "Researches/\(userid)")

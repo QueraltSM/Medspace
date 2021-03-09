@@ -63,6 +63,18 @@ class SignupVC: UIViewController {
         }
     }
     
+    
+    func askLogin(){
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+        alert.title = "Success"
+        alert.message = "Do you want to login now?"
+        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {_ in
+            self.setUserData(fullname: self.fullname.text!, usertype: "Doctor", username: self.username.text!, isUserLoggedIn: true)
+        }))
+        alert.addAction(UIAlertAction(title: "No", style: .destructive, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     func createUser() {
         Auth.auth().createUser(withEmail: email.text!, password: password.text!) {(authResult, error) in
             if error != nil {
@@ -71,8 +83,7 @@ class SignupVC: UIViewController {
                 let uid = authResult!.user.uid
                 self.db = Database.database().reference().child("Users/\(uid)")
                 self.db.setValue(["username": self.username.text!, "fullname":self.fullname.text!, "type": "Doctor", "email": self.email.text!])
-                self.showAlert(title: "Success!", message: "Your account has been created")
-                self.setUserData(fullname: self.fullname.text!, usertype: "Doctor", username: self.username.text!, isUserLoggedIn: true)
+                self.askLogin()
             }
         }
     }
