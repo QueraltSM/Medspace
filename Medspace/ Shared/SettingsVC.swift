@@ -49,6 +49,9 @@ class SettingsVC: UIViewController, UITableViewDelegate, UITableViewDataSource  
         cell.textLabel!.font = UIFont(name: "Copperplate-Bold", size: 23)
         cell.textLabel!.text = options[indexPath.section]
         cell.contentView.backgroundColor = UIColor.clear
+        if (usertype == "Admin" && indexPath.section == 3) {
+            cell.isHidden = true
+        }
         return cell
     }
     
