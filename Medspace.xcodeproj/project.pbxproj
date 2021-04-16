@@ -36,6 +36,7 @@
 		625D738D2506304F00104DBB /* DiscussionsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625D738C2506304F00104DBB /* DiscussionsVC.swift */; };
 		625D738F2506305A00104DBB /* MyDiscussionsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625D738E2506305A00104DBB /* MyDiscussionsVC.swift */; };
 		625D7391250636FF00104DBB /* CreateDiscussionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625D7390250636FF00104DBB /* CreateDiscussionVC.swift */; };
+		6265C54D262853BB003D5F7D /* NotificationsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6265C54C262853BB003D5F7D /* NotificationsVC.swift */; };
 		627F8CB6255E88D800399A33 /* CommentsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627F8CB5255E88D800399A33 /* CommentsVC.swift */; };
 		6291F5B3255E96540022A2A3 /* CreateCommentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6291F5B2255E96540022A2A3 /* CreateCommentVC.swift */; };
 		62AE62CD250FADDF008E2EBD /* Settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 62AE62CC250FADDD008E2EBD /* Settings.png */; };
@@ -116,6 +117,7 @@
 		625D738C2506304F00104DBB /* DiscussionsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionsVC.swift; sourceTree = "<group>"; };
 		625D738E2506305A00104DBB /* MyDiscussionsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDiscussionsVC.swift; sourceTree = "<group>"; };
 		625D7390250636FF00104DBB /* CreateDiscussionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDiscussionVC.swift; sourceTree = "<group>"; };
+		6265C54C262853BB003D5F7D /* NotificationsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsVC.swift; sourceTree = "<group>"; };
 		627F8CB5255E88D800399A33 /* CommentsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsVC.swift; sourceTree = "<group>"; };
 		6291F5B2255E96540022A2A3 /* CreateCommentVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCommentVC.swift; sourceTree = "<group>"; };
 		62AE62CC250FADDD008E2EBD /* Settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Settings.png; sourceTree = "<group>"; };
@@ -294,6 +296,7 @@
 				6229EEC72508123E00EA7CC1 /* Entities.swift */,
 				621C6D3F250E3B38001A345D /* SettingsVC.swift */,
 				62AE62CE250FAE3F008E2EBD /* EditProfileVC.swift */,
+				6265C54C262853BB003D5F7D /* NotificationsVC.swift */,
 			);
 			path = " Shared";
 			sourceTree = "<group>";
@@ -497,6 +500,7 @@
 				62AE62CF250FAE3F008E2EBD /* EditProfileVC.swift in Sources */,
 				627F8CB6255E88D800399A33 /* CommentsVC.swift in Sources */,
 				62D9782D24FF9328002E4664 /* CreateResearchVC.swift in Sources */,
+				6265C54D262853BB003D5F7D /* NotificationsVC.swift in Sources */,
 				6208307624E9C13A00291825 /* AppDelegate.swift in Sources */,
 				625D7391250636FF00104DBB /* CreateDiscussionVC.swift in Sources */,
 				62FB08B52500E01E0064C988 /* MyNewsVC.swift in Sources */,

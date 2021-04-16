@@ -58,3 +58,8 @@ struct Speciality {
     let name: String
     let color: UIColor?
 }
+
+struct Keyword {
+    let id: String
+    let keyword: String
+}

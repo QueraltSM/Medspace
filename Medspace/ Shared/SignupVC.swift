@@ -80,6 +80,7 @@ class SignupVC: UIViewController {
             if error != nil {
                 self.showAlert(title: "Error", message: error!.localizedDescription)
             } else {
+                UserDefaults.standard.set(true, forKey: "notificationsState")
                 let uid = authResult!.user.uid
                 self.db = Database.database().reference().child("Users/\(uid)")
                 self.db.setValue(["username": self.username.text!, "fullname":self.fullname.text!, "type": "Doctor", "email": self.email.text!])

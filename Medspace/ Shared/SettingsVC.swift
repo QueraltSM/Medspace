@@ -4,7 +4,7 @@ import Firebase
 
 class SettingsVC: UIViewController, UITableViewDelegate, UITableViewDataSource  {
     
-    var options = ["", "Edit profile", "Change password", "Delete account"]
+    var options = ["", "Edit profile", "Change password", "Delete account", "Notifications"]
     var ref: DatabaseReference!
     @IBOutlet weak var settingsTable: UITableView!
     
@@ -65,6 +65,9 @@ class SettingsVC: UIViewController, UITableViewDelegate, UITableViewDataSource  
                 break
             case 3:
                 deleteAccount()
+                break
+            case 4:
+                self.presentVC(segue: "NotificationsVC")
                 break
             default:
                 break

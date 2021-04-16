@@ -19,6 +19,7 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISe
     
     func initComponents(){
         uid = Auth.auth().currentUser!.uid
+        UserDefaults.standard.set(true, forKey: "notificationsState")
         usertype = UserDefaults.standard.string(forKey: "usertype")
         fullname = UserDefaults.standard.string(forKey: "fullname")
         username = UserDefaults.standard.string(forKey: "username")
