@@ -2,19 +2,23 @@ import UIKit
 import CoreData
 import FirebaseCore
 import Firebase
+import UserNotifications
+import AVFoundation
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
     var window: UIWindow?
     static var menu_bool = true
+    let notificationCenter = UNUserNotificationCenter.current()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        notificationCenter.delegate = self
         FirebaseApp.configure()
         return true
     }
-    
+
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
@@ -31,8 +35,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        let isUserLoggedIn = UserDefaults.standard.bool(forKey: "isUserLoggedIn")
+        let sendNotifications = UserDefaults.standard.object(forKey: "notificationsState") as? Bool
+            if (isUserLoggedIn && sendNotifications != nil && sendNotifications!) {
+                PostsWorker().start()
+        }
     }
-
+    
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
@@ -82,6 +91,70 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
+    }
+    
+    func confirmUserAuthorization() -> Bool {
+        notificationCenter.delegate = self
+        var allow = true
+        let options: UNAuthorizationOptions = [.alert, .sound, .badge]
+        notificationCenter.requestAuthorization(options: options) {
+            (didAllow, error) in
+            if !didAllow {
+                UserDefaults.standard.set(false, forKey: "notificationsState")
+                allow = false
+            }
+        }
+        return allow
+    }
+    
+    func userNotificationCenter(center: UNNotification, shouldPresentNotification notification: UNNotification) -> Bool {
+        return true
+    }
+    
+    func scheduleNotification(title: String, type: String) {
+        let content = UNMutableNotificationContent()
+        let categoryIdentifire = "notification"
+        content.body = "New \(type): \(title)"
+        content.badge = 1
+        content.categoryIdentifier = categoryIdentifire
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+        let identifier = title
+        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+        notificationCenter.add(request) { (error) in
+            if let error = error {
+                print("Error \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        let notificationsState = UserDefaults.standard.bool(forKey: "notificationsState")
+        if notificationsState {
+            AudioServicesPlayAlertSound(UInt32(0))
+            completionHandler([.alert, .sound])
+        }
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Void) {
+        if response.notification.request.identifier == "Local Notification" {
+            print("Handling notifications with the Local Notification Identifier")
+        }
+        //let userInfo = response.notification.request.content.userInfo
+        /*if let data = userInfo["type"] as? String {
+            if (data == "news") {
+              startVC(vc: "HomeVC")
+            } else if (data == "chat") {
+                if let url = URL(string: "https://" + domain + ".dicloud.es/news/chat.asp") {
+                    let urlRequest = URLRequest(url: url)
+                    myWebView.load(urlRequest)
+                }
+            }
+        }*/
+        completionHandler()
     }
 
 }

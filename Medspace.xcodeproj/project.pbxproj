@@ -15,6 +15,7 @@
 		6208308324E9C14200291825 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6208308124E9C14200291825 /* LaunchScreen.storyboard */; };
 		6210042D25AE16AA008A1609 /* Medical_Background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6210042C25AE16A9008A1609 /* Medical_Background.jpg */; };
 		621535AC24EACF14007B18BA /* SignupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621535AB24EACF14007B18BA /* SignupVC.swift */; };
+		621AEFC7262A33F200620608 /* PostsWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621AEFC6262A33F200620608 /* PostsWorker.swift */; };
 		621C6D40250E3B38001A345D /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621C6D3F250E3B38001A345D /* SettingsVC.swift */; };
 		6223B29824FA5634000F6E83 /* ShowNewsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6223B29724FA5634000F6E83 /* ShowNewsVC.swift */; };
 		6225EC9A24F07F2600231774 /* Menu.png in Resources */ = {isa = PBXBuildFile; fileRef = 6225EC9924F07F2600231774 /* Menu.png */; };
@@ -96,6 +97,7 @@
 		6208308424E9C14200291825 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6210042C25AE16A9008A1609 /* Medical_Background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Medical_Background.jpg; sourceTree = "<group>"; };
 		621535AB24EACF14007B18BA /* SignupVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupVC.swift; sourceTree = "<group>"; };
+		621AEFC6262A33F200620608 /* PostsWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsWorker.swift; sourceTree = "<group>"; };
 		621C6D3F250E3B38001A345D /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
 		6223B29724FA5634000F6E83 /* ShowNewsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowNewsVC.swift; sourceTree = "<group>"; };
 		6225EC9924F07F2600231774 /* Menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Menu.png; sourceTree = "<group>"; };
@@ -297,6 +299,7 @@
 				621C6D3F250E3B38001A345D /* SettingsVC.swift */,
 				62AE62CE250FAE3F008E2EBD /* EditProfileVC.swift */,
 				6265C54C262853BB003D5F7D /* NotificationsVC.swift */,
+				621AEFC6262A33F200620608 /* PostsWorker.swift */,
 			);
 			path = " Shared";
 			sourceTree = "<group>";
@@ -479,6 +482,7 @@
 				62B2A2E12563D4C100022013 /* EditCommentVC.swift in Sources */,
 				6208307824E9C13A00291825 /* ViewController.swift in Sources */,
 				6227CCE325037A0600EB676B /* MyCasesVC.swift in Sources */,
+				621AEFC7262A33F200620608 /* PostsWorker.swift in Sources */,
 				6246D17C250176F00067A382 /* EditResearchVC.swift in Sources */,
 				6227CCE52503826900EB676B /* EditCaseVC.swift in Sources */,
 				62F9F8772506530C0015E30C /* EditDiscussionVC.swift in Sources */,
