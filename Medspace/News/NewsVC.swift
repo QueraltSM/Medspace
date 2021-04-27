@@ -15,7 +15,6 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISe
     override func viewDidLoad() {
         super.viewDidLoad()
         initComponents()
-        checkNewPosts()
     }
     
     func initComponents(){
@@ -37,12 +36,6 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISe
         refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
         news_timeline.addSubview(refreshControl)
         UserDefaults.standard.set("NewsVC", forKey: "back")
-    }
-    
-    func checkNewPosts() {
-        // cada minuto mirar si hay nuevas noticias, casos etc
-        // notificar si eso
-        
     }
     
     func filterContent(for searchText: String) {

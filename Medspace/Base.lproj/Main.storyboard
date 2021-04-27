@@ -2295,9 +2295,9 @@
                             <view contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V7R-NR-n2u">
                                 <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Receive notifications" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KPg-km-28A">
-                                        <rect key="frame" x="69" y="137" width="193" height="45"/>
-                                        <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enable notifications" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KPg-km-28A">
+                                        <rect key="frame" x="69" y="137" width="226" height="45"/>
+                                        <fontDescription key="fontDescription" name="Copperplate-Bold" family="Copperplate" pointSize="20"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -2312,7 +2312,7 @@
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     </tableView>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="88g-5E-WSp">
-                                        <rect key="frame" x="281" y="144" width="49" height="31"/>
+                                        <rect key="frame" x="303" y="144" width="49" height="31"/>
                                         <color key="onTintColor" red="0.0" green="0.32852089410000002" blue="0.57488495110000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <color key="thumbTintColor" systemColor="tertiarySystemBackgroundColor"/>
                                     </switch>
@@ -2321,14 +2321,14 @@
                                 <constraints>
                                     <constraint firstItem="c6z-iA-bMJ" firstAttribute="leading" secondItem="V7R-NR-n2u" secondAttribute="leading" id="1i0-9Y-aGm"/>
                                     <constraint firstItem="9l2-Da-Ocj" firstAttribute="top" secondItem="c6z-iA-bMJ" secondAttribute="bottom" constant="28" id="6MU-ZB-8CY"/>
-                                    <constraint firstItem="KPg-km-28A" firstAttribute="trailing" secondItem="88g-5E-WSp" secondAttribute="trailing" constant="-66" id="KKD-U9-05H"/>
+                                    <constraint firstItem="KPg-km-28A" firstAttribute="trailing" secondItem="88g-5E-WSp" secondAttribute="trailing" constant="-55" id="KKD-U9-05H"/>
                                     <constraint firstItem="KPg-km-28A" firstAttribute="top" secondItem="V7R-NR-n2u" secondAttribute="top" constant="137" id="Kf4-wp-yU7"/>
-                                    <constraint firstAttribute="trailing" secondItem="88g-5E-WSp" secondAttribute="trailing" constant="100" id="MXf-9L-iUW"/>
+                                    <constraint firstAttribute="trailing" secondItem="88g-5E-WSp" secondAttribute="trailing" constant="78" id="MXf-9L-iUW"/>
                                     <constraint firstItem="c6z-iA-bMJ" firstAttribute="top" secondItem="KPg-km-28A" secondAttribute="bottom" constant="81" id="PN4-da-mYT"/>
                                     <constraint firstAttribute="bottom" secondItem="9l2-Da-Ocj" secondAttribute="bottom" constant="76" id="b4D-pU-b5a"/>
-                                    <constraint firstItem="88g-5E-WSp" firstAttribute="leading" secondItem="KPg-km-28A" secondAttribute="trailing" constant="19" id="epV-eh-0Ot"/>
+                                    <constraint firstItem="88g-5E-WSp" firstAttribute="leading" secondItem="KPg-km-28A" secondAttribute="trailing" constant="8" id="epV-eh-0Ot"/>
                                     <constraint firstItem="88g-5E-WSp" firstAttribute="top" secondItem="V7R-NR-n2u" secondAttribute="top" constant="144" id="oKC-Bc-reX"/>
-                                    <constraint firstItem="88g-5E-WSp" firstAttribute="leading" secondItem="KPg-km-28A" secondAttribute="leading" constant="212" id="p35-Su-zRH"/>
+                                    <constraint firstItem="88g-5E-WSp" firstAttribute="leading" secondItem="KPg-km-28A" secondAttribute="leading" constant="234" id="p35-Su-zRH"/>
                                     <constraint firstItem="9l2-Da-Ocj" firstAttribute="leading" secondItem="V7R-NR-n2u" secondAttribute="leading" id="rZK-RI-wcO"/>
                                     <constraint firstAttribute="trailing" secondItem="9l2-Da-Ocj" secondAttribute="trailing" id="sOq-C9-PyW"/>
                                     <constraint firstItem="KPg-km-28A" firstAttribute="leading" secondItem="V7R-NR-n2u" secondAttribute="leading" constant="69" id="t9D-Jw-Dl2"/>
@@ -2361,6 +2361,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="addKeywordBttn" destination="IHq-06-Lm7" id="Npi-1k-Kgt"/>
                         <outlet property="allKeywords" destination="9l2-Da-Ocj" id="7K9-gt-lyi"/>
                         <outlet property="notificationsState" destination="88g-5E-WSp" id="RTk-yA-uUh"/>
                     </connections>

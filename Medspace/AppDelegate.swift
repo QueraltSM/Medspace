@@ -35,6 +35,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        startPostWorker()
+    }
+    
+    func startPostWorker(){
         let isUserLoggedIn = UserDefaults.standard.bool(forKey: "isUserLoggedIn")
         let sendNotifications = UserDefaults.standard.object(forKey: "notificationsState") as? Bool
             if (isUserLoggedIn && sendNotifications != nil && sendNotifications!) {
@@ -111,10 +115,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         return true
     }
     
-    func scheduleNotification(title: String, type: String) {
+    func scheduleNotification(title: String) {
         let content = UNMutableNotificationContent()
         let categoryIdentifire = "notification"
-        content.body = "New \(type): \(title)"
+        content.title = title
         content.badge = 1
         content.categoryIdentifier = categoryIdentifire
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
@@ -140,20 +144,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
-        if response.notification.request.identifier == "Local Notification" {
-            print("Handling notifications with the Local Notification Identifier")
-        }
-        //let userInfo = response.notification.request.content.userInfo
-        /*if let data = userInfo["type"] as? String {
-            if (data == "news") {
-              startVC(vc: "HomeVC")
-            } else if (data == "chat") {
-                if let url = URL(string: "https://" + domain + ".dicloud.es/news/chat.asp") {
-                    let urlRequest = URLRequest(url: url)
-                    myWebView.load(urlRequest)
-                }
-            }
-        }*/
         completionHandler()
     }
 

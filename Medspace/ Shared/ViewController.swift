@@ -174,6 +174,7 @@ extension UIViewController {
         do {
             try firebaseAuth.signOut()
             setUserData(fullname: "", usertype: "", username: "", isUserLoggedIn: false)
+            PostsWorker().stop()
         } catch let signOutError as NSError {
             showAlert(title: "Error signing out", message: signOutError.description)
         }
@@ -277,6 +278,8 @@ extension UIViewController {
         if isUserLoggedIn {
             segue = "NewsVC"
         }
+        let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        appDelegate!.startPostWorker()
         self.presentVC(segue: segue)
     }
     

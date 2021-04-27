@@ -9,6 +9,7 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     var ref: DatabaseReference!
     var actualState: Bool!
     var keywords = [Keyword]()
+    @IBOutlet weak var addKeywordBttn: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,7 +76,7 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     
     func askDelete(keyword: Keyword, pos: Int, indexPath: IndexPath) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        alert.title = "Are you sure you want delete keyword \(keyword.keyword)?"
+        alert.title = "Are you sure you want delete keyword '\(keyword.keyword)'?"
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
             action in
             let path = "Keywords/\(uid!)/\(keyword.id)"
@@ -128,6 +129,7 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         let save = UIAlertAction(title: "Done", style: .default, handler: { alertAction -> Void in
             if let textField = alert.textFields?[0] {
                 if textField.text!.count > 0 {
+                    self.allKeywords.restore()
                     self.saveKeyword(keyword: textField.text!)
                 } else {
                     self.showAlert(title: "Error", message: "Keyword can not be empty")

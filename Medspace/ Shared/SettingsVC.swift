@@ -4,7 +4,7 @@ import Firebase
 
 class SettingsVC: UIViewController, UITableViewDelegate, UITableViewDataSource  {
     
-    var options = ["", "Edit profile", "Change password", "Delete account", "Notifications"]
+    var options = ["", "Edit profile", "Change password", "Notifications", "Delete account"]
     var ref: DatabaseReference!
     @IBOutlet weak var settingsTable: UITableView!
     
@@ -49,7 +49,7 @@ class SettingsVC: UIViewController, UITableViewDelegate, UITableViewDataSource  
         cell.textLabel!.font = UIFont(name: "Copperplate-Bold", size: 23)
         cell.textLabel!.text = options[indexPath.section]
         cell.contentView.backgroundColor = UIColor.clear
-        if (usertype == "Admin" && indexPath.section == 3) {
+        if (usertype == "Admin" && indexPath.section == 4) {
             cell.isHidden = true
         }
         return cell
@@ -64,10 +64,10 @@ class SettingsVC: UIViewController, UITableViewDelegate, UITableViewDataSource  
                 changePassword()
                 break
             case 3:
-                deleteAccount()
+                self.presentVC(segue: "NotificationsVC")
                 break
             case 4:
-                self.presentVC(segue: "NotificationsVC")
+                deleteAccount()
                 break
             default:
                 break

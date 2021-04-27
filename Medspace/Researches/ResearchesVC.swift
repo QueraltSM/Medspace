@@ -150,7 +150,11 @@ class ResearchesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         cell?.data_title.text = entry.title
         cell?.data_speciality.text = entry.speciality.name
         cell?.speciality_color = entry.speciality.color
-        cell?.data_user.text = "\(entry.user.username) on \(self.getFormattedDate(date: entry.date))"
+        if entry.user.id == uid! {
+            cell?.data_user.text =  "Me on \(self.getFormattedDate(date: entry.date))"
+        } else {
+            cell?.data_user.text =  "\(entry.user.username) on \(self.getFormattedDate(date: entry.date))"
+        }
         return cell!
     }
     

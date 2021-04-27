@@ -17,7 +17,7 @@ struct News {
     let user: User
 }
 
-struct Case {
+struct Case  {
     let id: String
     let title: String
     let description: String

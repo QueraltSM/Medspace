@@ -83,7 +83,6 @@ class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
                 let examination = data["examination"]! as! String
                 let speciality = data["speciality"]! as! String
                 let date = data["date"]! as! String
-                //let final_date = self.getFormattedDate(date: date)
                 let userid = data["user"]! as! String
                 ref.child("Users/\(userid)").observeSingleEvent(of: .value, with: { snapshot
                     in
@@ -150,7 +149,11 @@ class CasesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
         cell?.data_title.text = entry.title
         cell?.data_speciality.text = entry.speciality.name
         cell?.speciality_color = entry.speciality.color
-        cell?.data_user.text =  "\(entry.user.username) on \(self.getFormattedDate(date: entry.date))"
+        if entry.user.id == uid! {
+            cell?.data_user.text =  "Me on \(self.getFormattedDate(date: entry.date))"
+        } else {
+            cell?.data_user.text =  "\(entry.user.username) on \(self.getFormattedDate(date: entry.date))"
+        }
         return cell!
     }
     
