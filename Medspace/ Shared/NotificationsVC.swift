@@ -19,13 +19,21 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         getKeywords()
     }
     
-    func loopKeywords(ref: DatabaseReference, snapshot: DataSnapshot) {
-        self.startAnimation()
-        for child in snapshot.children.allObjects as! [DataSnapshot] {
-            keywords.append(Keyword(id: child.key, keyword: child.value as! String))
-            allKeywords.reloadData()
-        }
-        self.stopAnimation()
+    func initComponents(){
+        self.notificationsState.setOn(actualState, animated: false)
+        notificationsState.addTarget(self, action: #selector(self.changeState), for: .valueChanged)
+        self.allKeywords.delegate = self
+        self.allKeywords.dataSource = self
+        let footerView = UIView()
+        footerView.backgroundColor = UIColor.white
+        self.allKeywords.tableFooterView = footerView
+        self.notificationsState.backgroundColor = UIColor.white
+    }
+    
+    @objc func changeState(){
+        actualState = UserDefaults.standard.bool(forKey: "notificationsState")
+        UserDefaults.standard.setValue(!actualState, forKey: "notificationsState")
+        self.notificationsState.setOn(!actualState, animated: false)
     }
     
     func getKeywords() {
@@ -40,6 +48,14 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         })
     }
     
+    func loopKeywords(ref: DatabaseReference, snapshot: DataSnapshot) {
+        self.startAnimation()
+        for child in snapshot.children.allObjects as! [DataSnapshot] {
+            keywords.append(Keyword(id: child.key, keyword: child.value as! String))
+            allKeywords.reloadData()
+        }
+        self.stopAnimation()
+    }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -62,65 +78,6 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         return cell
     }
     
-    
-    func initComponents(){
-        self.notificationsState.setOn(actualState, animated: false)
-        notificationsState.addTarget(self, action: #selector(self.changeState), for: .valueChanged)
-        self.allKeywords.delegate = self
-        self.allKeywords.dataSource = self
-        let footerView = UIView()
-        footerView.backgroundColor = UIColor.white
-        self.allKeywords.tableFooterView = footerView
-        self.notificationsState.backgroundColor = UIColor.white
-    }
-    
-    func askDelete(keyword: Keyword, pos: Int, indexPath: IndexPath) {
-        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        alert.title = "Are you sure you want delete keyword '\(keyword.keyword)'?"
-        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
-            action in
-            let path = "Keywords/\(uid!)/\(keyword.id)"
-            self.removeDataDB(path: path)
-            self.presentVC(segue: "NotificationsVC")
-        }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: {
-            action in
-            let cell = self.allKeywords.cellForRow(at: indexPath)
-            cell!.setBorder(color: UIColor.white)
-        }))
-        self.present(alert, animated: true, completion: nil)
-    }
-    
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-            let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete", handler: { (action, indexPath) in
-            let keyword = self.keywords[indexPath.row]
-            let cell = self.allKeywords.cellForRow(at: indexPath)
-            cell!.setBorder(color: UIColor.init(hexString: "#2874A6"))
-            self.askDelete(keyword: keyword, pos: indexPath.row, indexPath: indexPath)
-        })
-        deleteAction.backgroundColor = UIColor.init(hexString: "#2874A6")
-        return [deleteAction]
-    }
-    
-    @objc func changeState(){
-        actualState = UserDefaults.standard.bool(forKey: "notificationsState")
-        UserDefaults.standard.setValue(!actualState, forKey: "notificationsState")
-        self.notificationsState.setOn(!actualState, animated: false)
-    }
-    
-    func saveKeyword(keyword: String) {
-        if keywords.contains(where: {$0.keyword.compare(keyword, options: .caseInsensitive) == .orderedSame}){
-            self.showAlert(title: "Error", message: "Keyword already exists")
-        } else {
-            let now = Date().description
-            keywords.append(Keyword(id: now, keyword: keyword))
-            let path = "Keywords/\(uid!)"
-            let ref = Database.database().reference()
-            ref.child("\(path)/\(now)").setValue(keyword)
-            allKeywords.reloadData()
-        }
-    }
-    
     @IBAction func addKeyword(_ sender: Any) {
         let alert = UIAlertController(title: "Add keyword", message: "Enter a new one", preferredStyle: .alert)
         alert.addTextField { (textField : UITextField!) -> Void in
@@ -141,6 +98,47 @@ class NotificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         alert.addAction(cancel)
         alert.addAction(save)
         alert.preferredAction = save
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func saveKeyword(keyword: String) {
+        if keywords.contains(where: {$0.keyword.compare(keyword, options: .caseInsensitive) == .orderedSame}){
+            self.showAlert(title: "Error", message: "Keyword already exists")
+        } else {
+            let now = Date().description
+            keywords.append(Keyword(id: now, keyword: keyword))
+            let path = "Keywords/\(uid!)"
+            let ref = Database.database().reference()
+            ref.child("\(path)/\(now)").setValue(keyword)
+            allKeywords.reloadData()
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+            let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete", handler: { (action, indexPath) in
+            let keyword = self.keywords[indexPath.row]
+            let cell = self.allKeywords.cellForRow(at: indexPath)
+            cell!.setBorder(color: UIColor.init(hexString: "#2874A6"))
+            self.askDelete(keyword: keyword, pos: indexPath.row, indexPath: indexPath)
+        })
+        deleteAction.backgroundColor = UIColor.init(hexString: "#2874A6")
+        return [deleteAction]
+    }
+    
+    func askDelete(keyword: Keyword, pos: Int, indexPath: IndexPath) {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+        alert.title = "Are you sure you want delete keyword '\(keyword.keyword)'?"
+        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
+            action in
+            let path = "Keywords/\(uid!)/\(keyword.id)"
+            self.removeDataDB(path: path)
+            self.presentVC(segue: "NotificationsVC")
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: {
+            action in
+            let cell = self.allKeywords.cellForRow(at: indexPath)
+            cell!.setBorder(color: UIColor.white)
+        }))
         self.present(alert, animated: true, completion: nil)
     }
     

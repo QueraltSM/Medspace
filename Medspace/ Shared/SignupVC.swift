@@ -83,7 +83,11 @@ class SignupVC: UIViewController {
                 UserDefaults.standard.set(true, forKey: "notificationsState")
                 let uid = authResult!.user.uid
                 self.db = Database.database().reference().child("Users/\(uid)")
-                self.db.setValue(["username": self.username.text!, "fullname":self.fullname.text!, "type": "Doctor", "email": self.email.text!])
+                self.db.setValue([
+                    "username": self.username.text!,
+                    "fullname":self.fullname.text!,
+                    "type": "Doctor",
+                    "email": self.email.text!])
                 self.askLogin()
             }
         }

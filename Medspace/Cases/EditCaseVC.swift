@@ -95,7 +95,7 @@ class EditCaseVC: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UI
 
     @IBAction func saveCase(_ sender: Any) {
         var error = ""
-        if !validateTxtView(case_title) || !validateTxtView(case_description) || !validateTxtView(case_history) || !validateTxtView(case_examination)   {
+        if !validateTxtView(case_title) || !validateTxtView(case_description) || !validateTxtView(case_history) || !validateTxtView(case_examination) {
             error = "Fill out all required fields\n"
         }
         if clinical_case!.title == case_title.text && clinical_case!.description == case_description.text &&

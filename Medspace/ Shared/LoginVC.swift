@@ -28,10 +28,21 @@ class LoginVC: UIViewController {
         email.placeHolderColor = UIColor.gray
         password.placeHolderColor = UIColor.gray
         login_button.backgroundColor = UIColor.black
-        
     }
     
-    func loginDB() {
+    func loginUser(){
+        self.email.setUnderline(color: UIColor.white)
+        self.password.setUnderline(color: UIColor.white)
+        self.db.child((Auth.auth().currentUser?.uid)!).observeSingleEvent(of: .value, with: { snapshot in
+                let value = snapshot.value as? NSDictionary
+                let usertype = value?["type"] as? String ?? ""
+                let fullname = value?["fullname"] as? String ?? ""
+                let username = value?["username"] as? String ?? ""
+            self.setUserData(fullname: fullname, usertype: usertype, username: username, isUserLoggedIn: true)
+        })
+    }
+    
+    func checkDB() {
         Auth.auth().signIn(withEmail: email.text!, password: password.text!) { (result, error) in
             if let error = error as NSError? {
               switch AuthErrorCode(rawValue: error.code) {
@@ -61,15 +72,7 @@ class LoginVC: UIViewController {
                 self.showAlert(title: "Error", message: error.localizedDescription)
               }
             } else {
-                self.email.setUnderline(color: UIColor.white)
-                self.password.setUnderline(color: UIColor.white)
-                self.db.child((Auth.auth().currentUser?.uid)!).observeSingleEvent(of: .value, with: { snapshot in
-                        let value = snapshot.value as? NSDictionary
-                        let usertype = value?["type"] as? String ?? ""
-                        let fullname = value?["fullname"] as? String ?? ""
-                        let username = value?["username"] as? String ?? ""
-                    self.setUserData(fullname: fullname, usertype: usertype, username: username, isUserLoggedIn: true)
-                })
+                self.loginUser()
             }
         }
     }
@@ -88,7 +91,7 @@ class LoginVC: UIViewController {
         if (validateTxtfield(email) && validateTxtfield(password)) {
             self.email.setUnderline(color: UIColor.white)
             self.password.setUnderline(color: UIColor.white)
-            loginDB()
+            checkDB()
         }
     }
     

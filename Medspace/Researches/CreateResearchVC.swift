@@ -141,7 +141,13 @@ class CreateResearchVC: UIViewController, UITextViewDelegate, UIPickerViewDelega
         Storage.storage().reference().child(path).putFile(from: self.documentURL!, metadata: nil) { metadata, error in
             self.stopAnimation()
             if error == nil {
-                self.postResearch(path: path, title: self.titleview.text!, description: self.research_description.text!, speciality: self.speciality_textfield.text!, user: uid!, date: now)
+                self.postResearch(
+                    path: path,
+                    title: self.titleview.text!,
+                    description: self.research_description.text!,
+                    speciality: self.speciality_textfield.text!,
+                    user: uid!,
+                    date: now)
                 self.presentVC(segue: "MyResearchesVC")
             } else {
                 self.showAlert(title: "Error", message: error!.localizedDescription)

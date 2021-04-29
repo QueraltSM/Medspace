@@ -107,5 +107,4 @@ class SideMenuVC: UIViewController, UITableViewDelegate, UITableViewDataSource  
             presentVC(segue: viewModel.segue!)
         }
     }
-
 }

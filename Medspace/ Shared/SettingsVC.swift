@@ -150,7 +150,6 @@ class SettingsVC: UIViewController, UITableViewDelegate, UITableViewDataSource  
                         action in
                         self.presentVC(segue: "LoginVC")
                     }))
-                    alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
                     self.present(alert, animated: true, completion: nil)
                 } else {
                     self.showAlert(title: "Error", message: "There was an error deleting your account")

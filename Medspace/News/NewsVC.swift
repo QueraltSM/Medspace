@@ -120,7 +120,9 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISe
                                 color = s.color!
                             }
                         }
-                        self.news.append(News(id: childDict.key, image: pic!, date: date, title: title, speciality: Speciality(name: speciality, color: color), description: description, user: User(id: userid, fullname: fullname, username: username)))
+                        self.news.append(News(id: childDict.key, image: pic!, date: date, title: title,
+                            speciality: Speciality(name: speciality, color: color), description: description,
+                            user: User(id: userid, fullname: fullname, username: username)))
                         let sortedNews = self.news.sorted {
                             $0.date > $1.date
                         }

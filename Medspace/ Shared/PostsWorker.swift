@@ -64,7 +64,8 @@ class PostsWorker {
         ref.child("Keywords/\(uid!)").observeSingleEvent(of: .value, with: { snapshot in
             for child in snapshot.children.allObjects as! [DataSnapshot] {
                 let key = Keyword(id: child.key, keyword: child.value as! String)
-                if (title.lowercased().contains(key.keyword.lowercased()) || description.lowercased().contains(key.keyword.lowercased())) && !notified {
+                if (title.lowercased().contains(key.keyword.lowercased()) ||
+                        description.lowercased().contains(key.keyword.lowercased())) && !notified {
                     self.appDelegate?.scheduleNotification(title: title)
                     notified = true
                 }

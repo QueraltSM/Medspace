@@ -53,35 +53,6 @@ class EditProfileVC: UIViewController, UITextViewDelegate, UITextFieldDelegate  
         self.present(alert, animated: true, completion: nil)
     }
     
-    func updateUser() {
-        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        alert.title = "Do you want to update your account data?"
-        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
-            action in
-            self.storeUserData()
-        }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
-        self.present(alert, animated: true, completion: nil)
-    }
-    
-    func checkUsername(){
-        ref.child("Users").observeSingleEvent(of: .value, with: { snapshot in
-            let enumerator = snapshot.children
-            var taken = false
-            while let rest = enumerator.nextObject() as? DataSnapshot {
-                let value = rest.value as? NSDictionary
-                let user = value!["username"] as? String ?? ""
-                if user.lowercased() == self.usernametxt.text!.lowercased() {
-                    taken = true
-                    self.showAlert(title: "Error", message: "Username is already taken")
-                }
-            }
-            if !taken {
-                self.updateUser()
-            }
-        })
-    }
-    
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         return textField.text!.count < 15
     }
@@ -108,5 +79,34 @@ class EditProfileVC: UIViewController, UITextViewDelegate, UITextFieldDelegate  
         } else {
             showAlert(title:"Error", message: error)
         }
+    }
+    
+    func checkUsername(){
+        ref.child("Users").observeSingleEvent(of: .value, with: { snapshot in
+            let enumerator = snapshot.children
+            var taken = false
+            while let rest = enumerator.nextObject() as? DataSnapshot {
+                let value = rest.value as? NSDictionary
+                let user = value!["username"] as? String ?? ""
+                if user.lowercased() == self.usernametxt.text!.lowercased() {
+                    taken = true
+                    self.showAlert(title: "Error", message: "Username is already taken")
+                }
+            }
+            if !taken {
+                self.updateUser()
+            }
+        })
+    }
+    
+    func updateUser() {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+        alert.title = "Do you want to update your account data?"
+        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
+            action in
+            self.storeUserData()
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
 }
